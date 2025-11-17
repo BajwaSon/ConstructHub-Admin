@@ -39,63 +39,19 @@ export class MapRealViewComponent implements AfterViewInit, OnDestroy {
   private readonly BASE_LNG = 55.38762432296308;
 
   // Sample sites with coordinates around Dubai Silicon Oasis
-  sites: Site[] = [
-    { name: "Site A", lat: 25.1202, lng: 55.3876, workerCount: 5 },
-    { name: "Site B", lat: 25.125, lng: 55.39, workerCount: 3 },
-    { name: "Site C", lat: 25.115, lng: 55.385, workerCount: 4 },
-    { name: "Building A", lat: 25.118, lng: 55.389, workerCount: 2 },
-    { name: "Building B", lat: 25.122, lng: 55.386, workerCount: 3 },
-    { name: "Building C", lat: 25.116, lng: 55.388, workerCount: 2 },
-  ];
+  sites: Site[] = [{ name: "Site A", lat: 25.1202, lng: 55.3876, workerCount: 5 }];
 
   workers: Worker[] = [
     // Site A - Workers
-    { id: "WRK-86234696", name: "Ahmed Hassan", type: "Carpenter", role: "worker", site: "Site A", lat: 25.1203, lng: 55.3877 },
-    { id: "WRK-23984712", name: "Mohammed Ali", type: "Laborer", role: "worker", site: "Site A", lat: 25.1201, lng: 55.3875 },
-    { id: "WRK-38475621", name: "Omar Ibrahim", type: "Electrician", role: "worker", site: "Site A", lat: 25.12, lng: 55.3874 },
-    { id: "WRK-56372819", name: "Khalid Ahmed", type: "Plumber", role: "worker", site: "Site A", lat: 25.1205, lng: 55.3879 },
+    { id: "WRK-86234696", name: "Ahmed Hassan", type: "Carpenter", role: "worker", site: "Site A", lat: 25.121, lng: 55.39 },
+    { id: "WRK-23984712", name: "Mohammed Ali", type: "Laborer", role: "worker", site: "Site A", lat: 25.121, lng: 55.389 },
+    { id: "WRK-38475621", name: "Omar Ibrahim", type: "Electrician", role: "worker", site: "Site A", lat: 25.1205, lng: 55.3891 },
+    { id: "WRK-56372819", name: "Khalid Ahmed", type: "Plumber", role: "worker", site: "Site A", lat: 25.1205, lng: 55.3892 },
     // Site A - Supervisors
-    { id: "WRK-98472635", name: "Sarah Johnson", type: "Supervisor", role: "supervisor", site: "Site A", lat: 25.1204, lng: 55.3878 },
-    { id: "WRK-29384756", name: "David Wilson", type: "Supervisor", role: "supervisor", site: "Site A", lat: 25.1202, lng: 55.3876 },
+    { id: "WRK-98472635", name: "Sarah Johnson", type: "Supervisor", role: "supervisor", site: "Site A", lat: 25.12055, lng: 55.38915 },
+    { id: "WRK-29384756", name: "David Wilson", type: "Supervisor", role: "supervisor", site: "Site A", lat: 25.12045, lng: 55.3895 },
     // Site A - Foremen
-    { id: "WRK-84736291", name: "James Anderson", type: "Foreman", role: "foreman", site: "Site A", lat: 25.1206, lng: 55.388 },
-
-    // Site B - Workers
-    { id: "WRK-82736491", name: "Fatima Al-Zahra", type: "Welder", role: "worker", site: "Site B", lat: 25.1251, lng: 55.3901 },
-    { id: "WRK-67584932", name: "Yusuf Khan", type: "Laborer", role: "worker", site: "Site B", lat: 25.1252, lng: 55.3902 },
-    { id: "WRK-74839261", name: "Hassan Malik", type: "Mason", role: "worker", site: "Site B", lat: 25.1253, lng: 55.3903 },
-    // Site B - Supervisors
-    { id: "WRK-29384765", name: "Emma Wilson", type: "Supervisor", role: "supervisor", site: "Site B", lat: 25.1249, lng: 55.3899 },
-    { id: "WRK-38475629", name: "Michael Brown", type: "Supervisor", role: "supervisor", site: "Site B", lat: 25.125, lng: 55.39 },
-    // Site B - Foremen
-    { id: "WRK-95837412", name: "Robert Taylor", type: "Foreman", role: "foreman", site: "Site B", lat: 25.1248, lng: 55.3898 },
-
-    // Site C - Workers
-    { id: "WRK-38475912", name: "Aisha Mohammed", type: "Electrician", role: "worker", site: "Site C", lat: 25.1151, lng: 55.3851 },
-    { id: "WRK-47582916", name: "Ibrahim Saleh", type: "Mason", role: "worker", site: "Site C", lat: 25.1149, lng: 55.3849 },
-    { id: "WRK-95837462", name: "Noor Ali", type: "Operator", role: "worker", site: "Site C", lat: 25.1152, lng: 55.3852 },
-    { id: "WRK-83749261", name: "Zainab Hassan", type: "Painter", role: "worker", site: "Site C", lat: 25.115, lng: 55.385 },
-    // Site C - Supervisors
-    { id: "WRK-29384712", name: "Thomas Lee", type: "Supervisor", role: "supervisor", site: "Site C", lat: 25.1153, lng: 55.3853 },
-    // Site C - Foremen
-    { id: "WRK-74839218", name: "Christopher Martinez", type: "Foreman", role: "foreman", site: "Site C", lat: 25.1148, lng: 55.3848 },
-
-    // Building A - Workers
-    { id: "WRK-12345678", name: "Ali Abdullah", type: "Carpenter", role: "worker", site: "Building A", lat: 25.1181, lng: 55.3891 },
-    { id: "WRK-23456789", name: "Hassan Mahmoud", type: "Laborer", role: "worker", site: "Building A", lat: 25.1182, lng: 55.3892 },
-    // Building A - Foremen
-    { id: "WRK-34567890", name: "Daniel White", type: "Foreman", role: "foreman", site: "Building A", lat: 25.118, lng: 55.389 },
-
-    // Building B - Workers
-    { id: "WRK-45678901", name: "Saeed Omar", type: "Electrician", role: "worker", site: "Building B", lat: 25.1221, lng: 55.3861 },
-    { id: "WRK-56789012", name: "Rashid Khalil", type: "Plumber", role: "worker", site: "Building B", lat: 25.1222, lng: 55.3862 },
-    // Building B - Supervisors
-    { id: "WRK-67890123", name: "Jennifer Davis", type: "Supervisor", role: "supervisor", site: "Building B", lat: 25.122, lng: 55.386 },
-
-    // Building C - Workers
-    { id: "WRK-78901234", name: "Tariq Nasser", type: "Welder", role: "worker", site: "Building C", lat: 25.1161, lng: 55.3881 },
-    // Building C - Foremen
-    { id: "WRK-89012345", name: "William Garcia", type: "Foreman", role: "foreman", site: "Building C", lat: 25.116, lng: 55.388 },
+    { id: "WRK-84736291", name: "James Anderson", type: "Foreman", role: "foreman", site: "Site A", lat: 25.1205, lng: 55.3896 },
   ];
 
   constructor(
@@ -131,7 +87,7 @@ export class MapRealViewComponent implements AfterViewInit, OnDestroy {
     // Initialize map centered on Dubai Silicon Oasis
     this.map = new google.maps.Map(mapElement, {
       center: { lat: this.BASE_LAT, lng: this.BASE_LNG },
-      zoom: 8,
+      zoom: 18,
       mapTypeId: google.maps.MapTypeId.SATELLITE,
       styles: [
         {
@@ -145,13 +101,18 @@ export class MapRealViewComponent implements AfterViewInit, OnDestroy {
     this.infoWindow = new google.maps.InfoWindow();
 
     // Add site markers
-    this.addSiteMarkers();
+    // this.addSiteMarkers();
 
     // Add worker markers
     this.addWorkerMarkers();
 
-    // Fit bounds to show all markers
+    // Fit bounds to show all markers, then set zoom to 18
     this.fitBounds();
+
+    // Ensure zoom level 18 is maintained after fitBounds
+    google.maps.event.addListenerOnce(this.map, "bounds_changed", () => {
+      this.map.setZoom(18);
+    });
 
     this.cdr.detectChanges();
   }
