@@ -1,0 +1,12 @@
+.date-full-view-button button {
+  color: var(--text-highlight);
+  font-size: calc(var(--primary-font-size) * 0.75);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+}
+.gap5 {
+  gap: 5px;
+}
+.cursor-pointer {
+  cursor: pointer;
+}

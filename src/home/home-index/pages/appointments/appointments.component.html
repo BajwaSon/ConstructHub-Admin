@@ -1,0 +1,468 @@
+<div class="page-wrapper d-flex flex-column h-100">
+  <!-- Filter Details List Wrap -->
+  <div class="filter-row-wrap d-flex flex-wrap gap-2 pb-4">
+    <div class="add-action-button border-0 bg-transparent">
+      <span class="button-light-text opacity-100">All Departments</span>
+    </div>
+    <div class="export-excel-button-outer ms-auto">
+      <button class="primary-button export-excel-primary-button flex-center-align" type="button" (click)="openModal(addDepartmentModal); resetAddForm()">
+        <span>
+          <img src="/images/plus-icon.svg" class="img-fluid" alt="Excel Sheet Icon" height="24" width="24" />
+        </span>
+        Add New Department
+      </button>
+    </div>
+  </div>
+  <!-- Recently Appointments Cols -->
+
+  <div class="appointments-cards-row-wrapper flex-fill overflow-hidden h-100">
+    <div class="recently-appointments-row row row-mx-cst overflow-hidden h-100">
+      <div class="col-sm-4 overflow-hidden h-100">
+        <div class="chat-listed-wrap bordered-rounded-card overflow-hidden d-flex flex-column h-100">
+          <form class="chat-listed-form pb-4" action="">
+            <div class="form-control-group">
+              <input type="text" class="form-control" id="searchFormControl" placeholder="Search By Name" [(ngModel)]="searchTerm" name="searchTerm" />
+            </div>
+          </form>
+          <div class="chat-listed-outer-wrap flex-fill h-100 overflow-y-auto">
+            <div class="nav flex-column nav-pills gap-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <!-- Check if there are any departments after filtering -->
+              @if (departmentLoader.isLoading()) {
+                <div style="width: 100%">
+                  <app-loader></app-loader>
+                </div>
+              } @else {
+                @if (departmentService.departments().length === 0) {
+                  <div style="width: 100%">
+                    <app-data-not-found></app-data-not-found>
+                  </div>
+                } @else {
+                  <ng-container *ngIf="(departmentService.departments() | departmentFilter: searchTerm).length > 0; else noData">
+                    @for (department of departmentService.departments() | departmentFilter: searchTerm; track $index; let i = $index) {
+                      <button class="nav-link" [class.active]="i === activeIndex" id="v-pills-{{ department.name | lowercase }}-tab" data-bs-toggle="pill" [attr.data-bs-target]="'#v-pills-' + department.name.toLowerCase()" type="button" role="tab" [attr.aria-controls]="'v-pills-' + department.name.toLowerCase()" [attr.aria-selected]="i === activeIndex" (click)="setActive(i, department)">{{ department.name }} Department</button>
+                    }
+                  </ng-container>
+                  <!-- Template to show when no data is found -->
+                  <ng-template #noData>
+                    <!-- <div class="text-center py-3">
+                      <p>No departments found.</p>
+                    </div> -->
+                    <div style="width: 100%">
+                      <app-data-not-found></app-data-not-found>
+                    </div>
+                  </ng-template>
+                }
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-8 overflow-hidden h-100">
+        <div class="bordered-rounded-card overflow-y-auto h-100">
+          @if (departmentService.departments().length > 0 && selectedDepartment() !== null) {
+            <div class="appointment-card-head tab-content-head border-bottom flex-align-between pb-3">
+              <div class="card-head-details">
+                <h5 class="card-head-name m-0">{{ selectedDepartment()?.name || "" }} Department</h5>
+              </div>
+              <div class="d-flex gap-2">
+                <button type="button" class="card-action-btn position-relative ripple-button icon-rounded-button" [title]="'Edit Department'" (click)="openModal(editDepartmentModal, 'updateDepartment')">
+                  <i class="mdi mdi-pencil-outline" style="font-size: 20px"></i>
+                </button>
+                <!-- @if (selectedDepartment()?.users?.length > 0) { -->
+                <button type="button" class="card-action-btn position-relative ripple-button icon-rounded-button" [disabled]="selectedDepartment()?.users?.length > 0" [title]="selectedDepartment()?.users?.length > 0 ? 'Cannot delete this department with assigned members' : 'Delete department'" (click)="openModal(deleteDepartmentModal, 'deleteDepartment')">
+                  <i class="mdi mdi-delete-outline" style="font-size: 20px"></i>
+                </button>
+                <!-- } -->
+                @if (staffWithRoles().length > 0) {
+                  <button type="button" class="card-action-btn position-relative ripple-button icon-rounded-button plusBtn" (click)="openModal(addDepartmentModalStaff, 'addDepartmentModalStaff')" [title]="'Add Staff'">
+                    <img src="/images/plus-dark-icon.svg" class="img-fluid" alt="Plus icon" height="24" width="24" />
+                  </button>
+                }
+              </div>
+            </div>
+
+            @if (staffWithRoles().length > 0) {
+              @if (departmentService.departments().length === 0 || selectedDepartment()?.users?.length === 0) {
+                <div style="width: 100%">
+                  <app-data-not-found></app-data-not-found>
+                </div>
+              } @else {
+                <div class="row-mx-cst row row-gap-3">
+                  @for (user of selectedDepartment().users; track $index; let i = $index) {
+                    <div class="col-sm-4">
+                      <div class="common-appointment-card position-relative border bordered-rounded-card py-5">
+                        @if (selectedDepartment()?.hod?.id === user.id) {
+                          <span class="switch-department-badge d-inline-block user-chip-badge">Head OF Department</span>
+                        }
+
+                        <button type="button" class="card-action-btn ripple-button icon-rounded-button m-1" (click)="openModal(changeDepartment, 'unassignDepartment', user)">
+                          <img src="/images/dots.svg" class="img-fluid" alt="Dots icon" height="5" width="20" />
+                        </button>
+                        <div class="appointment-card-head text-center">
+                          <div class="card-head-img mx-auto">
+                            @if (user.profile.profilePhoto.value && user.profile.profilePhoto.value !== "null") {
+                              <div class="avatar-circle-img" [appProfilePhoto]="user?.profile?.profilePhoto?.value || ''"></div>
+                            } @else {
+                              <div class="avatar-circle-image initials-avatar br-50 p14">
+                                {{ avatarService.getInitials(user.profile.firstName, user.profile.lastName) }}
+                              </div>
+                            }
+                          </div>
+                          <div class="card-head-details pt-3">
+                            <h5 class="card-head-name">{{ user.profile.firstName }} {{ user.profile.middleName }} {{ user.profile.lastName }}</h5>
+                            <p class="card-common-desc text-lowercase">{{ user.profile.email }}</p>
+                            <p class="card-common-desc text-lowercase">{{ user.profile.phoneNo }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            } @else {
+              <div class="flex-center-align justify-content-center h-100 w-100">
+                <div class="not-found-empty-alert-block" [style.background]="'#fff'" style="height: 100% !important">
+                  <div class="no-data-illustration interactive-illustration" tabindex="0" role="img" aria-label="No Class Levels Illustration">
+                    <svg width="280" height="240" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <ellipse cx="100" cy="120" rx="90" ry="40" fill="#f5f6fa" />
+
+                      <rect x="55" y="50" width="70" height="60" rx="6" fill="#fff" stroke="#bbb" stroke-width="2" />
+                      <rect x="65" y="60" width="70" height="60" rx="6" fill="#f7f7f7" stroke="#bbb" stroke-width="2" />
+
+                      <rect x="75" y="75" width="50" height="6" rx="3" fill="#e0e0e0" />
+                      <rect x="75" y="85" width="40" height="5" rx="2.5" fill="#e0e0e0" />
+                      <rect x="75" y="95" width="35" height="5" rx="2.5" fill="#e0e0e0" />
+                      <rect x="75" y="105" width="45" height="5" rx="2.5" fill="#e0e0e0" />
+
+                      <g class="magnifier">
+                        <circle cx="120" cy="110" r="38" stroke="#8ba0ad" stroke-width="6" fill="#f5f6fa" />
+                        <text x="120" y="110" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="Arial, sans-serif" fill="#8ba0ad" opacity="0.85" font-weight="bold">?</text>
+                        <rect x="150" y="140" width="38" height="8" rx="4" transform="rotate(45 150 140)" fill="#8ba0ad" />
+                      </g>
+                      <!-- Speech bubble with X -->
+                      <g class="x-bubble">
+                        <ellipse cx="160" cy="55" rx="20" ry="18" fill="#fff" stroke="#bbb" stroke-width="2" />
+                        <path d="M153 48L167 62M167 48L153 62" stroke="#ff4d4f" stroke-width="3" stroke-linecap="round" />
+                      </g>
+                    </svg>
+                  </div>
+
+                  @if (staffWithRoles().length === 0) {
+                    <h4 class="text-center" style="color: #8789ed">No Staff Found</h4>
+                    <p class="text-center" style="color: #888; font-size: 15px">
+                      To assign staff to department, please add any staff first.<br />
+                      Go to <b>Staff Management</b> in the sidebar, then select <b>Teachers</b>, <b>Nurses</b>, <b>Bus Assistants</b>, or <b>Staff</b> to create new staff.
+                    </p>
+                  } @else if (selectedDepartment()?.users?.length === 0) {
+                    <h4 class="text-center" style="color: #8789ed">No Staff Found</h4>
+                    <p class="text-center" style="color: #888; font-size: 15px">
+                      To add staff, please add anyone first.<br />
+                      Go to <b>Staff Management</b> in the sidebar, then select <b>Teachers</b>, <b>Nurses</b>, <b>Bus Assistants</b>, or <b>Staff</b> to create new staff.
+                    </p>
+                  }
+                </div>
+              </div>
+            }
+          } @else {
+            <div class="flex-center-align justify-content-center h-100 w-100">
+              <div class="not-found-empty-alert-block" [style.background]="'#fff'" style="height: 100% !important">
+                <div class="no-data-illustration interactive-illustration" tabindex="0" role="img" aria-label="No Class Levels Illustration">
+                  <svg width="280" height="240" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="100" cy="120" rx="90" ry="40" fill="#f5f6fa" />
+
+                    <rect x="55" y="50" width="70" height="60" rx="6" fill="#fff" stroke="#bbb" stroke-width="2" />
+                    <rect x="65" y="60" width="70" height="60" rx="6" fill="#f7f7f7" stroke="#bbb" stroke-width="2" />
+
+                    <rect x="75" y="75" width="50" height="6" rx="3" fill="#e0e0e0" />
+                    <rect x="75" y="85" width="40" height="5" rx="2.5" fill="#e0e0e0" />
+                    <rect x="75" y="95" width="35" height="5" rx="2.5" fill="#e0e0e0" />
+                    <rect x="75" y="105" width="45" height="5" rx="2.5" fill="#e0e0e0" />
+
+                    <g class="magnifier">
+                      <circle cx="120" cy="110" r="38" stroke="#8ba0ad" stroke-width="6" fill="#f5f6fa" />
+                      <text x="120" y="110" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="Arial, sans-serif" fill="#8ba0ad" opacity="0.85" font-weight="bold">?</text>
+                      <rect x="150" y="140" width="38" height="8" rx="4" transform="rotate(45 150 140)" fill="#8ba0ad" />
+                    </g>
+                    <!-- Speech bubble with X -->
+                    <g class="x-bubble">
+                      <ellipse cx="160" cy="55" rx="20" ry="18" fill="#fff" stroke="#bbb" stroke-width="2" />
+                      <path d="M153 48L167 62M167 48L153 62" stroke="#ff4d4f" stroke-width="3" stroke-linecap="round" />
+                    </g>
+                  </svg>
+                </div>
+
+                @if (departmentService.departments().length === 0) {
+                  <h4 class="text-center" style="color: #8789ed">No Departments Found</h4>
+                  <p class="text-center" style="color: #888; font-size: 15px">
+                    To assign staff to department, please add any department first.<br />
+                    Go to <b>Configuration</b> in the sidebar, then select <b>Department</b> to create new department.
+                  </p>
+                } @else if (teacherService.staffWithRoles().length === 0) {
+                  <h4 class="text-center" style="color: #8789ed">No Staff Found</h4>
+                  <p class="text-center" style="color: #888; font-size: 15px">
+                    To add staff, please add anyone first.<br />
+                    Go to <b>Staff Management</b> in the sidebar, then select <b>Teachers</b>, <b>Nurses</b>, <b>Bus Assistants</b>, or <b>Staff</b> to create new staff.
+                  </p>
+                } @else if (selectedDepartment()?.users?.length === 0) {
+                  <h4 class="text-center" style="color: #8789ed">No Staff Found</h4>
+                  <p class="text-center" style="color: #888; font-size: 15px">
+                    To add staff, please add anyone first.<br />
+                    Go to <b>Staff Management</b> in the sidebar, then select <b>Teachers</b>, <b>Nurses</b>, <b>Bus Assistants</b>, or <b>Staff</b> to create new staff.
+                  </p>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Department Modal -->
+  <ng-template #changeDepartment>
+    <div class="appointment-action-modal">
+      <div class="modal-body p-0 pb-3">
+        <button type="button" class="action-btn-item ripple-button" data-bs-toggle="modal" data-bs-target="#appointmentDeleteModal" (click)="closeModal(); openModal(unassignTeacherModal)">Unassign</button>
+        <button type="button" class="action-btn-item ripple-button" data-bs-toggle="modal" (click)="applyHODBadge()">
+          <span class="loader-spinner">
+            Apply HOD Badge
+            @if (loader.isLoading()) {
+              <span class="custom-spinner"></span>
+            }
+          </span>
+        </button>
+      </div>
+      <div class="modal-footer justify-content-center border-0 p-0">
+        <button type="button" class="action-btn-item action-cancel-button ripple-button m-0" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Unassign Teacher Alert Modal -->
+  <ng-template #unassignTeacherModal>
+    <div class="appointment-action-modal appointment-delete-modal">
+      <div class="modal-body p-0">
+        <h6 class="modal-title">Are you sure want to unassigned this Teacher?</h6>
+        <div class="modal-action-btns d-flex justify-content-center pt-4">
+          <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">No</button>
+          <button type="button" class="btn text-white primary-button" (click)="unassignDepartment()">
+            <span class="loader-spinner">
+              Yes
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Appointment Delete Alert Modal -->
+  <ng-template #appointmentDeleteModal>
+    <div class="appointment-action-modal appointment-delete-modal">
+      <div class="modal-body p-0">
+        <h6 class="modal-title">Are you sure want to delete this Item?</h6>
+        <div class="modal-action-btns d-flex justify-content-center pt-4">
+          <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">No</button>
+          <button type="button" class="btn text-white primary-button" (click)="closeModal()">Yes</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Edit Department Alert Modal -->
+  <ng-template #editDepartmentModal>
+    <div class="appointment-action-modal appointment-delete-modal">
+      <form [formGroup]="updateDepartmentForm" class="modal-body p-0" appSubmitOnEnter>
+        <h6 class="modal-title">Edit Department</h6>
+        <div class="modal-select-wrap pt-4">
+          <div class="select-wrap-label">Department</div>
+          <input type="text" class="select-item-button px-3" [formControl]="updateDepartmentForm.controls.name" id="firstName" placeholder="Department name" />
+          @if (updateDepartmentForm.get("name")?.invalid && updateDepartmentForm.get("name")?.touched) {
+            <div class="text-danger mt-1">Department name is required</div>
+          }
+        </div>
+        <div class="modal-action-btns d-flex justify-content-center pt-4">
+          <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn text-white primary-button" [disabled]="updateDepartmentForm.invalid" (click)="updateDepartment()">
+            <span class="loader-spinner">
+              Submit
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+
+  <!-- Add Department  Staff Alert Modal -->
+  <ng-template #addDepartmentModalStaff>
+    <div class="appointment-action-modal appointment-delete-modal add-staffModal">
+      <form [formGroup]="addStaffForm" class="modal-body p-0" appSubmitOnEnter>
+        <h6 class="modal-title">Add Staff</h6>
+        @if (staffWithRoles().length > 0) {
+          <div class="modal-select-wrap pt-4">
+            <div class="filter-select-field">
+              <div class="select-wrap-label" style="margin-bottom: 0.55rem !important">Role</div>
+              <app-single-select [options]="roleList()" [selectedValue]="addStaffForm.controls.role.value" (selectedValueChange)="onStaffRoleChange($event, 'staffRole')"></app-single-select>
+            </div>
+            @if (addStaffForm.value.role !== "" && teachersOptions().length > 0) {
+              <div class="filter-select-field mt-4">
+                <div class="select-wrap-label" style="margin-bottom: 0.45rem !important">Staff</div>
+                <app-multi-select [allItems]="teachersOptions()" [initialSelectedItems]="teachers()" (onSelectedItems)="addSelectedTeachers($event)"></app-multi-select>
+                @if (addStaffForm.get("name")?.invalid && addStaffForm.get("name")?.touched) {
+                  <div class="text-danger mt-1">Please select at least one staff member</div>
+                }
+              </div>
+            } @else if (addStaffForm.value.role !== "" && teachersOptions().length === 0) {
+              <div class="flex-center-align justify-content-center h-100 w-100">
+                <div class="not-found-empty-alert-block" [style.background]="'#fff'" style="height: 100% !important">
+                  <div class="no-data-illustration interactive-illustration" tabindex="0" role="img" aria-label="No Class Levels Illustration">
+                    <svg width="280" height="240" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <ellipse cx="100" cy="120" rx="90" ry="40" fill="#f5f6fa" />
+
+                      <rect x="55" y="50" width="70" height="60" rx="6" fill="#fff" stroke="#bbb" stroke-width="2" />
+                      <rect x="65" y="60" width="70" height="60" rx="6" fill="#f7f7f7" stroke="#bbb" stroke-width="2" />
+
+                      <rect x="75" y="75" width="50" height="6" rx="3" fill="#e0e0e0" />
+                      <rect x="75" y="85" width="40" height="5" rx="2.5" fill="#e0e0e0" />
+                      <rect x="75" y="95" width="35" height="5" rx="2.5" fill="#e0e0e0" />
+                      <rect x="75" y="105" width="45" height="5" rx="2.5" fill="#e0e0e0" />
+
+                      <g class="magnifier">
+                        <circle cx="120" cy="110" r="38" stroke="#8ba0ad" stroke-width="6" fill="#f5f6fa" />
+                        <text x="120" y="110" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="Arial, sans-serif" fill="#8ba0ad" opacity="0.85" font-weight="bold">?</text>
+                        <rect x="150" y="140" width="38" height="8" rx="4" transform="rotate(45 150 140)" fill="#8ba0ad" />
+                      </g>
+                      <!-- Speech bubble with X -->
+                      <g class="x-bubble">
+                        <ellipse cx="160" cy="55" rx="20" ry="18" fill="#fff" stroke="#bbb" stroke-width="2" />
+                        <path d="M153 48L167 62M167 48L153 62" stroke="#ff4d4f" stroke-width="3" stroke-linecap="round" />
+                      </g>
+                    </svg>
+                  </div>
+
+                  @if (teachersOptions().length === 0) {
+                    <h4 class="text-center" style="color: #8789ed">No remaining staff to assign this department.</h4>
+                    <p class="text-center" style="color: #888; font-size: 15px">
+                      To assign New <b>{{ addStaffForm.controls.role.value === "teacher" ? "Teacher" : addStaffForm.controls.role.value === "nurse" ? "Nurse" : addStaffForm.controls.role.value === "busAssistant" ? "Bus Assistant" : "Staff" }}</b> to this department, please add any staff first.<br />
+                      Go to <b>Staff Management</b> in the sidebar, then select
+                      @if (addStaffForm.controls.role.value === "teacher") {
+                        <b>Teachers</b>
+                      } @else if (addStaffForm.controls.role.value === "nurse") {
+                        <b>Nurses</b>
+                      } @else if (addStaffForm.controls.role.value === "busAssistant") {
+                        <b>Bus Assistants</b>
+                      } @else {
+                        <b>Staff</b>
+                      }
+                      to create new staff.
+                    </p>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+          <div class="modal-action-btns d-flex justify-content-center pt-4">
+            <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">Cancel</button>
+            <button type="submit" class="btn text-white primary-button" [disabled]="addStaffForm.invalid" (click)="assignStaff()">
+              <span class="loader-spinner">
+                Submit
+                @if (loader.isLoading()) {
+                  <span class="custom-spinner"></span>
+                }
+              </span>
+            </button>
+          </div>
+        } @else {
+          <div class="flex-center-align justify-content-center h-100 w-100">
+            <div class="not-found-empty-alert-block" [style.background]="'#fff'" style="height: 100% !important">
+              <div class="no-data-illustration interactive-illustration" tabindex="0" role="img" aria-label="No Class Levels Illustration">
+                <svg width="280" height="240" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="100" cy="120" rx="90" ry="40" fill="#f5f6fa" />
+
+                  <rect x="55" y="50" width="70" height="60" rx="6" fill="#fff" stroke="#bbb" stroke-width="2" />
+                  <rect x="65" y="60" width="70" height="60" rx="6" fill="#f7f7f7" stroke="#bbb" stroke-width="2" />
+
+                  <rect x="75" y="75" width="50" height="6" rx="3" fill="#e0e0e0" />
+                  <rect x="75" y="85" width="40" height="5" rx="2.5" fill="#e0e0e0" />
+                  <rect x="75" y="95" width="35" height="5" rx="2.5" fill="#e0e0e0" />
+                  <rect x="75" y="105" width="45" height="5" rx="2.5" fill="#e0e0e0" />
+
+                  <g class="magnifier">
+                    <circle cx="120" cy="110" r="38" stroke="#8ba0ad" stroke-width="6" fill="#f5f6fa" />
+                    <text x="120" y="110" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="Arial, sans-serif" fill="#8ba0ad" opacity="0.85" font-weight="bold">?</text>
+                    <rect x="150" y="140" width="38" height="8" rx="4" transform="rotate(45 150 140)" fill="#8ba0ad" />
+                  </g>
+                  <!-- Speech bubble with X -->
+                  <g class="x-bubble">
+                    <ellipse cx="160" cy="55" rx="20" ry="18" fill="#fff" stroke="#bbb" stroke-width="2" />
+                    <path d="M153 48L167 62M167 48L153 62" stroke="#ff4d4f" stroke-width="3" stroke-linecap="round" />
+                  </g>
+                </svg>
+              </div>
+
+              @if (staffWithRoles().length === 0) {
+                <h4 class="text-center" style="color: #8789ed">No Staff Found</h4>
+                <p class="text-center" style="color: #888; font-size: 15px">
+                  To add staff, please add anyone first.<br />
+                  Go to <b>Staff Management</b> in the sidebar, then select <b>Teachers</b>, <b>Nurses</b>, <b>Bus Assistants</b>, or <b>Staff</b> to create new staff.
+                </p>
+              }
+            </div>
+          </div>
+        }
+      </form>
+    </div>
+  </ng-template>
+
+  <!-- Add Department Alert Modal -->
+  <ng-template #addDepartmentModal>
+    <div class="appointment-action-modal appointment-delete-modal">
+      <form [formGroup]="addDepartmentForm" class="modal-body p-0" appSubmitOnEnter>
+        <h6 class="modal-title">Add Department</h6>
+        <div class="modal-select-wrap pt-4">
+          <div class="select-wrap-label">Department</div>
+          <input type="text" class="select-item-button px-3" [formControl]="addDepartmentForm.controls.name" id="firstName" placeholder="Department name" />
+          @if (addDepartmentForm.get("name")?.invalid && addDepartmentForm.get("name")?.touched) {
+            <div class="text-danger mt-1">Department name is required</div>
+          }
+        </div>
+        <div class="modal-action-btns d-flex justify-content-center pt-4">
+          <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn text-white primary-button" [disabled]="addDepartmentForm.invalid" (click)="addDepartment()">
+            <span class="loader-spinner">
+              Submit
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+
+  <!-- Delete Department Alert Modal -->
+  <ng-template #deleteDepartmentModal>
+    <div class="appointment-action-modal appointment-delete-modal">
+      <form class="modal-body p-0" appSubmitOnEnter>
+        <h6 class="modal-title">Are you sure you want to delete this department?</h6>
+        <div class="modal-action-btns d-flex justify-content-center pt-4">
+          <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">No</button>
+          <button type="button" class="btn text-white primary-button" (click)="deleteDepartment()">
+            <span class="loader-spinner">
+              Yes
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,18 @@
+<input [id]="label" type="number" [pattern]="pattern" class="form-control" [name]="label" [formControl]="formControl" [max]="max" [min]="min" [attr.placeholder]="label" [ngClass]="{ 'is-invalid': formControl.invalid && formControl.touched }" (keydown)="allowOnlyNumber($event)" (input)="onInput($event)" [readOnly]="readonly" />
+@if (formControl.invalid && formControl.touched) {
+  @if (formControl.getError("required")) {
+    <div class="text-danger input-field-error">This field is required.</div>
+  }
+  @if (formControl.getError("minlength")) {
+    <div class="text-danger input-field-error">Please enter at least {{ minLength }} digits.</div>
+  }
+  @if (formControl.getError("maxlength")) {
+    <div class="text-danger input-field-error">Maximum {{ maxLength }} digits allowed.</div>
+  }
+  @if (formControl.getError("min")) {
+    <div class="text-danger input-field-error">Please enter a number greater than or equal to {{ min }}.</div>
+  }
+  @if (formControl.getError("max")) {
+    <div class="text-danger input-field-error">Please enter a number less than or equal to {{ max }}.</div>
+  }
+}

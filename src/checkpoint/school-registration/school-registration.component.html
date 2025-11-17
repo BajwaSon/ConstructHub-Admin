@@ -1,0 +1,299 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="progress-outer-container flex-center-align py-4" *ngIf="!isLoading && !showAdminPanel">
+  <div class="progress-container-block w-100 mx-auto bg-white overflow-hidden">
+    <div class="header text-white text-center">
+      <h1>School Registration</h1>
+      <p>Complete the registration process in 5 simple steps</p>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-steps flex-align-between position-relative w-100">
+        <div class="step flex-center-align flex-column position-relative w-100 z-1" [ngClass]="{ active: currentStep === 1, completed: currentStep > 1 }">
+          <div class="step-number flex-center-align rounded-circle">1</div>
+          <div class="step-title">IRAS Setup ID</div>
+        </div>
+        <div class="step flex-center-align flex-column position-relative w-100 z-1" [ngClass]="{ active: currentStep === 2, completed: currentStep > 2 }">
+          <div class="step-number flex-center-align rounded-circle">2</div>
+          <div class="step-title">School Details</div>
+        </div>
+        <div class="step flex-center-align flex-column position-relative w-100 z-1" [ngClass]="{ active: currentStep === 3, completed: currentStep > 3 }">
+          <div class="step-number flex-center-align rounded-circle">3</div>
+          <div class="step-title">School Sessions</div>
+        </div>
+        <div class="step flex-center-align flex-column position-relative w-100 z-1" [ngClass]="{ active: currentStep === 4, completed: currentStep > 4 }">
+          <div class="step-number flex-center-align rounded-circle">4</div>
+          <div class="step-title">Additional Info</div>
+        </div>
+        <div class="step flex-center-align flex-column position-relative w-100 z-1" [ngClass]="{ active: currentStep === 5, completed: currentStep > 5 }">
+          <div class="step-number flex-center-align rounded-circle">5</div>
+          <div class="step-title">Review & Submit</div>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="schoolForm" (ngSubmit)="submitForm()" appSubmitOnEnter>
+      <div class="form-content">
+        <!-- Step 1: IRAS Setup ID -->
+        <div *ngIf="currentStep === 1">
+          <h2 class="form-content-heading">IRAS Setup ID</h2>
+          <div class="form-group">
+            <label>School ID *</label>
+            <app-input-number type="tel" [formControl]="schoolForm.controls.schoolId" id="schoolId" placeholder="Enter IRAS Setup ID" [class.error]="getControlError('schoolId')" [maxLength]="6" [minLength]="6"></app-input-number>
+            <!-- <input type="text" formControlName="schoolId" placeholder="Enter IRAS Setup ID" [class.error]="getControlError('schoolId')" /> -->
+            <!-- <div class="error-message" *ngIf="getControlError('schoolId')">
+              {{ getControlError("schoolId") }}
+            </div> -->
+          </div>
+        </div>
+
+        <!-- Step 2: School Details -->
+        <div *ngIf="currentStep === 2">
+          <h2 class="form-content-heading">School Information</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label>School Name *</label>
+              <app-input type="text" [formControl]="schoolForm.controls.schoolName" id="schoolName" placeholder="Enter school name" [class.error]="getControlError('schoolName')"></app-input>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Principal First Name *</label>
+              <app-input type="text" [formControl]="schoolForm.controls.principalFirstName" id="principalFirstName" placeholder="Enter principal first name" [class.error]="getControlError('principalFirstName')"></app-input>
+            </div>
+
+            <div class="form-group">
+              <label>Principal Middle Name</label>
+              <app-input type="text" [formControl]="schoolForm.controls.principalMiddleName" id="principalMiddleName" placeholder="Enter principal middle name" [class.error]="getControlError('principalMiddleName')"></app-input>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Principal Last Name</label>
+              <app-input type="text" [formControl]="schoolForm.controls.principalLastName" id="principalLastName" placeholder="Enter principal last name" [class.error]="getControlError('principalLastName')"></app-input>
+            </div>
+            <div class="form-group">
+              <label> Principal Gender</label>
+              <app-single-select [options]="genderOptions()" [selectedValue]="schoolForm.controls.principalGender.value" (selectedValueChange)="onGenderChange($event)"></app-single-select>
+              @if (schoolForm.controls.principalGender.invalid && (schoolForm.controls.principalGender.touched || schoolForm.controls.principalGender.dirty)) {
+                <div class="text-danger mt-1">Principal gender is required</div>
+              }
+            </div>
+          </div>
+          <div class="form-group">
+            <label>School Address *</label>
+            <app-input type="textarea" [formControl]="schoolForm.controls.address" id="address" placeholder="Enter complete address" [class.error]="getControlError('address')"></app-input>
+            <!-- <textarea formControlName="address" rows="3" placeholder="Enter complete address" [class.error]="getControlError('address')"></textarea> -->
+            <!-- <div class="error-message" *ngIf="getControlError('address')">
+              {{ getControlError("address") }}
+            </div> -->
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address *</label>
+              <app-input type="email" [formControl]="schoolForm.controls.email" id="email" placeholder="school@example.com" [class.error]="getControlError('email')"></app-input>
+              <!-- <input type="email" formControlName="email" placeholder="school@example.com" [class.error]="getControlError('email')" /> -->
+              <!-- <div class="error-message" *ngIf="getControlError('email')">
+                {{ getControlError("email") }}
+              </div> -->
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <app-input-number-country-code [formControl]="schoolForm.controls.phone" id="phone" label="Phone Number" [placeholder]="'Phone Number'" [class.error]="getControlError('phone')"></app-input-number-country-code>
+              <!-- <input type="tel" formControlName="phone" placeholder="+1234567890" [class.error]="getControlError('phone')" /> -->
+              <!-- <div class="error-message" *ngIf="getControlError('phone')">
+                {{ getControlError("phone") }}
+              </div> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: School Sessions -->
+        <div *ngIf="currentStep === 3">
+          <h2 class="form-content-heading">School Sessions Configuration</h2>
+          <div [formGroup]="sessionGroup">
+            <div class="session-card">
+              <div class="session-header flex-align-between mb-3">
+                <div class="session-title">{{ sessionGroup.get("name")?.value || "Session" }}</div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Session Name</label>
+                  <app-single-select [options]="sessionLists()" [selectedValue]="sessionGroup.get('name')?.value" (selectedValueChange)="onSessionNameChange($event)"></app-single-select>
+                  @if (sessionGroup.get("name")?.invalid && sessionGroup.get("name")?.touched) {
+                    <div class="text-danger mt-1">Session name is required</div>
+                  }
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Start Date *</label>
+                  <input type="text" formControlName="sessionStartDate" placeholder="dd-mm-yyyy" [ngClass]="{ 'is-invalid': sessionGroup.get('sessionStartDate')?.invalid && sessionGroup.get('sessionStartDate')?.touched }" [attr.autocomplete]="'off'" />
+                  @if (sessionGroup.get("sessionStartDate")?.invalid && sessionGroup.get("sessionStartDate")?.touched) {
+                    <div class="text-danger mt-1">
+                      @if (sessionGroup.get("sessionStartDate")?.errors?.["required"]) {
+                        Session start date is required
+                      } @else if (sessionGroup.get("sessionStartDate")?.errors?.["invalidDateFormat"]) {
+                        Please enter date in dd-mm-yyyy format
+                      }
+                    </div>
+                  }
+                </div>
+                <div class="form-group">
+                  <label>End Date *</label>
+                  <input type="text" formControlName="sessionEndDate" placeholder="dd-mm-yyyy" [ngClass]="{ 'is-invalid': sessionGroup.get('sessionEndDate')?.invalid && sessionGroup.get('sessionEndDate')?.touched }" [attr.autocomplete]="'off'" />
+                  @if (sessionGroup.get("sessionEndDate")?.invalid && sessionGroup.get("sessionEndDate")?.touched) {
+                    <div class="text-danger mt-1">
+                      @if (sessionGroup.get("sessionEndDate")?.errors?.["required"]) {
+                        Session end date is required
+                      } @else if (sessionGroup.get("sessionEndDate")?.errors?.["invalidDateFormat"]) {
+                        Please enter date in dd-mm-yyyy format
+                      } @else if (sessionGroup.get("sessionEndDate")?.errors?.["invalidDateRange"]) {
+                        Session end date must be after start date
+                      }
+                    </div>
+                  }
+                </div>
+                @if (sessionGroup.errors?.["invalidDateRange"] && (sessionGroup.get("sessionStartDate")?.touched || sessionGroup.get("sessionEndDate")?.touched)) {
+                  <div class="text-danger mt-1">Session start date must be before session end date</div>
+                }
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" formControlName="isActive" id="isActive" />
+                <label class="form-check-label" for="isActive"> Set as active session </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Additional Info -->
+        <div *ngIf="currentStep === 4">
+          <h2 class="form-content-heading">Additional Information</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Established Year *</label>
+              <app-input-number [formControl]="schoolForm.controls.establishedYear" id="establishedYear" placeholder="e.g., 1990" [class.error]="getControlError('establishedYear')"></app-input-number>
+              <!-- <input type="number" formControlName="establishedYear" placeholder="e.g., 1990" [class.error]="getControlError('establishedYear')" /> -->
+              <!-- <div class="error-message" *ngIf="getControlError('establishedYear')">
+                {{ getControlError("establishedYear") }}
+              </div> -->
+            </div>
+            <div class="form-group">
+              <label>School Type *</label>
+              <select formControlName="schoolType" [class.error]="getControlError('schoolType')">
+                <option value="">Select school type</option>
+                <option *ngFor="let type of schoolTypes" [value]="type.value">
+                  {{ type.label }}
+                </option>
+              </select>
+              <div class="error-message" *ngIf="getControlError('schoolType')">
+                {{ getControlError("schoolType") }}
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>School Description</label>
+            <app-input type="textarea" [formControl]="schoolForm.controls.description" id="description" placeholder="Brief description of your school" [class.error]="getControlError('description')"></app-input>
+            <!-- <textarea formControlName="description" rows="4" placeholder="Brief description of your school" [class.error]="getControlError('description')"></textarea> -->
+            <div class="error-message" *ngIf="getControlError('description')">
+              {{ getControlError("description") }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Review & Submit -->
+        <div *ngIf="currentStep === 5">
+          <h2 class="form-content-heading">Review Your Information</h2>
+          <div class="review-section">
+            <div class="review-title mt-2">IRAS Setup ID</div>
+            <div class="review-item d-flex justify-content-between py-2">
+              <span>School ID:</span>
+              <span>{{ schoolForm.get("schoolId")?.value }}</span>
+            </div>
+            <div class="review-title mt-2">School Details</div>
+            <div class="review-item d-flex justify-content-between py-2">
+              <span>School Name:</span>
+              <span>{{ schoolForm.get("schoolName")?.value }}</span>
+            </div>
+            <div class="review-item d-flex justify-content-between py-2">
+              <span>Principal:</span>
+              <span>{{ getPrincipalFullName() }}</span>
+            </div>
+            <div class="review-item d-flex justify-content-between py-2">
+              <span>Email:</span>
+              <span>{{ schoolForm.get("email")?.value }}</span>
+            </div>
+            <div class="review-item d-flex justify-content-between py-2">
+              <span>Established:</span>
+              <span>{{ schoolForm.get("establishedYear")?.value }}</span>
+            </div>
+            <div class="review-item d-flex justify-content-between py-2">
+              <span>Type:</span>
+              <span>{{ getSchoolTypeLabel(schoolForm.get("schoolType")?.value || "") }}</span>
+            </div>
+          </div>
+
+          <div class="review-section">
+            <div class="review-title mt-2 mb-2">Session</div>
+            <div class="review-item d-flex justify-content-between py-2">
+              <span>{{ sessionGroup.get("name")?.value }}:</span>
+              <span>
+                <strong>{{ sessionGroup.get("sessionStartDate")?.value }}</strong> -
+                <strong>{{ sessionGroup.get("sessionEndDate")?.value }}</strong>
+                <strong>({{ sessionGroup.get("isActive")?.value ? "Active" : "Inactive" }})</strong>
+              </span>
+            </div>
+          </div>
+
+          <div class="error-message" *ngIf="validationErrors['submit']">
+            {{ validationErrors["submit"] }}
+          </div>
+        </div>
+      </div>
+
+      <div class="navigation">
+        <button type="button" class="btn btn-secondary" (click)="previousStep()" *ngIf="currentStep > 1">Previous</button>
+        <div *ngIf="currentStep === 1"></div>
+        <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!isStepValid() || isSubmitting">
+          {{ currentStep < 5 ? "Next" : isSubmitting ? "Creating..." : "Create School" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Loading Screen -->
+<div class="loading-screen-container flex-center-align justify-content-center" *ngIf="isLoading">
+  <div class="loading-screen flex-center-align justify-content-center flex-column text-center">
+    <div class="spinner"></div>
+    <div class="loading-text">Setting up your school...</div>
+    <div class="loading-subtext">We're creating your school profile and configuring the admin panel.</div>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+    <p class="mt-2 text-gray-500">This will only take a few moments</p>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div class="admin-panel flex-center-align justify-content-center" *ngIf="showAdminPanel">
+  <div class="admin-container bg-white w-100 mx-auto">
+    <div class="admin-header">
+      <h1>{{ schoolForm.get("schoolName")?.value }} - Admin Panel</h1>
+      <p class="m-0">Welcome to your school management dashboard</p>
+    </div>
+
+    <div class="admin-content">
+      <div class="welcome-message">
+        <h2 class="mb-2">🎉 Registration Successful!</h2>
+        <p class="mb-0">Your school has been successfully registered and is now ready for management.</p>
+      </div>
+
+      <div style="background: #f8f9ff; padding: 30px; border-radius: 12px">
+        <h3 style="color: #374151; margin-bottom: 20px">Quick Actions</h3>
+        <div style="display: flex; flex-direction: column; gap: 15px">
+          <button class="btn btn-primary" style="width: 100%; height: 50px" (click)="goToDashboard()">Go to Dashboard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

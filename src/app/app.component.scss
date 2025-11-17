@@ -1,0 +1,15 @@
+.app-container {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.initials-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ccc; /* Default background color */
+  color: #fff; /* Text color */
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+}

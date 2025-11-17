@@ -1,0 +1,326 @@
+.top-header-bar {
+  .search-bar {
+    height: var(--h-w-global);
+    width: max(20%, 360px);
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--primary-rounded);
+
+    .form-control {
+      color: var(--secondary-dark);
+      font-size: var(--primary-font-size);
+      font-weight: var(--font-regular);
+      text-transform: capitalize;
+
+      &::placeholder {
+        color: var(--secondary-dark);
+      }
+    }
+  }
+
+  .admin-user-block {
+    gap: 0.75rem;
+
+    .admin-user-name {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 0.875);
+      font-weight: var(--font-semibold);
+      margin-bottom: 0;
+    }
+  }
+}
+
+.session-selection-card {
+  position: relative;
+
+  .top-header-action-card {
+    padding: 0.625rem 1rem;
+
+    .action-sheet-icon {
+      position: relative;
+      right: -5px;
+      transition: all 0.3s ease;
+    }
+  }
+
+  h5 {
+    color: var(--black);
+    font-size: var(--primary-font-size);
+    font-weight: var(--font-semibold);
+    line-height: 1;
+
+    span {
+      color: var(--text-highlight);
+      font-size: calc(var(--primary-font-size) * 0.875);
+    }
+  }
+
+  .top-header-action-card,
+  .session-selection-items {
+    cursor: pointer;
+    border-radius: 0.5rem;
+    background-color: var(--white);
+  }
+
+  .session-selection-items {
+    position: absolute;
+    padding: 1rem;
+    width: 100%;
+    max-height: 295px;
+    margin-top: 0.625rem;
+    pointer-events: none;
+    overflow-y: auto;
+    animation-name: fadeInDown;
+    -webkit-animation-name: fadeInDown;
+    animation-duration: 0.35s;
+    animation-fill-mode: both;
+    -webkit-animation-duration: 0.35s;
+    -webkit-animation-fill-mode: both;
+    box-shadow: 0px 4px 34px 0px rgba(0, 0, 0, 0.05);
+    z-index: 1111;
+    display: none;
+
+    .session-item-list {
+      cursor: pointer;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--grey-light-shade);
+      transition: all 0.3s ease;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.selected {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-top: 5px;
+        border-color: transparent;
+        border-radius: 0.5rem;
+        background-color: var(--highlight-white);
+      }
+    }
+  }
+
+  &.showed-list {
+    .action-sheet-icon {
+      transform: rotate(-180deg);
+    }
+
+    .session-selection-items {
+      display: block;
+      opacity: 0;
+      pointer-events: all;
+      animation-name: fadeInUp;
+      -webkit-animation-name: fadeInUp;
+      animation-duration: 0.4s;
+      animation-fill-mode: both;
+      -webkit-animation-duration: 0.4s;
+      -webkit-animation-fill-mode: both;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      transform: translate3d(0, 30px, 0);
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+
+    to {
+      transform: translate3d(0, 20px, 0);
+      opacity: 0;
+    }
+  }
+}
+
+.daily-alert-card {
+  height: 55px;
+  gap: 2rem;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--white);
+  overflow: hidden;
+
+  h5 {
+    color: var(--black);
+    font-size: calc(var(--primary-font-size) * 0.875);
+    font-weight: var(--font-semibold);
+    line-height: 1;
+  }
+
+  .avatar-name {
+    margin-bottom: 2px;
+  }
+
+  .avatar-designation {
+    font-size: calc(var(--primary-font-size) * 0.75);
+  }
+
+  .daily-alert-lists-outer {
+    position: relative;
+    gap: 0.75rem;
+
+    // height: 100%;
+    // width: 100%;
+    .alert-details-list {
+      backface-visibility: hidden;
+      // position: absolute;
+      // width: 100%;
+      opacity: 0;
+      animation: flipIn 5s linear infinite;
+    }
+  }
+}
+
+@keyframes flipIn {
+  0%,
+  20% {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+
+  25%,
+  75% {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+
+  80%,
+  100% {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+}
+
+.site-datetime-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 0.625rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 3s infinite;
+  }
+
+  .datetime-container {
+    display: flex;
+    gap: 1.5rem;
+    min-width: 280px;
+  }
+
+  .time-section,
+  .date-section,
+  .timezone-section {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .time-label,
+  .date-label,
+  .timezone-label {
+    font-size: 0.75rem;
+    font-weight: var(--font-semibold);
+    color: var(--black);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+  }
+
+  .time-display {
+    display: flex;
+    gap: 0.25rem;
+    font-weight: var(--font-semibold);
+
+    .time-digit-container {
+      width: 1.8rem;
+      height: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .time-digit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        color: var(--white);
+        font-size: 1.125rem;
+        font-weight: var(--font-semibold);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.2s ease;
+
+        &:nth-child(3),
+        &:nth-child(6) {
+          background: rgba(255, 255, 255, 0.2);
+          color: var(--primary-color);
+          font-weight: 900;
+        }
+      }
+    }
+  }
+
+  .date-display {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+  }
+
+  .timezone-display {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .site-datetime-display {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+
+    .datetime-container {
+      min-width: auto;
+      width: 100%;
+    }
+  }
+}

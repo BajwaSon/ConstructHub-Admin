@@ -1,0 +1,29 @@
+<div class="user-stats-details-card h-100" appViewportObserver (isVisible)="onVisibilityChange($event)">
+  <div class="user-stats-details-head card-stats-info flex-align-between">
+    <!-- <div class="card-stats-info-inner">
+      <p class="text-capitalize mb-1">Absent</p>
+      <h4 class="text-capitalize m-0">{{ totalAbsentDays }} days</h4>
+    </div> -->
+    <h4 class="text-capitalize m-0">{{ getAttendanceSummary() }}</h4>
+    <!-- @if (classLevelId() && classSectionId()) { -->
+    <div class="selection-item-outer month-select-outer d-flex gap-2 justify-content-end">
+      @if (showMonthSelect) {
+        <div class="stats-select-dropdown">
+          <app-select-dropdown [options]="monthOptions" [selectedValue]="selectedMonth().value" (selectedValueChange)="onMonthChange($event)"></app-select-dropdown>
+        </div>
+      }
+      <div class="stats-select-dropdown">
+        <app-select-dropdown [options]="timeRange" (selectedValueChange)="onTimeRangeChange($event)"></app-select-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="user-stats-details-body pt-3">
+    <div id="chart" style="height: 250px; width: 100%">
+      @if (classLevelId() && classSectionId()) {
+        <apx-chart [series]="chartOptions.series[0]?.data ? chartOptions.series : dummySeries" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis" [yaxis]="chartOptions.yaxis" [dataLabels]="chartOptions.dataLabels" [tooltip]="chartOptions.tooltip" [fill]="chartOptions.fill" [stroke]="chartOptions.stroke" [colors]="chartOptions.colors" [legend]="chartOptions.legend" [plotOptions]="chartOptions.plotOptions"> </apx-chart>
+      } @else {
+        <apx-chart [series]="chartOptions.series[0]?.data ? chartOptions.series : dummySeries" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis" [yaxis]="chartOptions.yaxis" [dataLabels]="chartOptions.dataLabels" [tooltip]="chartOptions.tooltip" [fill]="chartOptions.fill" [stroke]="chartOptions.stroke" [colors]="chartOptions.colors" [legend]="chartOptions.legend" [plotOptions]="chartOptions.plotOptions"> </apx-chart>
+      }
+    </div>
+  </div>
+</div>

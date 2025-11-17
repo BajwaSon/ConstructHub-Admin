@@ -1,0 +1,17 @@
+<!-- <div class="input-label-wrap">
+  <label [for]="id" class="input-label">
+    {{ placeholder }}
+    @if (formControl.getError("required")) {
+      <span class="text-danger">*</span>
+    }
+  </label>
+</div> -->
+<input [id]="id" [type]="type" class="form-control" [name]="placeholder" [formControl]="formControl" [attr.placeholder]="placeholder" [ngClass]="{ 'is-invalid': formControl.invalid && (formControl.touched || formControl.dirty) }" [attr.autocomplete]="autocomplete" />
+@if (formControl.invalid && (formControl.touched || formControl.dirty)) {
+  @if (formControl.getError("required")) {
+    <div class="text-danger input-field-error">This field is required.</div>
+  }
+  @if (formControl.getError("email") || formControl.getError("pattern")) {
+    <div class="text-danger input-field-error">Please enter a valid email address.</div>
+  }
+}

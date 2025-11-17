@@ -1,0 +1,198 @@
+<div class="page-wrapper d-flex flex-column h-100">
+  <!-- Main Content Container -->
+  <div class="main-content-container d-flex flex-column flex-fill overflow-hidden h-100">
+    <!-- Filter Details List Wrap -->
+    <div class="filter-row-wrap d-flex flex-wrap gap-2 pb-4">
+      <div class="add-action-button border-0 bg-transparent">
+        <span class="button-light-text opacity-100">Health Options List of Students</span>
+      </div>
+    </div>
+    <!-- Recently Appointments Cols -->
+    <div class="appointments-cards-row-wrapper flex-fill overflow-hidden h-100">
+      <div class="recently-appointments-row row row-mx-cst overflow-hidden h-100">
+        <div class="col-sm-12 overflow-hidden h-100">
+          <div class="bordered-rounded-card overflow-hidden d-flex flex-column h-100 pb-0">
+            <div class="appointment-card-head tab-content-head flex-align-between pb-3">
+              <div class="card-head-details">
+                <h5 class="card-head-name m-0">Health Symptoms</h5>
+              </div>
+              <button type="button" data-bs-toggle="modal" class="card-action-btn position-relative ripple-button icon-rounded-button" data-bs-toggle="offcanvas" data-bs-target="#addSymptomsCanvas" aria-controls="addSymptomsCanvas" (click)="resetForm()" [title]="'Add Health Symptoms'">
+                <img src="/images/plus-dark-icon.svg" alt="Plus icon" height="24" width="24" class="img-fluid" />
+              </button>
+            </div>
+            <div class="app-action-status-listing overflow-y-auto flex-fill py-4 h-100">
+              <div class="row">
+                <div class="col-12">
+                  @if (healthOptionLoader.isLoading()) {
+                    <div style="width: 100%">
+                      <app-loader></app-loader>
+                    </div>
+                  } @else if (healthService.healthSymptoms().length === 0) {
+                    <div style="width: 100%">
+                      <app-data-not-found></app-data-not-found>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="table-responsive theme-custom-table">
+                <table class="w-100">
+                  @for (symptom of healthService.healthSymptoms(); track $index) {
+                    <tr>
+                      <td>
+                        <div class="avatar-details-block flex-center-align">
+                          <div class="rounded-50-img">
+                            <img [src]="getPhotoUrl(symptom?.photo?.value)" class="img-fluid" alt="{{ symptom.symptomName }}" width="29" height="36" />
+                          </div>
+                          <div class="avatar-details">
+                            <div class="avatar-name">{{ symptom.symptomName }}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-end">
+                        <button type="button" [title]="'Edit'" class="card-action-btn ripple-button icon-rounded-button me-3" data-bs-toggle="offcanvas" data-bs-target="#editSymptomsCanvas" aria-controls="editSymptomsCanvas" (click)="openModal(null, 'update', symptom)">
+                          <img src="/images/pencil-icon.svg" alt="Dots icon" height="5" width="20" class="img-fluid" />
+                        </button>
+                        <button type="button" [title]="'Delete'" class="card-action-btn ripple-button icon-rounded-button" (click)="openModal(deleteHealthSymptoms, 'update', symptom)">
+                          <img src="/images/trash-icon.svg" alt="Dots icon" height="5" width="20" class="img-fluid" />
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Health Symptoms -->
+<ng-template #deleteHealthSymptoms>
+  <div class="appointment-action-modal appointment-delete-modal">
+    <div class="modal-body p-0">
+      <h6 class="modal-title">Are you sure want to delete this Health Symptoms?</h6>
+      <div class="modal-action-btns d-flex justify-content-center pt-4">
+        <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">No</button>
+        <button type="button" class="btn text-white primary-button" (click)="deleteSymptoms()">
+          <span class="loader-spinner">
+            Yes
+            @if (loader.isLoading()) {
+              <span class="custom-spinner"></span>
+            }
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Add New Health Symptoms Side Panel -->
+<div class="offcanvas appointment-side-canvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="addSymptomsCanvas" aria-labelledby="addSymptomsCanvasLabel">
+  <div class="offcanvas-header p-0 pb-4">
+    <h5 class="offcanvas-title d-flex align-items-end gap-2 flex-fill" id="addSymptomsCanvasLabel">
+      <span><img src="/images/teacher-icon-dark.svg" alt="Calendar icon" class="img-fluid" height="24" width="24" /></span> Add Health Symptoms
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body overflow-x-hidden p-0 pt-lg-4">
+    <form [formGroup]="addHealthSymptomsForm" class="take-appointment-form" appSubmitOnEnter>
+      <div class="form-group-item mb-4">
+        <div class="select-menu-wrap w-100">
+          <div class="select-wrap-label">Symptoms Name</div>
+          <app-input type="text" [formControl]="addHealthSymptomsForm.controls.name" placeholder="Symptoms Name"></app-input>
+        </div>
+      </div>
+      <div class="form-group-item">
+        <div class="media-upload-outer flex-center-align">
+          <div class="preview-upload-img">
+            <div class="avatar-rounded-img position-relative" [style.background-color]="profileImage ? '#c5c5c5' : '#666666'">
+              @if (profileImage) {
+                <img [src]="profileImage" alt="Symptom image" class="img-fluid upload-icon" height="34" width="34" />
+              } @else {
+                <img src="/images/camera-icon.svg" alt="Camera icon" class="img-fluid upload-icon" height="34" width="34" />
+              }
+            </div>
+          </div>
+          <div class="upload-media-item">
+            <div class="form-label">Upload Symptom Image (SVG only)</div>
+            <label for="fileInput" class="media-upload-btn mb-0">
+              <input type="file" id="fileInput" accept=".svg,image/svg+xml" (change)="onFileSelected($event)" hidden="" />
+              Upload SVG
+            </label>
+
+            @if (addHealthSymptomsForm.get("profileImage")?.invalid && addHealthSymptomsForm.get("profileImage")?.touched) {
+              <div class="text-danger mt-1">Symptom image is required</div>
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="offcanvas-footer modal-action-btns d-flex justify-content-center p-0 pt-4 gap-3">
+    <button type="button" class="btn btn-outline ripple-button primary-button w-100" data-bs-dismiss="offcanvas" #closeCanvas>Cancel</button>
+    <button type="submit" class="btn text-white primary-button w-100" [disabled]="addHealthSymptomsForm.invalid" (click)="addHealthSymptoms()">
+      <span class="loader-spinner">
+        Submit
+        @if (loader.isLoading()) {
+          <span class="custom-spinner"></span>
+        }
+      </span>
+    </button>
+  </div>
+</div>
+
+<!-- Edit Health Symptoms Side Panel -->
+<div class="offcanvas appointment-side-canvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="editSymptomsCanvas" aria-labelledby="editSymptomsCanvasLabel">
+  <div class="offcanvas-header p-0 pb-4">
+    <h5 class="offcanvas-title d-flex align-items-end gap-2 flex-fill" id="editSymptomsCanvasLabel">
+      <span><img src="/images/teacher-icon-dark.svg" alt="Calendar icon" class="img-fluid" height="24" width="24" /></span> Edit Health Symptoms
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body overflow-x-hidden p-0 pt-lg-4">
+    <form [formGroup]="updateHealthSymptomsForm" class="take-appointment-form" appSubmitOnEnter>
+      <div class="form-group-item mb-4">
+        <div class="select-menu-wrap w-100">
+          <div class="select-wrap-label">Symptoms Name</div>
+          <app-input type="text" [formControl]="updateHealthSymptomsForm.controls.name" placeholder="Symptoms"></app-input>
+        </div>
+      </div>
+      <div class="form-group-item">
+        <div class="media-upload-outer flex-center-align">
+          <div class="preview-upload-img">
+            <div class="avatar-rounded-img position-relative" [style.background-color]="profileImage ? '#c5c5c5' : '#666666'">
+              @if (profileImage) {
+                <img [src]="profileImage" alt="Symptom image" class="img-fluid upload-icon" height="34" width="34" />
+              } @else {
+                <img src="/images/camera-icon.svg" alt="Camera icon" class="img-fluid upload-icon" height="34" width="34" />
+              }
+            </div>
+          </div>
+          <div class="upload-media-item">
+            <div class="form-label">Upload Symptom Image (SVG only)</div>
+            <label for="fileInput" class="media-upload-btn mb-0">
+              <input type="file" id="fileInput" accept=".svg,image/svg+xml" (change)="onFileSelected($event)" hidden="" />
+              Upload SVG
+            </label>
+            @if (updateHealthSymptomsForm.get("profileImage")?.invalid && updateHealthSymptomsForm.get("profileImage")?.touched) {
+              <div class="text-danger mt-1">Symptom image is required</div>
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="offcanvas-footer modal-action-btns d-flex justify-content-center p-0 pt-4 gap-3">
+    <button type="button" class="btn btn-outline ripple-button primary-button w-100" data-bs-dismiss="offcanvas" #closeUpdateCanvas>Cancel</button>
+    <button type="submit" class="btn text-white primary-button w-100" [disabled]="updateHealthSymptomsForm.invalid" (click)="updateHealthSymptoms()">
+      <span class="loader-spinner">
+        Submit
+        @if (loader.isLoading()) {
+          <span class="custom-spinner"></span>
+        }
+      </span>
+    </button>
+  </div>
+</div>

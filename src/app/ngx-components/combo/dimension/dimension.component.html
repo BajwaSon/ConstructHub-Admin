@@ -1,0 +1,16 @@
+<div class="form-group vertical">
+  <label [for]="label">{{ label }}</label>
+  <div class="input-group">
+    <input type="text" name="dimensionLength" (keydown)="allowOnlyNumber($event)" placeholder="Length" [formControl]="dimensionLength" class="form-control" />
+    <input type="text" name="dimensionWidth" (keydown)="allowOnlyNumber($event)" placeholder="Width" [formControl]="dimensionWidth" class="form-control" />
+    <input type="text" name="dimensionHeight" (keydown)="allowOnlyNumber($event)" placeholder="Height" [formControl]="dimensionHeight" class="form-control" />
+    <select name="dimensionUnit" class="custom-select form-control" [formControl]="dimensionUnit">
+      <option value="cm">cm</option>
+      <option value="ft">ft</option>
+      <option value="g">g</option>
+      <option value="in">in</option>
+      <option value="km">km</option>
+      <option value="m">m</option>
+    </select>
+  </div>
+</div>

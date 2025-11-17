@@ -1,0 +1,10 @@
+.back-screen-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--h-w-global);
+  width: var(--h-w-global);
+  outline: none;
+  border: none;
+  background-color: var(--white);
+}

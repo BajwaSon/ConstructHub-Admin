@@ -1,0 +1,70 @@
+<div class="widget-container pt-5" #widgetContainer>
+  <!-- Inside Temperature -->
+  <div class="card dashboard-temp-card temp-card-inside h-100">
+    <div class="card-header bg-transparent"><i class="fas fa-thermometer-half me-2"></i> Inside Temperature</div>
+    <div class="card-body text-center py-4">
+      <div #insideTemp class="temperature-value">23<span class="unit">°C</span></div>
+      <div class="trend mt-2"><i class="fas fa-arrow-up me-1"></i> +0.5°C from 1h ago</div>
+    </div>
+    <div class="card-footer bg-transparent text-center">
+      <small>Updated: Just now</small>
+    </div>
+  </div>
+
+  <!-- Outside Temperature -->
+  <div class="card dashboard-temp-card temp-card-outside h-100">
+    <div class="card-header bg-transparent"><i class="fas fa-cloud-sun me-2"></i> Outside Temperature</div>
+    <div class="card-body text-center py-4">
+      <div #outsideTemp class="temperature-value">34<span class="unit">°C</span></div>
+      <div class="trend mt-2"><i class="fas fa-arrow-up me-1"></i> +0.8°C from 1h ago</div>
+    </div>
+    <div class="card-footer bg-transparent text-center">
+      <small>Updated: Just now</small>
+    </div>
+  </div>
+
+  <!-- Inside Humidity -->
+  <div class="card dashboard-temp-card humidity-card-inside h-100">
+    <div class="card-header bg-transparent"><i class="fas fa-tint me-2"></i> Inside Humidity</div>
+    <div class="card-body text-center py-4">
+      <div #insideHumidity class="humidity-value">32<span class="unit">%</span></div>
+      <div class="trend mt-2"><i class="fas fa-arrow-down me-1"></i> -2% from 1h ago</div>
+    </div>
+    <div class="card-footer bg-transparent text-center">
+      <small>Updated: Just now</small>
+    </div>
+  </div>
+
+  <!-- Outside Humidity -->
+  <div class="card dashboard-temp-card humidity-card-outside h-100">
+    <div class="card-header bg-transparent"><i class="fas fa-cloud-rain me-2"></i> Outside Humidity</div>
+    <div class="card-body text-center py-4">
+      <div #outsideHumidity class="humidity-value">55<span class="unit">%</span></div>
+      <div class="trend mt-2"><i class="fas fa-arrow-down me-1"></i> -3% from 1h ago</div>
+    </div>
+    <div class="card-footer bg-transparent text-center">
+      <small>Updated: Just now</small>
+    </div>
+  </div>
+
+  <!-- AQI (Air Quality Index) -->
+  <div class="card dashboard-temp-card aqi-card h-100">
+    <div class="card-header bg-transparent"><i class="fas fa-wind me-2"></i> Air Quality Index</div>
+    <div class="aqi-body">
+      <div class="aqi-value-container">
+        <div class="aqi-circle">
+          <div #aqiGauge class="aqi-gauge" style="border-top-color: #2ecc71; border-right-color: #2ecc71"></div>
+          <div #aqiValue class="aqi-value">42<span class="aqi-unit">AQI</span></div>
+        </div>
+      </div>
+      <div class="aqi-status-container">
+        <div #aqiStatus class="aqi-status status-good">Good</div>
+      </div>
+      <div #aqiDescription class="aqi-description">Air quality is considered satisfactory, and air pollution poses little or no risk.</div>
+      <div class="aqi-trend"><i class="fas fa-arrow-down me-1"></i> -3 from 1h ago</div>
+    </div>
+    <div class="card-footer bg-transparent text-center">
+      <small #timestamp>Updated: Just now</small>
+    </div>
+  </div>
+</div>

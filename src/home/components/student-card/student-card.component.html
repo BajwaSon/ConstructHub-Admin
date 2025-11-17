@@ -1,0 +1,34 @@
+<!-- <div class="single-student-stats-details pt-4">
+  <h5 class="common-head-title">
+    Overall Stats about <span class="text-capitalize">{{ student?.firstName ? student.firstName : "" }} {{ student?.middleName ? student.middleName : "" }} {{ student?.lastName ? student.lastName : "" }}</span>
+  </h5> -->
+<div class="student-stats-details-row row">
+  <div class="col-md-3">
+    <div class="student-head-card user-glassporisum-card h-100">
+      <div class="user-card-avtar mx-auto">
+        @if (student?.profilePhoto?.value && student.profilePhoto?.value !== "null") {
+          <div class="user-proile-avtar avatar-circle-img" [style.background-image]="'url(' + student.profilePhoto?.value + ')'"></div>
+        } @else {
+          <div class="user-proile-avtar avatar-circle-img position-relative" [style.background-color]="avatarService.getAvatarColor(student?.firstName + student?.lastName)" [style.color]="avatarService.getTextColor(avatarService.getAvatarColor(student?.firstName + student?.lastName))">
+            <span class="h1 position-absolute top-50 start-50 translate-middle">
+              {{ avatarService.getInitials(student?.firstName, student?.lastName) }}
+            </span>
+          </div>
+        }
+      </div>
+      <div class="user-card-details">
+        <h5 class="common-head-title">{{ student?.firstName ? student.firstName : "" }} {{ student?.middleName ? student.middleName : "" }} {{ student?.lastName ? student.lastName : "" }}</h5>
+        <div class="user-details-chips d-flex justify-content-center gap-1">
+          <span class="d-inline-block user-chip-badge">Level: {{ student?.classLevel?.levelName }}</span>
+          @if (student?.classes?.length > 0) {
+            <span class="d-inline-block user-chip-badge"> Class: {{ getClassNames() }} </span>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <ng-content></ng-content>
+  </div>
+</div>
+<!-- </div> -->

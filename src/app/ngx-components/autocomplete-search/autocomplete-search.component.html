@@ -1,0 +1,18 @@
+<div style="position: relative">
+  <input *ngIf="!selectText" type="text" [(ngModel)]="searchString" [ngModelOptions]="{ standalone: true }" autocomplete="off" (focus)="onFocus()" (blur)="onBlur()" (input)="onSearch()" class="form-control" placeholder="Search" style="width: 100%" />
+
+  <div *ngIf="selectText" class="input-group" style="overflow: hidden">
+    <input type="text" [(ngModel)]="selectText" [ngModelOptions]="{ standalone: true }" autocomplete="off" class="form-control" style="width: 100%" readonly />
+    <button type="button" class="btn bg-transparent cross-box" (click)="clearSelection()">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+
+  <div class="search-list" #searchList [class.hide]="selectText">
+    @for (option of list(); track $index) {
+      <button class="list" (click)="onSelect(option)">
+        {{ option.label }}
+      </button>
+    }
+  </div>
+</div>

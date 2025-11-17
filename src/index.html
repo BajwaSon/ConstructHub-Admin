@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>ConstructHub - Construction Management Admin Panel</title>
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg" href="favicon.svg" />
+
+  <!-- Preload critical resources -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;display=swap" as="style" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" as="style" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap"
+    as="style" />
+  <!-- Host Grotesk Google Fonts Updated Here -->
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&amp;display=swap"
+    rel="stylesheet" />
+
+  <style>
+    #screenLoaderWrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-height: 100vh;
+      width: 100%;
+      height: 100%;
+      animation: fadeOut 0.5s ease forwards 2.5s;
+      background-image: var(--bg-light-gradient);
+      background-color: var(--bg-white-shade);
+      z-index: 9999;
+    }
+
+    .screen-loader-inner {
+      height: 100%;
+      justify-content: center;
+    }
+
+    .loader-logo {
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards 1s;
+    }
+
+    .loader-fill-line {
+      position: absolute;
+      bottom: 48px;
+      margin: 0 auto;
+      height: 0.25rem;
+      width: 297px;
+      border-radius: 0.5rem;
+      background-color: var(--white);
+      overflow: hidden;
+    }
+
+    .line-fill-progress {
+      height: 100%;
+      width: 0;
+      background-color: var(--black);
+      animation: fillLine 0.5s ease forwards;
+    }
+
+    /* Keyframes for animations */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fillLine {
+      0% {
+        width: 0;
+      }
+
+      100% {
+        width: 100%;
+      }
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+  </style>
+
+  <!-- <style>
+      @import "./global.css";
+    </style> -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#1976d2" />
+
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_clpgw0Lx3srAFfGGi8wS-VJt9bJDtMA&loading=async&v=weekly"></script>
+</head>
+
+<body class="mat-typography">
+  <div id="screenLoaderWrapper">
+    <div class="screen-loader-inner flex-center-align">
+      <div class="loader-logo">
+        <img src="/images/neuronso-brand.svg" alt="Neuronso Brand" />
+      </div>
+      <div class="loader-fill-line">
+        <div class="line-fill-progress"></div>
+      </div>
+    </div>
+  </div>
+  <app-root></app-root>
+
+  <!-- Common Script JS Updated Here -->
+  <script>
+    (function () {
+      window.addEventListener("load", function () {
+        setTimeout(() => {
+          const screenLoaderWrapper = document.getElementById("screenLoaderWrapper");
+          screenLoaderWrapper.style.display = "none";
+        }, 3000);
+      });
+    })();
+  </script>
+
+  <!-- <script>
+      function scaling() {
+        const root = document.documentElement;
+        const documentWidth = window.innerWidth;
+        const documentHeight = window.innerHeight;
+        const uiBaseWidth = getComputedStyle(root).getPropertyValue("--ui-base-width").trim().replace("px", "");
+
+        const scale = Number(documentWidth) / Number(uiBaseWidth);
+        const scaledWidth = ((1 / scale) * documentWidth).toFixed(0);
+        const scaledHeight = ((1 / scale) * documentHeight).toFixed(0);
+        root.style.setProperty("--base-scale", scale);
+        root.style.setProperty("--screen-width", scaledWidth + "px");
+        root.style.setProperty("--screen-height", scaledHeight + "px");
+      }
+
+      document.addEventListener("DOMContentLoaded", scaling);
+      window.addEventListener("resize", scaling);
+    </script> -->
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
+</body>
+
+</html>

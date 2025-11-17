@@ -1,0 +1,102 @@
+.form-control {
+  color: var(--secondary-dark);
+  font-size: var(--primary-font-size);
+  font-weight: var(--font-regular);
+  text-transform: capitalize;
+  line-height: 1.5;
+  text-align: left;
+  height: var(--h-w-global);
+  width: 100%;
+  min-width: 7.25rem;
+  padding: 8px 6px;
+  border: 2px solid var(--light-grey-border);
+  border-radius: 0.75rem;
+  background-color: var(--white);
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: none;
+  }
+}
+
+::ng-deep .dropdown-toggle {
+  display: flex;
+  font-size: 16px;
+  align-items: center;
+}
+
+.country-code-dropdown {
+  width: 112px;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: transparent;
+}
+.number-select-filed {
+  .country-code-input {
+    padding-left: 125px;
+  }
+}
+.custom-dropdown {
+  position: relative;
+  // width: 250px;
+  // border: 1px solid #ccc;
+  border-radius: 5px;
+  // background: white;
+  cursor: pointer;
+}
+
+.selected-option {
+  width: 75px;
+}
+
+.selected-option img {
+  margin-right: 6px;
+}
+
+.arrow {
+  font-size: 14px;
+  // border-right: 1px solid #c2c2c2;
+  padding: 1px 3px;
+}
+
+.dropdown-list {
+  position: absolute;
+  left: -12px;
+  top: 36px;
+  width: 100%;
+  background: white;
+  border-top: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 99;
+  min-width: 221px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.dropdown-list li {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-list li:hover {
+  background: #f0f0f0;
+  cursor: pointer;
+}
+
+.dropdown-list img {
+  margin-right: 10px;
+}
+.number-select-filed {
+  z-index: 1;
+}
+// Ensure parent containers do not clip the dropdown
+.number-select-filed,
+.custom-dropdown {
+  overflow: visible !important;
+}

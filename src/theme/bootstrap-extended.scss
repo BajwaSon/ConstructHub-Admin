@@ -1,0 +1,75 @@
+.page {
+  height: var(--screen-height);
+  width: var(--screen-width);
+}
+
+.vh-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-align-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-center-align {
+  display: flex;
+  align-items: center;
+}
+
+.page-screen-isolated {
+  height: var(--screen-height);
+  width: var(--screen-width);
+  overflow-y: auto;
+}
+
+.avatar-circle-img,
+.avatar-rounded-img {
+  width: 100%;
+  padding-top: 100%;
+  border-radius: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: var(--light-grey);
+}
+
+.avatar-rounded-img {
+  border-radius: 0.5rem;
+}
+
+.cst-scrollbar-tracker {
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+.disabled {
+  opacity: 0.4;
+}
+
+.modal-blur {
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+button,
+input,
+textarea {
+  outline: none !important;
+  box-shadow: none !important;
+}

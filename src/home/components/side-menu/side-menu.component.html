@@ -1,0 +1,52 @@
+<aside class="sidebar-panel d-flex flex-column overflow-hidden h-100">
+  <div class="sidebar-brand pb-3" [routerLink]="['/home/dashboard']" style="cursor: pointer">
+    <img src="/images/neuronso-logo.svg" alt="Neuronso Logo" class="img-fluid" width="200" />
+  </div>
+  <div class="sidebar-author-card flex-center-align gap-2">
+    <div class="rounded-50-img">
+      <!-- @if (userService.currentUser()?.profile?.profilePhoto?.value && userService.currentUser()?.profile?.profilePhoto?.value !== "null") {
+        <div class="avatar-circle-img" [style.background-image]="'url(' + userService.currentUser()?.profile?.profilePhoto?.value + ')'"></div>
+     
+      } @else {
+        <div class="avatar-circle-img flex-center-align initials-avatar">
+          {{ avatarService.getInitials(userService.currentUser()?.profile?.firstName, userService.currentUser()?.profile?.lastName) }}
+        </div>
+      } -->
+      <div class="avatar-circle-img" [style.background-image]="'url(/assets/images/naim.png)'"></div>
+    </div>
+    <div class="sidebar-author-details">
+      <h5 class="sidebar-author-label mt-0 ml-3">
+        Naim Messai
+        <!-- {{ userService.currentUser()?.profile?.firstName ? userService.currentUser()?.profile?.firstName : "" }}
+        {{ userService.currentUser()?.profile?.middleName ? userService.currentUser()?.profile?.middleName : "" }}
+        {{ userService.currentUser()?.profile?.lastName ? userService.currentUser()?.profile?.lastName : "" }} -->
+      </h5>
+      <p class="sidebar-author-designation">Operations Manager</p>
+      <!-- <p class="sidebar-author-designation">{{ userService.currentUser() ? userService.currentUser()?.role?.name : "Principal" }}</p> -->
+    </div>
+  </div>
+  <div class="flex-fill h-100 overflow-hidden pt-4">
+    <app-nav-menu (logoutClicked)="openLogoutModal()"></app-nav-menu>
+  </div>
+</aside>
+<div class="drop-shadow"></div>
+
+<!-- User Logout Alert Modal -->
+<ng-template #logoutModal>
+  <form class="appointment-delete-modal" appSubmitOnEnter>
+    <div class="modal-body p-0">
+      <h6 class="modal-title">Are you sure you want to log out of this panel?</h6>
+      <div class="modal-action-btns d-flex justify-content-center pt-4">
+        <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">No</button>
+        <button type="submit" class="btn text-white primary-button" (click)="logout()">
+          <span class="loader-spinner">
+            Yes
+            @if (loader.isLoading()) {
+              <span class="custom-spinner"></span>
+            }
+          </span>
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>

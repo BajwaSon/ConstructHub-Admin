@@ -1,0 +1,55 @@
+<nav class="sidebar-navigation overflow-hidden pt-3 pb-4 h-100">
+  <ul class="list-unstyled flex-fill overflow-y-auto">
+    <ng-container *ngFor="let item of menuItems">
+      <!-- Menu items without children -->
+      <li class="navigation-item" *ngIf="!item.children">
+        <a [routerLink]="[item.route]" routerLinkActive="active-link" class="navigation-link flex-center-align text-decoration-none position-relative">
+          <span><img [src]="item.icon" [alt]="item.label" class="nav-icon labelIcon" /></span>
+          {{ item.label }}
+        </a>
+      </li>
+
+      <!-- Menu items with children -->
+      <li class="navigation-item" *ngIf="item.children">
+        <div type="button" [class.active-link]="isActive(item.route)" [class.expanded]="isExpanded(item)" class="navigation-link flex-center-align text-decoration-none position-relative" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + getCollapseId(item.label)" [attr.aria-expanded]="isExpanded(item)" [attr.aria-controls]="'collapse' + getCollapseId(item.label)" (click)="onParentClick(item)">
+          <span><img [src]="item.icon" [alt]="item.label" class="nav-icon labelIcon" /></span>
+          {{ item.label }}
+        </div>
+        <ul [id]="'collapse' + getCollapseId(item.label)" [class.show]="isExpanded(item)" class="accordion-collapse collapse navigation-submenu" data-bs-parent="#navigationMenuAccordion">
+          <ng-container *ngFor="let child of item.children">
+            <!-- Submenu items without children -->
+            <li class="navigation-item" *ngIf="!child.children">
+              <a [routerLink]="[child.route]" routerLinkActive="active-link" class="navigation-link flex-center-align text-decoration-none position-relative">
+                <span><img [src]="child.icon" [alt]="child.label" class="nav-icon" /></span>
+                {{ child.label }}
+              </a>
+            </li>
+            <!-- Submenu items with children -->
+            <li class="navigation-item" *ngIf="child.children">
+              <div type="button" [class.active-link]="isActive(child.route)" [class.expanded]="isExpanded(child)" class="navigation-link flex-center-align text-decoration-none position-relative" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + getCollapseId(child.label)" [attr.aria-expanded]="isExpanded(child)" [attr.aria-controls]="'collapse' + getCollapseId(child.label)" (click)="onParentClick(child)">
+                <span><img [src]="child.icon" [alt]="child.label" class="nav-icon" /></span>
+                {{ child.label }}
+              </div>
+              <ul [id]="'collapse' + getCollapseId(child.label)" [class.show]="isExpanded(child)" class="accordion-collapse collapse navigation-submenu" data-bs-parent="#navigationMenuAccordion">
+                <li class="navigation-item" *ngFor="let grandChild of child.children">
+                  <a [routerLink]="[grandChild.route]" routerLinkActive="active-link" class="navigation-link flex-center-align text-decoration-none position-relative">
+                    <span><img [src]="grandChild.icon" [alt]="grandChild.label" class="nav-icon" /></span>
+                    {{ grandChild.label }}
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </li>
+    </ng-container>
+  </ul>
+  <div class="navigation-item pb-0">
+    <div type="button" class="navigation-link flex-center-align text-decoration-none position-relative" (click)="onLogoutClick()">
+      <span>
+        <img src="/assets/nav-icons/logout.svg" alt="Logout" class="nav-icon labelIcon" />
+      </span>
+      Logout
+    </div>
+  </div>
+</nav>

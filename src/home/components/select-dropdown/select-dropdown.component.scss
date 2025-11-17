@@ -1,0 +1,91 @@
+.select-menu-wrap {
+  position: relative;
+  width: 100%;
+  .select-item-button {
+    width: 100%;
+  }
+  .action-sheet-icon {
+    transition: all 0.3s ease;
+  }
+  .select-menu-options {
+    position: absolute;
+    padding: 0.625rem;
+    margin-top: 0.625rem;
+    width: 100%;
+    max-height: 295px;
+    border: 2px solid var(--light-grey-border);
+    border-radius: 0.75rem;
+    background: var(--white);
+    pointer-events: none;
+    overflow-y: auto;
+    animation-name: fadeInDown;
+    -webkit-animation-name: fadeInDown;
+    animation-duration: 0.35s;
+    animation-fill-mode: both;
+    -webkit-animation-duration: 0.35s;
+    -webkit-animation-fill-mode: both;
+
+    .menu-option-item {
+      display: flex;
+      align-items: center;
+      height: 2.5rem;
+      cursor: pointer;
+      padding: 0 1rem;
+      margin: 0.25rem 0;
+      border-radius: 0.5rem;
+      border-color: transparent;
+      background: var(--white);
+      .menu-option-text {
+        color: var(--secondary-dark);
+        font-size: var(--primary-font-size);
+        font-weight: var(--font-regular);
+        text-transform: capitalize;
+      }
+      &:hover {
+        background: var(--highlight-white);
+      }
+      &.selected {
+        background-color: var(--highlight-white);
+      }
+    }
+  }
+  &.active {
+    .select-item-button {
+      .action-sheet-icon {
+        transform: rotate(-180deg);
+      }
+    }
+    .select-menu-options {
+      display: block;
+      opacity: 0;
+      pointer-events: all;
+      z-index: 10;
+      animation-name: fadeInUp;
+      -webkit-animation-name: fadeInUp;
+      animation-duration: 0.4s;
+      animation-fill-mode: both;
+      -webkit-animation-duration: 0.4s;
+      -webkit-animation-fill-mode: both;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      transform: translate3d(0, 30px, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+  @keyframes fadeInDown {
+    from {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+    to {
+      transform: translate3d(0, 20px, 0);
+      opacity: 0;
+    }
+  }
+}

@@ -1,0 +1,83 @@
+<div class="top-header-bar pb-4">
+  <div class="row">
+    <div class="col-lg-9">
+      <div class="sidebar-brand pb-3" [routerLink]="['/home/dashboard']" style="cursor: pointer" *ngIf="isFullscreen">
+        <img src="/images/neuronso-brand-white.svg" alt="Neuronso Logo" class="img-fluid" width="250" />
+      </div>
+      <!-- construction site current date and time -->
+      <div class="site-datetime-display">
+        <div class="datetime-container">
+          <div class="time-section">
+            <div class="time-label">SITE TIME</div>
+            <div class="time-display">
+              <div class="time-digit-container" *ngFor="let digit of currentTimeArray; let i = index">
+                <span class="time-digit" [@digitAnimation]="digit" [style.animation-delay]="i * 0.05 + 's'">
+                  {{ digit }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="date-section">
+            <div class="date-label">CURRENT DATE</div>
+            <div class="date-display" [@dateAnimation]="currentDate">
+              {{ currentDate | date: "EEEE, MMMM d, yyyy" | uppercase }}
+            </div>
+            <div class="timezone-display" [@timezoneAnimation]="currentTimezone">
+              {{ currentTimezone }}
+            </div>
+          </div>
+        </div>
+      </div>
+      @if (isSearchVisible) {
+      <div class="top-header-left-side flex-center-align gap-3">
+        <!-- Search Bar Field -->
+        <div class="search-bar flex-center-align bg-white gap-2">
+          <span class="search-icon d-inline-flex">
+            <img src="/images/search-icon.svg" alt="Search icon" class="img-fluid" height="18" width="18" />
+          </span>
+          <input type="text" class="form-control flex-fill border-0 p-0" placeholder="Search by Students"
+            aria-label="Search by Students" />
+        </div>
+      </div>
+      }
+    </div>
+    <div class="col-lg-3">
+      <div class="top-header-right-side flex-center-align justify-content-end gap-2">
+        <!-- Chat Notification Button -->
+        <button class="notification-button ripple-button icon-rounded-button" (click)="gotoMessages()"
+          [title]="'View Messages'">
+          <img src="/images/msg-icon.svg" class="img-fluid" alt="Chat Icon" height="24" width="24" />
+          @if (!isMessagesRoute) {
+          <span class="alert-badge-dot rounded-circle position-absolute">2</span>
+          }
+        </button>
+
+        <!-- Other Notification Button -->
+        <button class="notification-button ripple-button icon-rounded-button" [title]="'View Notifications'">
+          <img src="/images/bell-icon.svg" class="img-fluid" alt="Bell Icon" height="24" width="24" />
+          <span class="alert-badge-dot rounded-circle position-absolute">5</span>
+        </button>
+        <!-- Full Screen Preview Button -->
+        <button class="notification-button ripple-button icon-rounded-button" (click)="toggleFullscreen()"
+          [title]="'View Fullscreen'">
+          <ng-container *ngIf="isFullscreen">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              style="fill: rgba(102, 102, 102, 1)">
+              <path
+                d="M16.121 6.465 14 4.344V10h5.656l-2.121-2.121 3.172-3.172-1.414-1.414zM4.707 3.293 3.293 4.707l3.172 3.172L4.344 10H10V4.344L7.879 6.465zM19.656 14H14v5.656l2.121-2.121 3.172 3.172 1.414-1.414-3.172-3.172zM6.465 16.121l-3.172 3.172 1.414 1.414 3.172-3.172L10 19.656V14H4.344z">
+              </path>
+            </svg>
+          </ng-container>
+          <ng-container *ngIf="!isFullscreen">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              style="fill: rgba(102, 102, 102, 1)">
+              <path
+                d="m21 15.344-2.121 2.121-3.172-3.172-1.414 1.414 3.172 3.172L15.344 21H21zM3 8.656l2.121-2.121 3.172 3.172 1.414-1.414-3.172-3.172L8.656 3H3zM21 3h-5.656l2.121 2.121-3.172 3.172 1.414 1.414 3.172-3.172L21 8.656zM3 21h5.656l-2.121-2.121 3.172-3.172-1.414-1.414-3.172 3.172L3 15.344z">
+              </path>
+            </svg>
+          </ng-container>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

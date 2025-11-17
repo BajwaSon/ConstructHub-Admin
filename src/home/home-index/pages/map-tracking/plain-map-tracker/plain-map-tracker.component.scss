@@ -1,0 +1,57 @@
+.legend-item-outer {
+  justify-content: flex-end;
+  .legend-item {
+    .legend-icon {
+      font-weight: var(--font-medium);
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      background-color: var(--primary-color);
+      &.teacher-density {
+        background-color: #e74c3c;
+      }
+
+      &.children-density {
+        background-color: #5cace2;
+      }
+    }
+    h5 {
+      color: var(--black);
+      font-size: var(--primary-font-size);
+      font-weight: var(--font-medium);
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+// Map container and dots positioning
+#floorPlan {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+// Police inspector styling
+.security-guard {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    transform: scale(1.2);
+  }
+  
+  div {
+    font-size: 30px;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+}
+

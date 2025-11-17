@@ -1,0 +1,9 @@
+<mat-form-field class="w-100 p-0">
+  <mat-select class="select-item-button" [(value)]="selectedValue" (selectionChange)="onSelectChange($event)">
+    <!-- <mat-option [value]="''">Select an option</mat-option> -->
+    @for (option of options; track $index) {
+      <!-- <mat-option [value]="">Select</mat-option> -->
+      <mat-option [value]="option.value">{{ option.label }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

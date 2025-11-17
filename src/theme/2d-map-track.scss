@@ -1,0 +1,140 @@
+.plain-view-map-container {
+  cursor: grab;
+  border: 1px solid var(--light-grey-border);
+  border-radius: 0.625rem;
+  &:active {
+    cursor: grabbing;
+  }
+  .floor-pan-image {
+    transform-origin: 0 0;
+    transition: transform 1.5s ease-in-out;
+  }
+  .person-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform-origin: 0 0;
+    transition: transform 1.5s ease-in-out;
+    .person {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: var(--font-semibold);
+      pointer-events: all;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      transform: translate(-50%, -50%);
+      transition: all 0.2s ease;
+      overflow: hidden;
+      &:hover {
+        z-index: 100;
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+      &.teacher {
+        background-color: #e74c3c;
+        border: 1px solid #c0392b;
+      }
+      &.child {
+        background-color: #3498db;
+        border: 1px solid #2980b9;
+      }
+      &.staff {
+        background-color: #f39c12;
+        border: 1px solid #e67e22;
+      }
+    }
+  }
+  .person-tooltip {
+    position: fixed;
+    color: var(--text-highlight);
+    padding: 0.625rem;
+    font-size: calc(var(--primary-font-size) * 0.875);
+    pointer-events: none;
+    opacity: 0;
+    white-space: normal;
+    width: 220px;
+    border: 1px solid var(--light-grey-border);
+    border-radius: 0.625rem;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.2s ease;
+    z-index: 101;
+    .person-tooltip-photo {
+      width: 3.5rem;
+      height: 3.5rem;
+      margin-right: 0.625rem;
+      object-fit: cover;
+      border: 2px solid var(--text-highlight);
+      border-radius: 50%;
+    }
+    .person-tooltip-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      .person-tooltip-info {
+        flex: 1;
+      }
+    }
+    .status-stat {
+      display: flex;
+      justify-content: space-between;
+      font-size: calc(var(--primary-font-size) * 0.875);
+      margin: 5px 0;
+      .status-stat-value {
+        font-weight: var(--font-semibold);
+      }
+    }
+  }
+}
+
+.zoom-controls {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 100;
+  .zoom-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-semibold);
+    width: 30px;
+    height: 30px;
+    margin: 0 2px;
+    cursor: pointer;
+    background: var(--white);
+    border: 1px solid var(--light-grey-border);
+    border-radius: 4px;
+    &.classroom-btn {
+      width: auto;
+      padding: 0 8px;
+    }
+    &.active-btn {
+      color: var(--white);
+      border-color: var(--primary-color);
+      background-color: var(--primary-color);
+    }
+    &:not(.active-btn):hover {
+      background: #f0f0f0;
+    }
+  }
+  .zoom-level {
+    display: inline-block;
+    padding: 0 0.625rem;
+    font-size: calc(var(--primary-font-size) * 0.875);
+  }
+}

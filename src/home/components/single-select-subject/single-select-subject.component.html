@@ -1,0 +1,7 @@
+<mat-form-field class="w-100 p-0">
+  <mat-select class="select-item-button" (selectionChange)="onSelectChange($event)" [value]="selectedValue || options[0]?.value">
+    @for (gender of options; track gender) {
+      <mat-option [value]="gender.value">{{ gender.label }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

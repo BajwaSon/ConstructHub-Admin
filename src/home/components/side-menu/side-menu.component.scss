@@ -1,0 +1,84 @@
+.sidebar-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 1.5rem 2.375rem 0 1.5rem;
+  width: 290px;
+  background-color: var(--white);
+  scrollbar-width: none;
+  scrollbar-color: var(--white);
+  transition: all 0.5s ease;
+  z-index: 999;
+  @media screen and (max-width: 991px) {
+    transform: translate3d(-100%, 0, 0);
+    &.active {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  @media screen and (max-width: 1500px) {
+    padding: 1.5rem 1.5rem 0 1.5rem;
+    width: 260px;
+    .sidebar-brand {
+      img {
+        width: 180px;
+      }
+    }
+  }
+}
+
+.sidebar-author-card {
+  padding: 0.625rem 0.5rem;
+  margin-top: 1rem;
+  border: 1px solid var(--grey-light-shade);
+  border-radius: 0.5rem;
+  background-color: var(--white);
+  .rounded-50-img {
+    width: 40px;
+  }
+  .sidebar-author-details {
+    .sidebar-author-label {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 0.875);
+      font-weight: var(--font-medium);
+      margin-bottom: 0.25rem;
+    }
+    .sidebar-author-designation {
+      color: var(--text-highlight);
+      font-size: calc(var(--primary-font-size) * 0.75);
+      font-weight: var(--font-regular);
+      line-height: 1;
+      margin: 0;
+    }
+  }
+  .initials-avatar {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+.sidebar-panel.active + .drop-shadow {
+  display: block;
+}
+
+.appointment-delete-modal {
+  padding: 3rem 1.5rem;
+  border-radius: var(--cst-radius-lg);
+  .modal-title {
+    color: var(--black);
+    font-size: var(--primary-font-size);
+    font-weight: var(--font-regular);
+    letter-spacing: 0.64px;
+    text-align: center;
+    margin: 0;
+  }
+  .modal-action-btns {
+    gap: 0.625rem;
+    .btn {
+      width: 5.5rem;
+    }
+  }
+  .select-menu-wrap {
+    width: 18.75rem;
+    margin: 0 auto;
+  }
+}

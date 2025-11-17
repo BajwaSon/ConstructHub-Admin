@@ -1,0 +1,179 @@
+<div class="user-stats-details-card bg-white bordered-rounded-card">
+  <div
+    class="user-stats-details-head d-flex"
+    [ngClass]="{
+      'justify-content-between': classLevelId() && classSectionId(),
+      'justify-content-end': !(classLevelId() && classSectionId()),
+    }">
+    @if (classLevelId() && classSectionId()) {
+      <div class="card-stats-info" *ngIf="heartRateStat">
+        <p class="text-capitalize mb-1">{{ heartRateStat()?.name }}</p>
+        <h4 class="text-capitalize m-0">{{ heartRateStat()?.value() }} <span [innerHTML]="heartRateStat()?.unit"></span></h4>
+      </div>
+    }
+
+    <!-- @if (classLevelId() && classSectionId()) { -->
+    <div class="selection-item-outer month-select-outer d-flex justify-content-end gap-2 mb-3">
+      @if (showMonthSelect) {
+        <div class="stats-select-dropdown">
+          <app-select-dropdown [options]="monthOptions" [selectedValue]="selectedMonth().value" (selectedValueChange)="onMonthChange($event)"></app-select-dropdown>
+        </div>
+      }
+      <div class="stats-select-dropdown">
+        <app-select-dropdown [options]="timeRange" (selectedValueChange)="onTimeRangeChange($event)"></app-select-dropdown>
+      </div>
+    </div>
+    <!-- } -->
+  </div>
+
+  <div class="user-stats-details-body">
+    @if (classLevelId() && classSectionId()) {
+      <div id="chart" style="height: 190px; width: 100%">
+        <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis" [yaxis]="chartOptions.yaxis" [dataLabels]="chartOptions.dataLabels" [tooltip]="chartOptions.tooltip" [fill]="chartOptions.fill" [stroke]="chartOptions.stroke"> </apx-chart>
+      </div>
+      <ul class="nav nav-pills graph-pills-tabs justify-content-between pt-4 mb-0" id="pills-tab" role="tablist">
+        <li class="nav-item w-100" role="presentation">
+          <button (click)="onHealthStatClick('Heart Rate')" class="nav-link active w-100" id="pills-heart-tab" data-bs-toggle="pill" data-bs-target="#pills-heart" type="button" role="tab" aria-controls="pills-heart" aria-selected="true" style="background-color: #fdefef">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_2662_2870)">
+                <path d="M13 9.0481L8 14.0001L6.06933 12.0881M1.99133 6.68543C1.98576 5.98234 2.20266 5.29549 2.61101 4.7231C3.01936 4.15072 3.59825 3.72212 4.26489 3.4986C4.93154 3.27508 5.65179 3.26809 6.32264 3.47862C6.9935 3.68915 7.58061 4.10642 8 4.67077C8.27569 4.30411 8.62409 3.99831 9.0234 3.7725C9.42271 3.54669 9.86433 3.40573 10.3206 3.35845C10.7769 3.31116 11.2381 3.35856 11.6752 3.49769C12.1123 3.63682 12.516 3.86468 12.861 4.16701C13.206 4.46934 13.4849 4.83962 13.6803 5.25469C13.8756 5.66977 13.9832 6.12069 13.9962 6.57924C14.0092 7.03779 13.9275 7.49409 13.7561 7.9196C13.5847 8.3451 13.3273 8.73065 13 9.0521" stroke="#FF8383" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M2 8.66675H3.33333L4.66667 10.6667L6 6.66675L6.66667 8.66675H8.66667" stroke="#FF8383" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_2662_2870">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </li>
+        <li class="nav-item w-100" role="presentation">
+          <button (click)="onHealthStatClick('Body Temperature')" class="nav-link w-100" id="pills-body-temperature-tab" data-bs-toggle="pill" data-bs-target="#pills-heart" type="button" role="tab" aria-controls="pills-heart" aria-selected="true" style="background-color: #ebeefa">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_99_1033)">
+                <path d="M5.33333 9C4.82496 9.29351 4.42763 9.74657 4.20299 10.2889C3.97834 10.8313 3.93893 11.4326 4.09087 11.9996C4.2428 12.5666 4.57759 13.0677 5.0433 13.425C5.50902 13.7824 6.07964 13.9761 6.66667 13.9761C7.25369 13.9761 7.82431 13.7824 8.29003 13.425C8.75575 13.0677 9.09054 12.5666 9.24247 11.9996C9.3944 11.4326 9.35499 10.8313 9.13035 10.2889C8.9057 9.74657 8.50838 9.29351 8 9V3.33333C8 2.97971 7.85952 2.64057 7.60948 2.39052C7.35943 2.14048 7.02029 2 6.66667 2C6.31305 2 5.97391 2.14048 5.72386 2.39052C5.47381 2.64057 5.33333 2.97971 5.33333 3.33333V9Z" stroke="#647FF4" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M5.33325 6H7.99992" stroke="#647FF4" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M10.6667 6H14.6667" stroke="#647FF4" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_99_1033">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </li>
+        <li class="nav-item w-100" role="presentation">
+          <button (click)="onHealthStatClick('BP')" class="nav-link w-100" id="pills-bp-tab" data-bs-toggle="pill" data-bs-target="#pills-heart" type="button" role="tab" aria-controls="pills-heart" aria-selected="true" style="background-color: #e2fce4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10D01C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-heart">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+              <path d="M6 21v-2a4 4 0 0 1 4 -4h.5" />
+              <path d="M18 22l3.35 -3.284a2.143 2.143 0 0 0 .005 -3.071a2.242 2.242 0 0 0 -3.129 -.006l-.224 .22l-.223 -.22a2.242 2.242 0 0 0 -3.128 -.006a2.143 2.143 0 0 0 -.006 3.071l3.355 3.296z" />
+            </svg>
+          </button>
+        </li>
+        <li class="nav-item w-100" role="presentation">
+          <button (click)="onHealthStatClick('HRV')" class="nav-link w-100" id="pills-hrv-tab" data-bs-toggle="pill" data-bs-target="#pills-heart" type="button" role="tab" aria-controls="pills-heart" aria-selected="true" style="background-color: #fff2e7">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_99_1034)">
+                <path d="M2 3.33329C2 3.15648 2.07024 2.98691 2.19526 2.86189C2.32029 2.73686 2.48986 2.66663 2.66667 2.66663H13.3333C13.5101 2.66663 13.6797 2.73686 13.8047 2.86189C13.9298 2.98691 14 3.15648 14 3.33329V9.99996C14 10.1768 13.9298 10.3463 13.8047 10.4714C13.6797 10.5964 13.5101 10.6666 13.3333 10.6666H2.66667C2.48986 10.6666 2.32029 10.5964 2.19526 10.4714C2.07024 10.3463 2 10.1768 2 9.99996V3.33329Z" stroke="#F4AB67" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M4.66675 13.3334H11.3334" stroke="#F4AB67" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M6 10.6666V13.3333" stroke="#F4AB67" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M10 10.6666V13.3333" stroke="#F4AB67" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M4.66675 6.66663H6.00008L7.33341 8.66663L8.66675 4.66663L9.33341 6.66663H11.3334" stroke="#F4AB67" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_99_1034">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </li>
+        <li class="nav-item w-100" role="presentation">
+          <button (click)="onHealthStatClick('SPO2')" class="nav-link w-100" id="pills-spo2-tab" data-bs-toggle="pill" data-bs-target="#pills-heart" type="button" role="tab" aria-controls="pills-heart" aria-selected="true" style="background-color: #ffefc1">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_99_1035)">
+                <path d="M6.66663 3.33337H9.33329V2.00004C9.33329 1.82323 9.26305 1.65366 9.13803 1.52864C9.01301 1.40361 8.84344 1.33337 8.66663 1.33337H7.33329C7.15648 1.33337 6.98691 1.40361 6.86189 1.52864C6.73686 1.65366 6.66663 1.82323 6.66663 2.00004V3.33337Z" stroke="#F4AB67" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M9.33329 2.33337C9.33329 3.41737 9.67129 4.47471 10.3 5.35804L10.3333 5.40471C10.9838 6.31851 11.3334 7.41234 11.3333 8.53404V12.6667C11.3333 13.0203 11.1928 13.3595 10.9428 13.6095C10.6927 13.8596 10.3536 14 9.99996 14H5.99996C5.64634 14 5.3072 13.8596 5.05715 13.6095C4.8071 13.3595 4.66663 13.0203 4.66663 12.6667V8.53337C4.66663 7.41204 5.01596 6.31871 5.66663 5.40471L5.69996 5.35804C6.32874 4.47481 6.66663 3.41757 6.66663 2.33337" stroke="#F4AB67" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M4.66663 9.86861C4.93329 9.75394 5.16375 9.56889 5.33329 9.33328C5.48474 9.12228 5.68527 8.95133 5.91758 8.83518C6.14988 8.71903 6.40696 8.66117 6.66663 8.66661C6.92629 8.66117 7.18338 8.71903 7.41568 8.83518C7.64798 8.95133 7.84851 9.12228 7.99996 9.33328C8.15141 9.54427 8.35194 9.71523 8.58424 9.83138C8.81654 9.94753 9.07363 10.0054 9.33329 9.99994C9.59296 10.0054 9.85004 9.94753 10.0823 9.83138C10.3146 9.71523 10.5152 9.54427 10.6666 9.33328C10.836 9.09717 11.0665 8.91164 11.3333 8.79661" stroke="#F4AB67" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_99_1035">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </li>
+        <li class="nav-item w-100" role="presentation">
+          <button (click)="onHealthStatClick('Stress Value')" class="nav-link w-100" id="pills-stress-tab" data-bs-toggle="pill" data-bs-target="#pills-heart" type="button" role="tab" aria-controls="pills-heart" aria-selected="true" style="background-color: #fdeeff">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_99_1036)">
+                <path d="M2 8H5L6 4L8.66667 12L10 6L11 8H14" stroke="#E41EFE" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_99_1036">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </li>
+        <li class="nav-item w-100" role="presentation">
+          <button (click)="onHealthStatClick('Breathing Rate')" class="nav-link w-100" id="pills-breathing-tab" data-bs-toggle="pill" data-bs-target="#pills-heart" type="button" role="tab" aria-controls="pills-heart" aria-selected="true" style="background-color: #dcebed">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_99_1037)">
+                <path d="M2 8.66667C2 8.48986 2.07024 8.32029 2.19526 8.19526C2.32029 8.07024 2.48986 8 2.66667 8H5.33333C5.51014 8 5.67971 8.07024 5.80474 8.19526C5.92976 8.32029 6 8.48986 6 8.66667V12.6667C6 12.8435 5.92976 13.013 5.80474 13.1381C5.67971 13.2631 5.51014 13.3333 5.33333 13.3333H2.66667C2.48986 13.3333 2.32029 13.2631 2.19526 13.1381C2.07024 13.013 2 12.8435 2 12.6667V8.66667Z" stroke="#18BCD6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M10 6.00004C10 5.82323 10.0702 5.65366 10.1953 5.52864C10.3203 5.40361 10.4899 5.33337 10.6667 5.33337H13.3333C13.5101 5.33337 13.6797 5.40361 13.8047 5.52864C13.9298 5.65366 14 5.82323 14 6.00004V12.6667C14 12.8435 13.9298 13.0131 13.8047 13.1381C13.6797 13.2631 13.5101 13.3334 13.3333 13.3334H10.6667C10.4899 13.3334 10.3203 13.2631 10.1953 13.1381C10.0702 13.0131 10 12.8435 10 12.6667V6.00004Z" stroke="#18BCD6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M6 3.33329C6 3.15648 6.07024 2.98691 6.19526 2.86189C6.32029 2.73686 6.48986 2.66663 6.66667 2.66663H9.33333C9.51014 2.66663 9.67971 2.73686 9.80474 2.86189C9.92976 2.98691 10 3.15648 10 3.33329V12.6666C10 12.8434 9.92976 13.013 9.80474 13.138C9.67971 13.2631 9.51014 13.3333 9.33333 13.3333H6.66667C6.48986 13.3333 6.32029 13.2631 6.19526 13.138C6.07024 13.013 6 12.8434 6 12.6666V3.33329Z" stroke="#18BCD6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M2.66663 13.3334H12" stroke="#18BCD6" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_99_1037">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </li>
+        <li class="nav-item w-100" role="presentation">
+          <button (click)="onHealthStatClick('Calories')" class="nav-link w-100" id="pills-calories-tab" data-bs-toggle="pill" data-bs-target="#pills-heart" type="button" role="tab" aria-controls="pills-heart" aria-selected="true" style="background-color: #ebebeb">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_99_1038)">
+                <path d="M8 7.99996C9.33333 6.02663 8 3.33329 7.33333 2.66663C7.33333 4.69196 6.15133 5.82729 5.33333 6.66663C4.516 7.50663 4 8.82663 4 9.99996C4 11.0608 4.42143 12.0782 5.17157 12.8284C5.92172 13.5785 6.93913 14 8 14C9.06087 14 10.0783 13.5785 10.8284 12.8284C11.5786 12.0782 12 11.0608 12 9.99996C12 8.97863 11.296 7.37329 10.6667 6.66663C9.476 8.66663 8.806 8.66663 8 7.99996Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_99_1038">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </li>
+        <li class="nav-item w-100" role="presentation">
+          <button (click)="onHealthStatClick('Sleep')" class="nav-link w-100" id="pills-sleep-tab" data-bs-toggle="pill" data-bs-target="#pills-heart" type="button" role="tab" aria-controls="pills-heart" aria-selected="true" style="background-color: #dbe3ff">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_99_1039)">
+                <path d="M3.33337 5.99996C3.33337 6.35358 3.47385 6.69272 3.7239 6.94277C3.97395 7.19282 4.31309 7.33329 4.66671 7.33329C5.02033 7.33329 5.35947 7.19282 5.60952 6.94277C5.85956 6.69272 6.00004 6.35358 6.00004 5.99996C6.00004 5.64634 5.85956 5.3072 5.60952 5.05715C5.35947 4.8071 5.02033 4.66663 4.66671 4.66663C4.31309 4.66663 3.97395 4.8071 3.7239 5.05715C3.47385 5.3072 3.33337 5.64634 3.33337 5.99996Z" stroke="#0039FF" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M14.6667 11.3334V9.33337H1.33337" stroke="#0039FF" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M1.33337 5.33337V11.3334" stroke="#0039FF" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M8 9.33333H14.6667V8C14.6667 7.46957 14.456 6.96086 14.0809 6.58579C13.7058 6.21071 13.1971 6 12.6667 6H8V9.33333Z" stroke="#0039FF" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_99_1039">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    } @else {
+      <div id="stacked-chart" style="height: 280px; width: 100%" class="stackedHealthChart" #stackedChartRef>
+        <apx-chart [series]="stackedChartOptions.series" [chart]="stackedChartOptions.chart" [xaxis]="stackedChartOptions.xaxis" [yaxis]="stackedChartOptions.yaxis" [dataLabels]="stackedChartOptions.dataLabels" [tooltip]="stackedChartOptions.tooltip" [fill]="stackedChartOptions.fill" [stroke]="stackedChartOptions.stroke" [colors]="stackedChartOptions.colors" [plotOptions]="stackedChartOptions.plotOptions" [legend]="stackedChartOptions.legend"> </apx-chart>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,56 @@
+.attendance-details-calendar {
+  .date-slider-header {
+    margin-bottom: 1.375rem;
+    #dateMonthYear {
+      position: relative;
+      top: 1px;
+      color: var(--black);
+      font-size: var(--primary-font-size);
+      font-weight: var(--font-medium);
+    }
+  }
+  .day-container-wrap {
+    .weekdays-container,
+    .days-container {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      width: 100%;
+      div {
+        color: var(--text-highlight);
+        font-size: var(--primary-font-size);
+        font-weight: var(--font-regular);
+        text-transform: capitalize;
+        line-height: 1.5;
+        letter-spacing: 0.38px;
+        &.weekday-item {
+          padding-bottom: 1rem;
+        }
+        &.day-item {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--black);
+          height: 70px;
+          cursor: pointer;
+          &.day-highlight::before {
+            position: absolute;
+            content: "";
+            top: 50%;
+            left: 50%;
+            height: 2rem;
+            width: 2rem;
+            opacity: 0.3;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            z-index: -1;
+          }
+        }
+        &:not(.weekday-item) {
+          border-top: 0.3px solid #aeaeb2;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+<!-- eslint-disable @angular-eslint/template/alt-text -->
+<div class="number-select-filed position-relative">
+  <div class="number-country-code d-inline-flex align-items-center">
+    <div #dropdownElement class="custom-dropdown">
+      <div class="selected-option flex-align-between" (click)="toggleDropdown()">
+        <img *ngIf="selectedCountry?.code" [src]="getFlagPath(selectedCountry.code)" class="img-fluid" height="24" width="24" />
+        {{ selectedCountry?.code }}
+        <span class="arrow">&#9662;</span>
+      </div>
+
+      <ul *ngIf="dropdownOpen" class="dropdown-list">
+        <li *ngFor="let country of countries" (click)="selectCountry(country)">
+          <img [src]="getFlagPath(country.code)" class="img-fluid" height="24" width="24" />
+          {{ country.name }} ({{ country.code }})
+        </li>
+      </ul>
+    </div>
+    <span class="country-code-divider"></span>
+  </div>
+  <input [id]="label" [type]="type" [attr.placeholder]="placeholder" (input)="onInputChange($event)" class="form-control country-code-input" [name]="label" [formControl]="formControl" [ngClass]="{ 'is-invalid': formControl.invalid && formControl.touched }" />
+</div>
+
+@if (formControl.invalid && formControl.touched) {
+  @if (formControl.getError("required")) {
+    <div class="text-danger input-field-error">This field is required.</div>
+  }
+  @if (formControl.getError("pattern")) {
+    <div class="text-danger input-field-error">Invalid phone number format.</div>
+  }
+}

@@ -1,0 +1,15 @@
+<div class="select-menu-wrap" #optionMenu appClickOutside (clickOutside)="optionMenu?.classList?.remove('active')">
+  <button type="button" class="select-item-button flex-align-between ripple-button" (click)="toggleOptions()">
+    <span class="d-inline-block action-sheet-number flex-fill px-2">{{ selectedOption.label }}</span>
+    <span class="action-sheet-icon">
+      <img src="/images/select-icon.svg" alt="Overall stats select" class="img-fluid" height="24" width="24" />
+    </span>
+  </button>
+  <ul class="select-menu-options">
+    @for (option of options; track $index; let i = $index) {
+      <li class="menu-option-item" [class.selected]="option.value === selectedOption.value" (click)="onOptionSelect($event, option)">
+        <span class="menu-option-text">{{ option.label }}</span>
+      </li>
+    }
+  </ul>
+</div>

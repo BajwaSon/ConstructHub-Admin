@@ -1,0 +1,112 @@
+<div class="home-screen-wrapper d-flex flex-column overflow-hidden h-100 pb-0">
+  <!-- <div class="home-screen-head">
+      <ion-header>
+        <div class="top-header d-flex align-items-center justify-content-between">
+          <div class="back-screen-button-outer">
+            <app-back-button (clicked)="modalCtrl.dismiss()"></app-back-button>
+          </div>
+          <ion-title class="common-head-title">{{ "attendance.addAttendanceText" | translate }}</ion-title>
+          <div class="header-user-profile d-flex align-items-center gap-2">
+            <button class="notification-button icon-rounded-button ion-activatable" (click)="openNotifications()">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_2662_901)">
+                  <path d="M10 5C10 4.46957 10.2107 3.96086 10.5858 3.58579C10.9609 3.21071 11.4696 3 12 3C12.5304 3 13.0391 3.21071 13.4142 3.58579C13.7893 3.96086 14 4.46957 14 5C15.1484 5.54303 16.1274 6.38833 16.8321 7.4453C17.5367 8.50227 17.9404 9.73107 18 11V14C18.0753 14.6217 18.2954 15.2171 18.6428 15.7381C18.9902 16.2592 19.4551 16.6914 20 17H4C4.54494 16.6914 5.00981 16.2592 5.35719 15.7381C5.70457 15.2171 5.92474 14.6217 6 14V11C6.05956 9.73107 6.4633 8.50227 7.16795 7.4453C7.8726 6.38833 8.85159 5.54303 10 5Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M9 17V18C9 18.7956 9.31607 19.5587 9.87868 20.1213C10.4413 20.6839 11.2044 21 12 21C12.7956 21 13.5587 20.6839 14.1213 20.1213C14.6839 19.5587 15 18.7956 15 18V17" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+                <defs>
+                  <clipPath id="clip0_2662_901">
+                    <rect width="24" height="24" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+              <span class="d-inline-block rounded-circle alert-badge-dot position-absolute"></span>
+              <ion-ripple-effect type="unbounded" class="custom-ripple"></ion-ripple-effect>
+            </button>
+          </div>
+        </div>
+      </ion-header>
+    </div> -->
+  <div class="home-screen-body add-new-meeting-body d-flex flex-column overflow-hidden flex-fill h-100">
+    <!-- <div class="date-slider-outer m-0">
+        <app-date-slider></app-date-slider>
+      </div> -->
+    <div class="add-new-meeting-inner d-flex flex-column flex-fill overflow-hidden h-100">
+      <div class="add-meeting-slots-wrap inner-padd-inline d-flex flex-column flex-fill overflow-hidden h-100">
+        <div class="all-stats-title card-mb-1">
+          <!-- <h5 class="text-capitalize m-0">{{ "attendance.selectTime" | translate }}</h5> -->
+        </div>
+        <div class="select-slots-row pb-3">
+          <div class="select-slot-btn-wrap full-day-select-btn w-100">
+            <input type="radio" class="btn-check" name="options-base" id="fullDaySelect" autocomplete="off" />
+            <!-- <label class="btn select-slot-btn" for="fullDaySelect">{{ "attendance.fullDayText" | translate }}</label> -->
+          </div>
+        </div>
+        <div class="flex-fill overflow-y-auto h-100">
+          <div class="select-slots-row d-flex flex-wrap justify-content-between gap-3">
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option7am" autocomplete="off" checked />
+              <!-- <label class="btn select-slot-btn" for="option7am">07:00 {{ "attendance.time.am" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option8am" autocomplete="off" />
+              <!-- <label class="btn select-slot-btn" for="option8am">08:00 {{ "attendance.time.am" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option9am" autocomplete="off" />
+              <!-- <label class="btn select-slot-btn" for="option9am">09:00 {{ "attendance.time.am" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option10am" autocomplete="off" />
+              <!-- <label class="btn select-slot-btn" for="option10am">10:00 {{ "attendance.time.am" | translate }}</label> -->
+            </div>
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option11am" autocomplete="off" />
+              <!-- <label class="btn select-slot-btn" for="option11am">11:00 {{ "attendance.time.am" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option12pm" autocomplete="off" />
+              <!-- <label class="btn select-slot-btn" for="option12pm">12:00 {{ "attendance.time.pm" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option13pm" autocomplete="off" />
+              <!-- <label class="btn select-slot-btn" for="option13pm">13:00 {{ "attendance.time.pm" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option14pm" autocomplete="off" />
+              <!-- <label class="btn select-slot-btn" for="option14pm">14:00 {{ "attendance.time.pm" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option15pm" autocomplete="off" />
+              <!-- <label class="btn select-slot-btn" for="option15pm">15:00 {{ "attendance.time.pm" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <input type="radio" class="btn-check" name="options-base" id="option16pm" autocomplete="off" />
+              <!-- <label class="btn select-slot-btn" for="option16pm">16:00 {{ "attendance.time.pm" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <!-- <input type="radio" class="btn-check" name="options-base" id="option17pm" autocomplete="off" /> -->
+              <!-- <label class="btn select-slot-btn" for="option17pm">17:00 {{ "attendance.time.pm" | translate }}</label> -->
+            </div>
+
+            <div class="select-slot-btn-wrap">
+              <!-- <input type="radio" class="btn-check" name="options-base" id="option18pm" autocomplete="off" /> -->
+              <!-- <label class="btn select-slot-btn" for="option18pm">18:00 {{ "attendance.time.pm" | translate }}</label> -->
+            </div>
+          </div>
+        </div>
+        <div class="login-button-wrap pt-3 mt-1">
+          <!-- <button class="primary-button w-100" type="submit">{{ "attendance.submitBtn" | translate }}</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

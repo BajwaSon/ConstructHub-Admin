@@ -1,0 +1,24 @@
+.search-bar {
+  width: max(40%, 320px);
+  box-shadow: var(--shadow-light-bg);
+
+  .search-icon {
+    color: var(--text-tertiary-color);
+    padding-left: 1.45em;
+    border-radius: 25px 0 0 25px;
+    i {
+      font-size: var(--primary-font-size);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      &.bi.bi-x-lg {
+        font-size: calc(var(--primary-font-size) * 1.2);
+      }
+    }
+  }
+  .form-control {
+    color: var(--text-tertiary-color);
+    font-size: var(--primary-font-size);
+    padding: 0.7em 0.75em;
+    border-radius: 0 25px 25px 0;
+  }
+}

@@ -1,0 +1,110 @@
+.top-header-bar {
+  .admin-user-block {
+    gap: 0.75rem;
+    .admin-user-name {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 0.875);
+      font-weight: var(--font-semibold);
+      margin-bottom: 0;
+    }
+  }
+}
+
+.setting-list-item {
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  .setting-item-details {
+    .setting-item-icon {
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      background-color: #e0d8ff;
+    }
+    .setting-item-label {
+      color: var(--black);
+      font-size: var(--primary-font-size);
+      font-weight: var(--font-medium);
+      margin: 0 0 0.15rem;
+    }
+    .setting-item-info {
+      color: #7c7c7c;
+      font-size: calc(var(--primary-font-size) * 0.75);
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+  .btn-outline.primary-button {
+    height: auto;
+    line-height: 1.2;
+  }
+}
+
+.appointment-side-canvas {
+  padding: 1.5rem;
+  border-top-left-radius: var(--cst-radius-lg);
+  border-bottom-left-radius: var(--cst-radius-lg);
+  .offcanvas-header {
+    .offcanvas-title {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 1.5);
+      font-weight: var(--font-regular);
+      letter-spacing: 0.96px;
+      line-height: 1;
+    }
+    .btn-close {
+      height: 34px;
+      width: 34px;
+      opacity: 1;
+      padding: 0;
+      margin: 0;
+      background-image: url("/images/close-icon.svg");
+      background-size: 34px;
+    }
+  }
+  .take-appointment-form {
+    input,
+    textarea {
+      &::placeholder {
+        color: var(--black);
+        text-transform: capitalize;
+      }
+    }
+    textarea {
+      min-height: 9rem;
+    }
+    .select-item-button {
+      transition: all 0.3s ease;
+      &:focus {
+        border-color: var(--black);
+      }
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    padding: 3rem;
+    width: 32rem;
+  }
+}
+
+.modal-action-btns {
+  .btn {
+    width: 5.5rem;
+  }
+}
+
+.auth-screen-inner {
+  max-width: 24.875rem;
+  .welcome-intro {
+    padding-bottom: 2.5rem;
+    h5 {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 1.5);
+      font-weight: var(--font-semibold);
+      margin-bottom: 0.75rem;
+    }
+    p {
+      color: var(--text-highlight);
+      font-size: var(--primary-font-size);
+    }
+  }
+}

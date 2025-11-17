@@ -1,0 +1,19 @@
+<div class="page-wrapper">
+  <!-- KPI Cards -->
+  <div class="details-cards-row row row-cols-1 row-cols-md-5">
+    @for (card of cards; track $index) {
+    <div class="col card-mb-1">
+      <app-detail-count-card [count]="card.count" [title]="card.title" [iconSrc]="card.iconSrc" [iconAlt]="card.iconAlt"
+        [site]="card.site"> </app-detail-count-card>
+    </div>
+    }
+  </div>
+
+  <!-- Overall Attendance -->
+  <app-overall-attendance></app-overall-attendance>
+
+  <!-- Airport Flight Status Chart -->
+  <app-flight-status-chart></app-flight-status-chart>
+
+  <!-- overall airport chart -->
+</div>

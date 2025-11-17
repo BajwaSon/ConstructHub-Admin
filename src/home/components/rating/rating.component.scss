@@ -1,0 +1,22 @@
+.performance-rating-list {
+  padding-bottom: 1rem;
+  .rating-text {
+    width: 35px;
+    text-align: right;
+  }
+  .rating-icon-label {
+    position: relative;
+    top: 2px;
+    color: var(--black);
+    font-size: var(--primary-font-size);
+    font-weight: var(--font-medium);
+    line-height: 1;
+  }
+  .performance-rating-icons {
+    ul {
+      li {
+        padding-left: 0.5rem;
+      }
+    }
+  }
+}

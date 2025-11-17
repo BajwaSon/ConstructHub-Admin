@@ -1,0 +1,217 @@
+<div class="page-wrapper d-flex flex-column h-100">
+  <!-- Filter Details List Wrap -->
+  <div class="filter-row-wrap gap-2 pb-4">
+    <div class="add-action-button border-0 bg-transparent">
+      <span class="button-light-text opacity-100">Scheduling of Holidays</span>
+    </div>
+  </div>
+  <!-- Recently Appointments Cols -->
+  <div class="appointments-cards-row-wrapper flex-fill overflow-hidden h-100">
+    <div class="recently-appointments-row row row-mx-cst overflow-hidden h-100">
+      <div class="col-sm-3 overflow-hidden h-100">
+        <div class="chat-listed-wrap bordered-rounded-card overflow-hidden d-flex flex-column h-100">
+          <form class="chat-listed-form pb-4" appSubmitOnEnter>
+            <div class="form-control-group">
+              <input type="text" class="form-control" id="searchFormControl" placeholder="Search By Name" [(ngModel)]="holidayFilterTerm" name="holidayFilterTerm" [ngModelOptions]="{ standalone: true }" />
+            </div>
+          </form>
+          <div class="chat-listed-outer-wrap flex-fill h-100 overflow-y-auto">
+            <div class="nav flex-column nav-pills gap-2 h-100" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              @if (holidayLoader.isLoading()) {
+                <div style="width: 100%">
+                  <app-loader></app-loader>
+                </div>
+              } @else {
+                @if (holidayService.holidays().length === 0) {
+                  <div style="width: 100%">
+                    <app-data-not-found></app-data-not-found>
+                  </div>
+                }
+                @for (holiday of holidayService.holidays() | holidayFilter: holidayFilterTerm; track holiday.id; let i = $index) {
+                  <button class="nav-link flex-center-align ripple-button" [class.active]="holiday.active" [id]="holiday.id" data-bs-toggle="pill" [attr.data-bs-target]="'#' + holiday.id" type="button" role="tab" [attr.aria-controls]="holiday.id" [attr.aria-selected]="holiday.active">
+                    <div class="rounded-50-img">
+                      <div class="avatar-circle-img initials-avatar br-50 p14 text-uppercase d-flex justify-content-center align-items-center">
+                        <!-- <div class="avatar-circle-img d-flex justify-content-center align-items-center bg-primary text-white text-uppercase"> -->
+                        {{ holiday.title?.charAt(0) }}
+                      </div>
+                      <!-- <div class="avatar-circle-img" [style.background-image]="'url(' + holiday.imageUrl + ')'"></div> -->
+                    </div>
+                    <div class="assistant-details-group">
+                      <span class="bus-assistant-name text-black d-block text-capitalize">{{ holiday.title }}</span>
+                      <span class="bus-assistant-info d-block">
+                        @for (reDate of holiday.recurringDates; track $index) {
+                          {{ reDate.start | date: "dd/MM/yyyy" }} - {{ reDate.end | date: "dd/MM/yyyy" }}
+                        }
+                      </span>
+                    </div>
+                  </button>
+                }
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-9 overflow-hidden h-100">
+        <div class="bordered-rounded-card d-flex flex-column overflow-hidden h-100 pb-0">
+          <div class="appointment-card-head tab-content-head border-bottom flex-align-between pb-3 mb-0">
+            <div class="card-head-details">
+              @if (isCalendarOpen) {
+                <h5 class="card-head-name m-0">Holidays Calendar</h5>
+              } @else {
+                <h5 class="card-head-name m-0">Add Holiday</h5>
+              }
+            </div>
+            <button type="button" class="card-action-btn position-relative ripple-button icon-rounded-button" (click)="showMeetingDetail()">
+              @if (isCalendarOpen) {
+                <img src="/images/plus-dark-icon.svg" alt="Plus icon" class="img-fluid" width="24" height="24" [title]="'Add Holiday'" />
+              } @else {
+                <img src="/images/calendar-icon.svg" alt="Plus icon" class="img-fluid" width="24" height="24" [title]="'View Holidays Calendar'" />
+              }
+            </button>
+          </div>
+          @if (isCalendarOpen) {
+            <div class="app-meeting-calendar-outer overflow-y-auto h-100 py-4">
+              <app-meeting-calendar [allEvents]="allEvents" (deleteEvent)="deleteEvent($event)"></app-meeting-calendar>
+            </div>
+          } @else {
+            <div class="tab-content overflow-hidden h-100" id="v-pills-tabContent">
+              <div class="tab-pane fade show active overflow-y-auto py-4 h-100" id="v-pills-kg" role="tabpanel" aria-labelledby="v-pills-kg-tab" tabindex="0">
+                <div class="teams-container h-100">
+                  <form class="d-flex flex-column h-100" [formGroup]="holidayForm" appSubmitOnEnter>
+                    <!-- Main Content -->
+                    <div class="teams-content flex-fill">
+                      <!-- Form -->
+
+                      <!-- Title -->
+                      <div class="form-row flex-fill mb-4">
+                        <div class="form-icon"><i class="bi bi-pencil"></i></div>
+                        <div class="form-field">
+                          <app-input type="text" [formControl]="holidayForm.controls.title" placeholder="Add title"></app-input>
+                          <!-- @if (holidayForm.get("title")?.invalid && holidayForm.get("title")?.touched) {
+                            <div class="text-danger mt-1">Title is required</div>
+                          } -->
+                        </div>
+                      </div>
+
+                      <!-- Date & Time -->
+                      <div class="form-row">
+                        <div class="form-icon">
+                          <i class="bi bi-clock"></i>
+                        </div>
+                        <div class="form-field">
+                          <div class="datetime-picker flex-center-align">
+                            <div class="d-flex flex-center-align w-100">
+                              <div class="d-flex flex-column w-100">
+                                <app-input type="date" [formControl]="holidayForm.controls.startDate"></app-input>
+                                <!-- @if (holidayForm.get("startDate")?.invalid && holidayForm.get("startDate")?.touched) {
+                                  <div class="text-danger mt-1">Start date is required</div>
+                                } -->
+                                @if (!holidayForm.get("allDay")?.value) {
+                                  <app-input type="time" [formControl]="holidayForm.controls.startTime"></app-input>
+                                  <!-- @if (holidayForm.get("startTime")?.invalid && holidayForm.get("startTime")?.touched) {
+                                    <div class="text-danger mt-1">Start time is required</div>
+                                  } -->
+                                }
+                              </div>
+                              <span class="arrow-separator">
+                                <i class="bi bi-arrow-right"></i>
+                              </span>
+                            </div>
+                            <div class="d-flex flex-center-align w-100">
+                              <div class="d-flex flex-column w-100">
+                                <app-input type="date" [formControl]="holidayForm.controls.endDate"></app-input>
+                                @if (holidayForm.errors?.["timeRequired"]) {
+                                  <div class="text-danger mt-1">Time is required when not all day</div>
+                                }
+                                @if (holidayForm.errors?.["endDateBeforeStart"]) {
+                                  <div class="text-danger mt-1">End date must be after start date</div>
+                                }
+                                @if (holidayForm.errors?.["endTimeBeforeStart"]) {
+                                  <div class="text-danger mt-1">End time must be after start time</div>
+                                }
+                              </div>
+                            </div>
+                            <div class="text-nowrap">{{ formatMeetingDuration() }}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Text Editor -->
+                      <div class="editor-container">
+                        <div class="editor-toolbar flex-center-align flex-wrap p-2">
+                          <button type="button" class="toolbar-btn"><i class="bi bi-type-bold"></i></button>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-type-italic"></i></button>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-type-underline"></i></button>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-type-strikethrough"></i></button>
+                          <span class="toolbar-separator"></span>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-text-paragraph"></i></button>
+                          <span class="toolbar-separator"></span>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-list-ul"></i></button>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-list-ol"></i></button>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-list-check"></i></button>
+                          <span class="toolbar-separator"></span>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-blockquote-left"></i></button>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-link-45deg"></i></button>
+                          <span class="toolbar-separator"></span>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-list"></i></button>
+                          <button type="button" class="toolbar-btn"><i class="bi bi-table"></i></button>
+                        </div>
+                        <textarea name="editorContent" id="editorContent" class="editor-content form-control p-3" placeholder="Type details for this new meeting" formControlName="details"></textarea>
+                      </div>
+                    </div>
+
+                    <!-- Footer with Action Buttons -->
+                    <div class="teams-footer modal-action-btns flex-center-align justify-content-end gap-3">
+                      <button type="button" class="btn btn-outline ripple-button primary-button" (click)="close()">Close</button>
+                      <button type="submit" class="btn text-white primary-button" [disabled]="holidayForm.invalid" (click)="onSubmit()">
+                        <span class="loader-spinner">
+                          Submit
+                          @if (loader.isLoading()) {
+                            <span class="custom-spinner"></span>
+                          }
+                        </span>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="v-pills-nurses" role="tabpanel" aria-labelledby="v-pills-nurses-tab" tabindex="0"></div>
+              <div class="tab-pane fade" id="v-pills-teachers" role="tabpanel" aria-labelledby="v-pills-teachers-tab" tabindex="0"></div>
+              <div class="tab-pane fade" id="v-pills-technology" role="tabpanel" aria-labelledby="v-pills-technology-tab" tabindex="0"></div>
+              <div class="tab-pane fade" id="v-pills-assistant" role="tabpanel" aria-labelledby="v-pills-assistant-tab" tabindex="0"></div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #deleteEventModal>
+    <div class="appointment-action-modal appointment-delete-modal py-5">
+      <div class="modal-body p-0">
+        <h6 class="modal-title">Delete Events for {{ meetingEvents.start | date: "MMM d, yyyy" }}</h6>
+        <ul class="d-flex flex-column gap-2 align-items-center mt-3 list-inline hstack gap-1 mb-0">
+          <li class="delete-option list-inline-item w-100" (click)="deleteOccurrence()">
+            <button type="submit" class="btn text-white primary-button w-100">
+              Delete this occurrence only
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </button>
+          </li>
+          <li class="delete-option list-inline-item w-100" (click)="deleteSeries()">
+            <button type="submit" class="btn text-white primary-button w-100">
+              Delete entire series
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </button>
+          </li>
+        </ul>
+        <div class="modal-action-btns d-flex justify-content-center pt-4">
+          <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

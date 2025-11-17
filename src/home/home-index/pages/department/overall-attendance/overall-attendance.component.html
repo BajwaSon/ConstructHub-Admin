@@ -1,0 +1,16 @@
+<div class="overall-stats-card bordered-rounded-card mb-4">
+  <div class="overall-stats-card-head flex-align-between">
+    <h4 class="common-head-title mb-0">Overall Attendance Report</h4>
+    <div class="overall-stats-filter-select flex-center-align gap-2">
+      @if (showMonthSelect) {
+        <div class="stats-select-dropdown">
+          <app-select-dropdown [options]="monthOptions" [selectedValue]="selectedMonth().value" (selectedValueChange)="onMonthChange($event)"></app-select-dropdown>
+        </div>
+      }
+      <div class="stats-select-dropdown">
+        <app-select-dropdown [options]="timeRange" (selectedValueChange)="onTimeRangeChange($event)"></app-select-dropdown>
+      </div>
+    </div>
+  </div>
+  <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis" [dataLabels]="chartOptions.dataLabels" [yaxis]="chartOptions.yaxis" [legend]="chartOptions.legend" [plotOptions]="chartOptions.plotOptions" [tooltip]="chartOptions.tooltip" [stroke]="chartOptions.stroke" [colors]="chartOptions.colors" [fill]="chartOptions.fill"> </apx-chart>
+</div>

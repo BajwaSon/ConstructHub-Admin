@@ -1,0 +1,34 @@
+<div class="auth-screen-outer d-flex align-items-center justify-content-center">
+  <div class="auth-screen-inner w-100">
+    <div class="auth-screen-header text-center">
+      <div class="brand-logo pb-5">
+        <img [ngSrc]="'images/neuronso-brand.svg'" alt="Neuronso Brand Logo" height="100" width="178" class="img-fluid" priority="" />
+      </div>
+    </div>
+    <div class="auth-screen-body auth-bg-modal">
+      <form [formGroup]="form" class="auth-screen-form" appSubmitOnEnter>
+        <div class="form-control-group">
+          <label for="auth.login.email" class="form-label">Email</label>
+          <app-input type="email" [formControl]="form.controls.email" id="auth.login.email" placeholder="Enter your email"></app-input>
+        </div>
+        <div class="form-control-group">
+          <label for="auth.login.password" class="form-label">Password</label>
+          <app-input-password [formControl]="form.controls.password" id="auth.login.password" placeholder="Enter your password"></app-input-password>
+        </div>
+        <div class="forget-password-label pb-4">
+          <p class="mb-0">Forgot Password? <span class="reset-password-link text-decoration-underline cursor-pointer" (click)="gotoForgetPassword()">Reset Here</span></p>
+        </div>
+        <div class="auth-screen-button-wrap py-3">
+          <button class="primary-button w-100" type="submit" [disabled]="form.invalid" (click)="login()">
+            <span class="loader-spinner">
+              Sign In
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

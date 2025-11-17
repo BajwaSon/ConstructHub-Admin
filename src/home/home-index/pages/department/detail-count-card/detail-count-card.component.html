@@ -1,0 +1,9 @@
+<div class="detail-count-card gap-2 h-100">
+  <div class="count-card-body flex-fill">
+    <h3 class="count-card-title" #countElement>{{ count() }}</h3>
+    <p class="count-card-text">{{ title }} <span *ngIf="site">({{ site }})</span></p>
+  </div>
+  <div class="count-card-icon flex-center-align justify-content-center">
+    <img [src]="iconSrc" class="img-fluid" [alt]="iconAlt" height="35" width="35" />
+  </div>
+</div>

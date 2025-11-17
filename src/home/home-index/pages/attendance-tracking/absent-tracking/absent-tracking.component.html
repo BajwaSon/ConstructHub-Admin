@@ -1,0 +1,232 @@
+<div class="recently-appointments-row row row-mx-cst overflow-hidden h-100">
+  <div class="col-sm-3 overflow-hidden h-100">
+    <div class="bordered-rounded-card passenger-list-card overflow-hidden d-flex flex-column h-100 pb-0">
+      <div class="tab-content-head pb-4">
+        <div class="card-head-details">
+          <h5 class="card-head-name m-0">Tracked List</h5>
+        </div>
+      </div>
+      <div class="attendance-listed-outer flex-fill overflow-y-auto h-100 pt-3">
+        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <button *ngFor="let category of categories" class="nav-link flex-center-align ripple-button"
+            [class.active]="activeTab === category.id" (click)="setActiveTab(category.id)"
+            [id]="'v-pills-' + category.id + '-tab'" type="button" role="tab"
+            [attr.aria-controls]="'v-pills-' + category.id" [attr.aria-selected]="activeTab === category.id"
+            [attr.data-category-id]="category.id">
+            <div class="flex-align-between w-100 gap-2">
+              <div>
+                <span>
+                  <img [src]="category.icon" alt="Category Icon" />
+                </span>
+                {{ category.name }}
+              </div>
+
+              <div class="legend-icon flex-center-align text-white rounded-circle children-density">
+                <span class="count-text" [title]="getAbsentPeople(category.id).length + ' Passengers'">{{
+                  getAbsentPeople(category.id).length }}</span>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-9 overflow-hidden h-100">
+    <div class="bordered-rounded-card d-flex flex-column overflow-y-auto h-100">
+      <div class="tab-content" id="v-pills-tabContent">
+        <!-- Card View for Last Call and Missed Passengers -->
+        <div *ngFor="let category of categories" class="tab-pane fade" [class.show]="activeTab === category.id"
+          [class.active]="activeTab === category.id" [id]="'v-pills-' + category.id" role="tabpanel"
+          [attr.aria-labelledby]="'v-pills-' + category.id + '-tab'" tabindex="0">
+          <!-- Show cards for Last Call and Missed passengers -->
+          <div *ngIf="!isMapView(category.id)" class="ticket-card-grid">
+            <div class="ticket-card" *ngFor="let person of getAbsentPeople(category.id); let i = index"
+              [attr.data-idx]="i" [attr.data-id]="person.id" [attr.data-name]="person.name">
+              <div class="ticket-header flex-center-align gap-3 mb-3">
+                <div class="ticket-avatar">
+                  <div class="ticket-avatar-fight" [style.background-image]="'url(' + person.imageUrl + ')'"></div>
+                </div>
+                <div>
+                  <h5 class="m-0">{{ person.name }}</h5>
+                  <small class="text-muted">PNR: {{ getTicketFor(person).pnr }} • {{ getTicketFor(person).airline
+                    }}</small>
+                  <div class="countdown-timer mt-1" *ngIf="getTicketFor(person).status !== 'Missed'">
+                    <span class="countdown-label">Time left:</span>
+                    <div class="countdown-boxes" (click)="showFlightDetails(person)">
+                      <div class="countdown-box" [class]="getCountdownClass(person)">
+                        <span class="countdown-value">{{ getReactiveCountdownMinutes(person) }}</span>
+                      </div>
+                      <div class="countdown-box" [class]="getCountdownClass(person)">
+                        <span class="countdown-value">{{ getReactiveCountdownSeconds(person) }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ticket-divider"></div>
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <div><strong>Flight</strong>: {{ getTicketFor(person).flightNumber }}</div>
+                  <div><strong>From</strong>: {{ getTicketFor(person).from }}</div>
+                  <div><strong>To</strong>: {{ getTicketFor(person).to }}</div>
+                </div>
+                <div class="col-sm-6">
+                  <div>
+                    <strong>Boarding</strong>: <span class="date-muted">{{ getTicketFor(person).boardingTime | date:
+                      "dd/MM/yyyy HH:mm" }}</span>
+                  </div>
+                  <div>
+                    <strong>Departure</strong>: <span class="date-muted">{{ getTicketFor(person).departureTime | date:
+                      "dd/MM/yyyy HH:mm" }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row g-3 mt-1">
+                <div class="col-sm-6">
+                  <div><strong>Terminal</strong>: {{ getTicketFor(person).terminal }}</div>
+                </div>
+                <div class="col-sm-3">
+                  <div><strong>Gate</strong>: {{ getTicketFor(person).gate }}</div>
+                </div>
+                <div class="col-sm-3">
+                  <div><strong>Seat</strong>: {{ getTicketFor(person).seat }}</div>
+                </div>
+              </div>
+              <div class="row g-3 mt-1">
+                <div class="col-sm-6">
+                  <div>
+                    <strong>Class</strong>: <span class="chip chip-neutral">{{ getTicketFor(person).travelClass
+                      }}</span>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div>
+                    <strong>Status</strong>: <span class="chip"
+                      [class.chip-success]="getTicketFor(person).status === 'Boarding'"
+                      [class.chip-warning]="getTicketFor(person).status === 'Last Call'"
+                      [class.chip-danger]="getTicketFor(person).status === 'Missed'">{{ getTicketFor(person).status
+                      }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row g-3 mt-1">
+                <div class="col-sm-6">
+                  <div><strong>Baggage</strong>: {{ getTicketFor(person).baggage }}</div>
+                </div>
+                <div class="col-sm-6">
+                  <div><strong>Passport</strong>: {{ getTicketFor(person).passport }}</div>
+                </div>
+              </div>
+              <div class="ticket-actions mt-3">
+                <button type="button" class="icon-btn" title="Audio Announcement" (click)="$event.stopPropagation()">
+                  <img src="/images/notification-icon.svg" alt="Audio" />
+                </button>
+                <button type="button" class="icon-btn" title="Call" (click)="$event.stopPropagation()">
+                  <img src="/images/call-icon.svg" alt="Call" />
+                </button>
+                <button type="button" class="icon-btn" title="WhatsApp" (click)="$event.stopPropagation()">
+                  <img src="/images/whatsapp-icon.svg" alt="WhatsApp" />
+                </button>
+                <button type="button" class="icon-btn" title="Location" (click)="openLocationModal(person, $event)">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9 9.75C10.2426 9.75 11.25 8.74264 11.25 7.5C11.25 6.25736 10.2426 5.25 9 5.25C7.75736 5.25 6.75 6.25736 6.75 7.5C6.75 8.74264 7.75736 9.75 9 9.75Z"
+                      stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                      d="M9 1.5C6.51472 1.5 4.5 3.51472 4.5 6C4.5 9.75 9 16.5 9 16.5C9 16.5 13.5 9.75 13.5 6C13.5 3.51472 11.4853 1.5 9 1.5Z"
+                      stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Show airport map for Underage passengers -->
+          <div *ngIf="category.id === 'under_age'" class="h-100">
+            <div class="plain-view-map-container position-relative overflow-hidden h-100" id="underAgeMapContainer">
+              <img src="/images/blueprints-site-plan.jpg" class="img-fluid h-100 w-100 floor-pan-image object-fit-cover"
+                id="underAgeFloorPlan" alt="Airport floor plan" />
+              <div id="underAgePulseDotsContainer" class="position-absolute top-0 start-0 w-100 h-100"></div>
+            </div>
+          </div>
+
+          <!-- Show airport map for Wheelchair passengers -->
+          <div *ngIf="category.id === 'wheelchair'" class="h-100">
+            <div class="plain-view-map-container position-relative overflow-hidden h-100" id="wheelchairMapContainer">
+              <img src="/images/blueprints-site-plan.jpg" class="img-fluid h-100 w-100 floor-pan-image object-fit-cover"
+                id="wheelchairFloorPlan" alt="Airport floor plan" />
+              <div id="wheelchairPulseDotsContainer" class="position-absolute top-0 start-0 w-100 h-100"></div>
+            </div>
+          </div>
+
+          <div *ngIf="getAbsentPeople(category.id).length === 0" class="text-center p-5">
+            <h5>No passengers in this list.</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Location Modal -->
+<div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true"
+  [class.show]="showLocationModal" [style.display]="showLocationModal ? 'block' : 'none'">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content bg-white rounded-4" style="max-width: 100% !important">
+      <div class="modal-header">
+        <h5 class="modal-title" id="locationModalLabel">
+          <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"
+            style="margin-right: 8px">
+            <path
+              d="M9 9.75C10.2426 9.75 11.25 8.74264 11.25 7.5C11.25 6.25736 10.2426 5.25 9 5.25C7.75736 5.25 6.75 6.25736 6.75 7.5C6.75 8.74264 7.75736 9.75 9 9.75Z"
+              stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M9 1.5C6.51472 1.5 4.5 3.51472 4.5 6C4.5 9.75 9 16.5 9 16.5C9 16.5 13.5 9.75 13.5 6C13.5 3.51472 11.4853 1.5 9 1.5Z"
+              stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Passenger Location - {{ selectedPerson?.name }}
+        </h5>
+        <button type="button" class="btn-close" (click)="closeLocationModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="location-modal-map-container">
+          <img src="/images/blueprints-site-plan.jpg" class="location-modal-map-image" alt="Airport floor plan" />
+
+          <div class="location-modal-dots-container">
+            <div *ngFor="let dot of modalMapDots" class="location-modal-dot"
+              [class.highlighted-dot]="dot.id === selectedPerson?.id" [class.other-dot]="dot.id !== selectedPerson?.id"
+              [style.left.%]="dot.x" [style.top.%]="dot.y">
+              <div *ngIf="dot.id === selectedPerson?.id" class="dot-label">
+                {{ selectedPerson?.name }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer flex-column">
+        <div class="passenger-info-summary" *ngIf="selectedPerson">
+          <div class="info-row">
+            <span class="info-label">Flight:</span>
+            <span class="info-value">{{ getTicketFor(selectedPerson).flightNumber }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Gate:</span>
+            <span class="info-value">{{ getTicketFor(selectedPerson).gate }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Terminal:</span>
+            <span class="info-value">{{ getTicketFor(selectedPerson).terminal }}</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline ripple-button primary-button"
+          (click)="closeLocationModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop fade show" *ngIf="showLocationModal" (click)="closeLocationModal()"></div>
+
+<!-- Passenger Popup -->
+<div id="dotPopup" class="dot-popup"></div>

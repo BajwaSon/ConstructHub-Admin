@@ -1,0 +1,453 @@
+<div class="d-flex flex-column overflow-hidden h-100">
+  <!-- Filter Details List Wrap -->
+  <div class="filter-row-wrap pb-4">
+    <div class="add-action-button border-0 bg-transparent">
+      <span class="button-light-text opacity-100">Health Statics of Students</span>
+    </div>
+    <!-- <div class="filter-select-wrap flex-center-align gap-3">
+      <div class="filter-select-field">
+        <app-single-select [options]="levelList()" [selectedValue]="healthStatsForm.controls.classLevel.value" (selectedValueChange)="onLevelChange($event, 'level')"></app-single-select>
+      </div>
+      @if (classSectionService.classSectionsByClassLevel().length > 0) {
+        <div class="filter-select-field">
+          <app-single-select [options]="classNameList()" [selectedValue]="healthStatsForm.controls.className.value" (selectedValueChange)="onLevelChange($event, 'className')"></app-single-select>
+        </div>
+      }
+    </div> -->
+  </div>
+  <!-- Recently Appointments Cols -->
+  <div class="recently-appointments-row row row-mx-cst overflow-hidden h-100">
+    <div class="col-sm-9 overflow-hidden h-100">
+      <div class="bordered-rounded-card overflow-hidden d-flex flex-column h-100 pb-0">
+        <div class="appointment-card-head tab-content-head flex-align-between pb-4">
+          <div class="card-head-details">
+            <h5 class="card-head-name m-0">Overall Health Stats about Students</h5>
+          </div>
+          <div class="filter-select-wrap flex-center-align gap-3">
+            @if (classLevelService.classLevels().length > 0) {
+              <div class="filter-select-field">
+                <app-single-select [options]="levelList()" [selectedValue]="healthStatsForm.controls.classLevel.value" (selectedValueChange)="onLevelChange($event, 'level')"></app-single-select>
+              </div>
+
+              @if (classSectionService.classSectionsByClassLevel().length > 0 && healthStatsForm.controls.classLevel.value !== "") {
+                <div class="filter-select-field">
+                  <app-single-select [options]="classNameList()" [selectedValue]="healthStatsForm.controls.className.value" (selectedValueChange)="onLevelChange($event, 'className')"></app-single-select>
+                </div>
+              }
+
+              <div class="flex-center-align gap-2">
+                <button type="button" class="list-tab-button" [class.active]="!isGridView" (click)="toggleView(false)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none">
+                    <g clip-path="url(#clip0_364_9441)">
+                      <path d="M2.66669 6.00004C2.66669 6.17685 2.73693 6.34642 2.86195 6.47144C2.98697 6.59647 3.15654 6.66671 3.33335 6.66671C3.51016 6.66671 3.67973 6.59647 3.80476 6.47144C3.92978 6.34642 4.00002 6.17685 4.00002 6.00004C4.00002 5.82323 3.92978 5.65366 3.80476 5.52864C3.67973 5.40361 3.51016 5.33337 3.33335 5.33337C3.15654 5.33337 2.98697 5.40361 2.86195 5.52864C2.73693 5.65366 2.66669 5.82323 2.66669 6.00004Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M2.66669 10C2.66669 10.1769 2.73693 10.3464 2.86195 10.4714C2.98697 10.5965 3.15654 10.6667 3.33335 10.6667C3.51016 10.6667 3.67973 10.5965 3.80476 10.4714C3.92978 10.3464 4.00002 10.1769 4.00002 10C4.00002 9.82323 3.92978 9.65366 3.80476 9.52864C3.67973 9.40361 3.51016 9.33337 3.33335 9.33337C3.15654 9.33337 2.98697 9.40361 2.86195 9.52864C2.73693 9.65366 2.66669 9.82323 2.66669 10Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M7.33331 6.00004C7.33331 6.17685 7.40355 6.34642 7.52858 6.47144C7.6536 6.59647 7.82317 6.66671 7.99998 6.66671C8.17679 6.66671 8.34636 6.59647 8.47138 6.47144C8.59641 6.34642 8.66665 6.17685 8.66665 6.00004C8.66665 5.82323 8.59641 5.65366 8.47138 5.52864C8.34636 5.40361 8.17679 5.33337 7.99998 5.33337C7.82317 5.33337 7.6536 5.40361 7.52858 5.52864C7.40355 5.65366 7.33331 5.82323 7.33331 6.00004Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M7.33331 10C7.33331 10.1769 7.40355 10.3464 7.52858 10.4714C7.6536 10.5965 7.82317 10.6667 7.99998 10.6667C8.17679 10.6667 8.34636 10.5965 8.47138 10.4714C8.59641 10.3464 8.66665 10.1769 8.66665 10C8.66665 9.82323 8.59641 9.65366 8.47138 9.52864C8.34636 9.40361 8.17679 9.33337 7.99998 9.33337C7.82317 9.33337 7.6536 9.40361 7.52858 9.52864C7.40355 9.65366 7.33331 9.82323 7.33331 10Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M12 6.00004C12 6.17685 12.0702 6.34642 12.1953 6.47144C12.3203 6.59647 12.4899 6.66671 12.6667 6.66671C12.8435 6.66671 13.013 6.59647 13.1381 6.47144C13.2631 6.34642 13.3333 6.17685 13.3333 6.00004C13.3333 5.82323 13.2631 5.65366 13.1381 5.52864C13.013 5.40361 12.8435 5.33337 12.6667 5.33337C12.4899 5.33337 12.3203 5.40361 12.1953 5.52864C12.0702 5.65366 12 5.82323 12 6.00004Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M12 10C12 10.1769 12.0702 10.3464 12.1953 10.4714C12.3203 10.5965 12.4899 10.6667 12.6667 10.6667C12.8435 10.6667 13.013 10.5965 13.1381 10.4714C13.2631 10.3464 13.3333 10.1769 13.3333 10C13.3333 9.82323 13.2631 9.65366 13.1381 9.52864C13.013 9.40361 12.8435 9.33337 12.6667 9.33337C12.4899 9.33337 12.3203 9.40361 12.1953 9.52864C12.0702 9.65366 12 9.82323 12 10Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_364_9441">
+                        <rect width="16" height="16" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </button>
+                <button type="button" class="list-tab-button" [class.active]="isGridView" (click)="toggleView(true)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none">
+                    <g clip-path="url(#clip0_364_8391)">
+                      <path d="M2.66667 3.33329C2.66667 3.15648 2.73691 2.98691 2.86193 2.86189C2.98696 2.73686 3.15653 2.66663 3.33334 2.66663H6C6.17682 2.66663 6.34639 2.73686 6.47141 2.86189C6.59643 2.98691 6.66667 3.15648 6.66667 3.33329V5.99996C6.66667 6.17677 6.59643 6.34634 6.47141 6.47136C6.34639 6.59639 6.17682 6.66663 6 6.66663H3.33334C3.15653 6.66663 2.98696 6.59639 2.86193 6.47136C2.73691 6.34634 2.66667 6.17677 2.66667 5.99996V3.33329Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M9.33333 3.33329C9.33333 3.15648 9.40357 2.98691 9.52859 2.86189C9.65361 2.73686 9.82318 2.66663 9.99999 2.66663H12.6667C12.8435 2.66663 13.013 2.73686 13.1381 2.86189C13.2631 2.98691 13.3333 3.15648 13.3333 3.33329V5.99996C13.3333 6.17677 13.2631 6.34634 13.1381 6.47136C13.013 6.59639 12.8435 6.66663 12.6667 6.66663H9.99999C9.82318 6.66663 9.65361 6.59639 9.52859 6.47136C9.40357 6.34634 9.33333 6.17677 9.33333 5.99996V3.33329Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M2.66667 10C2.66667 9.82323 2.73691 9.65366 2.86193 9.52864C2.98696 9.40361 3.15653 9.33337 3.33334 9.33337H6C6.17682 9.33337 6.34639 9.40361 6.47141 9.52864C6.59643 9.65366 6.66667 9.82323 6.66667 10V12.6667C6.66667 12.8435 6.59643 13.0131 6.47141 13.1381C6.34639 13.2631 6.17682 13.3334 6 13.3334H3.33334C3.15653 13.3334 2.98696 13.2631 2.86193 13.1381C2.73691 13.0131 2.66667 12.8435 2.66667 12.6667V10Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M9.33333 10C9.33333 9.82323 9.40357 9.65366 9.52859 9.52864C9.65361 9.40361 9.82318 9.33337 9.99999 9.33337H12.6667C12.8435 9.33337 13.013 9.40361 13.1381 9.52864C13.2631 9.65366 13.3333 9.82323 13.3333 10V12.6667C13.3333 12.8435 13.2631 13.0131 13.1381 13.1381C13.013 13.2631 12.8435 13.3334 12.6667 13.3334H9.99999C9.82318 13.3334 9.65361 13.2631 9.52859 13.1381C9.40357 13.0131 9.33333 12.8435 9.33333 12.6667V10Z" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_364_8391">
+                        <rect width="16" height="16" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+        @if (classLevelService.classLevels().length > 0) {
+          @if (classLevelLoader.isLoading()) {
+            <div style="width: 100%">
+              <app-loader></app-loader>
+            </div>
+          } @else {
+            @if (classSectionService.classSectionsByClassLevel().length === 0 || healthStatsForm.controls.className.value === "" || healthStatsForm.controls.classLevel.value === "") {
+              <div class="flex-center-align justify-content-center h-100 w-100">
+                <div class="empty-alert-block" [style.background]="'#f3f6ff'">
+                  <!-- Animated SVG or Icon -->
+                  <svg width="64" height="64" fill="none" viewBox="0 0 64 64">
+                    <circle cx="32" cy="32" r="30" fill="#e3eafe" />
+                    <path d="M32 20v16M32 44h.02" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" />
+                  </svg>
+
+                  <h5 class="text-center mt-3 mb-1">
+                    @if (healthStatsForm.controls.classLevel.value === "" && healthStatsForm.controls.className.value === "") {
+                      Select a class level to view health statistics
+                    } @else if (classSectionService.classSectionsByClassLevel().length > 0 && healthStatsForm.controls.classLevel.value !== "") {
+                      Choose a class section to view student health data
+                    } @else if (classSectionService.classSectionsByClassLevel().length === 0 && healthStatsForm.controls.classLevel.value !== "" && healthStatsForm.controls.className.value === "") {
+                      <h4 class="text-center" style="color: #8789ed">No class sections available for this level.</h4>
+                      <p class="text-center" style="color: #888; font-size: 15px">You can select a different class level or create class sections for this level.</p>
+                      <p class="text-center" style="color: #888; font-size: 15px">If you want to create class sections, go to <b>Academic Setup</b> in the sidebar, then select <b>Class Section</b> to create new class sections.</p>
+                    }
+                  </h5>
+                </div>
+              </div>
+            }
+            @if (classSectionService.classSectionsByClassLevel().length > 0 && healthStatsForm.controls.className.value !== "" && healthStatsForm.controls.classLevel.value !== "") {
+              <div class="student-lists-tab-outer overflow-hidden overflow-y-auto flex-fill h-100 py-4">
+                <div [attr.class]="'student-list-wrap ' + (isGridView ? 'grid-view' : 'list-view')">
+                  @for (student of classSectionService.classSectionById(); track $index; let i = $index) {
+                    <div class="student-img-wrap">
+                      <div class="student-img-item" (click)="setActiveStudent(student)" [class.active]="activeStudent === student || (i === 0 && !activeStudent)">
+                        <!-- <div class="rounded-50-img"> -->
+                        @if (student.profilePhoto?.value && student.profilePhoto?.value !== "null") {
+                          <div class="avatar-rounded-img avatar-circle-img" [style.background-image]="'url(' + student.profilePhoto?.value + ')'"></div>
+                        } @else {
+                          <div class="avatar-rounded-img flex-center-align initials-avatar mx-auto">
+                            {{ avatarService.getInitials(student.firstName, student.lastName) }}
+                          </div>
+                        }
+                        <!-- </div> -->
+                      </div>
+                      <h6 class="student-item-name text-center">{{ student.firstName !== null ? student.firstName + " " : "" }} {{ student.middleName !== null ? student.middleName + " " : "" }} {{ student.lastName !== null ? student.lastName : "" }}</h6>
+                    </div>
+                  }
+                </div>
+                <div class="single-student-stats-details pt-4">
+                  <h5 class="common-head-title">
+                    Overall Stats about <span>{{ activeStudent?.firstName ? activeStudent.firstName : "" }} {{ activeStudent?.middleName ? activeStudent.middleName : "" }} {{ activeStudent?.lastName ? activeStudent.lastName : "" }}</span>
+                  </h5>
+                  <div class="student-stats-details-row">
+                    <div class="heath-stats-row row-mx-cst row row-cols-2 row-cols-md-5">
+                      @for (stat of studentHealthStats; track $index) {
+                        <div class="col card-mb-1">
+                          <div class="health-stats-card h-100" [style.border-color]="stat.bdColor" [style.background-color]="stat.bgColor">
+                            <img [src]="stat.icon" class="img-fluid" alt="{{ stat.title }} Icon" />
+                            <div class="card-stats-info">
+                              <p>{{ stat.title }}</p>
+                              <h4>{{ stat.value() }} {{ stat.unit }}</h4>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        } @else {
+          <div class="flex-center-align justify-content-center h-100 w-100">
+            <div class="not-found-empty-alert-block" [style.background]="'#fff'">
+              <div class="no-data-illustration interactive-illustration" tabindex="0" role="img" aria-label="No Class Levels Illustration">
+                <svg width="280" height="240" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Soft background shape -->
+                  <ellipse cx="100" cy="120" rx="90" ry="40" fill="#f5f6fa" />
+                  <!-- Document stack -->
+                  <rect x="55" y="50" width="70" height="60" rx="6" fill="#fff" stroke="#bbb" stroke-width="2" />
+                  <rect x="65" y="60" width="70" height="60" rx="6" fill="#f7f7f7" stroke="#bbb" stroke-width="2" />
+                  <!-- Document lines -->
+                  <rect x="75" y="75" width="50" height="6" rx="3" fill="#e0e0e0" />
+                  <rect x="75" y="85" width="40" height="5" rx="2.5" fill="#e0e0e0" />
+                  <rect x="75" y="95" width="35" height="5" rx="2.5" fill="#e0e0e0" />
+                  <rect x="75" y="105" width="45" height="5" rx="2.5" fill="#e0e0e0" />
+                  <!-- Magnifying glass -->
+                  <g class="magnifier">
+                    <circle cx="120" cy="110" r="38" stroke="#8ba0ad" stroke-width="6" fill="#f5f6fa" />
+                    <text x="120" y="110" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="Arial, sans-serif" fill="#8ba0ad" opacity="0.85" font-weight="bold">?</text>
+                    <rect x="150" y="140" width="38" height="8" rx="4" transform="rotate(45 150 140)" fill="#8ba0ad" />
+                  </g>
+                  <!-- Speech bubble with X -->
+                  <g class="x-bubble">
+                    <ellipse cx="160" cy="55" rx="20" ry="18" fill="#fff" stroke="#bbb" stroke-width="2" />
+                    <path d="M153 48L167 62M167 48L153 62" stroke="#ff4d4f" stroke-width="3" stroke-linecap="round" />
+                  </g>
+                </svg>
+              </div>
+              @if (classLevelService.classLevels().length === 0) {
+                <h4 class="text-center" style="color: #8789ed">No Class Levels Found</h4>
+                <p class="text-center" style="color: #888; font-size: 15px">
+                  To view students health stats, please add class levels first.<br />
+                  Go to <b>Academic Setup</b> in the sidebar, then select <b>Levels & Subjects</b> to create new class levels.
+                </p>
+              } @else if (classSectionService.classSectionsByClassLevel().length === 0) {
+                <h4 class="text-center" style="color: #8789ed">No Class Sections Found</h4>
+                <p class="text-center" style="color: #888; font-size: 15px">
+                  To view students health stats, please add class sections first.<br />
+                  Go to <b>Academic Setup</b> in the sidebar, then select <b>Class Section</b> to create new class sections.
+                </p>
+              } @else {
+                <h4 class="text-center" style="color: #8789ed">No Data Found</h4>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="col-sm-3 overflow-hidden h-100">
+      <div class="bordered-rounded-card overflow-hidden d-flex flex-column h-100 pb-0">
+        <div class="appointment-card-head tab-content-head flex-align-between pb-4">
+          <div class="card-head-details">
+            <h5 class="card-head-name m-0">Under the Observation</h5>
+          </div>
+        </div>
+        <div class="chat-listed-body d-flex flex-column overflow-y-auto flex-fill gap-3 py-4 h-100">
+          <div class="common-appointment-card bordered-rounded-card border-danger px-0" style="background: var(--light-red-bg)">
+            <div class="appointment-card-head flex-center-align px-4 pb-3">
+              <div class="card-head-img">
+                <div class="avatar-circle-img" style="background-image: url(&quot;/images/ali.png&quot;)"></div>
+              </div>
+              <div class="card-head-details">
+                <h5 class="card-head-name">Ali</h5>
+                <p class="card-common-desc">Headache</p>
+              </div>
+              <div class="spinner-grow text-danger" role="status">
+                <span class="visually-hidden"></span>
+              </div>
+            </div>
+            <div class="appointment-card-body flex-align-between flex-wrap border-line-top border-danger px-4 pt-3">
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/heart-rate.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/body-temperature.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>34<sup>o</sup></h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/bp.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/stress-value.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>234 psi</h4>
+                </div>
+              </div>
+            </div>
+            <div class="appointment-card-graph">
+              <svg class="stacked-area-load-state--css-draw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 711 325">
+                <path id="chart-bg" class="chart-bg" style="stroke: #f46a6a" d="M3.4,216.5h707.3 M3.4,160.5h707.3 M3.3,103.5h707.3 M3.3,48.5h707.6 M0.4,276.6H710H0.4z" />
+                <polyline id="chart-line" class="chart-line--static" style="stroke: transparent; stroke-width: 4; fill: none" points="8.8,175.8 62.4,237.7 116.1,184.7 169.7,175.8 223.3,57 277,176.8 330.6,176.8 384.3,122.5 437.9,176.8 491.6,176.8 545.2,218.4 598.8,122.5 652.5,184.7 706.1,135.1 " />
+                <polyline id="chart-line" class="chart-line" style="stroke: #f46a6a; stroke-width: 4; fill: none" points="8.8,175.8 62.4,237.7 116.1,184.7 169.7,175.8 223.3,57 277,176.8 330.6,176.8 384.3,122.5 437.9,176.8 491.6,176.8 545.2,218.4 598.8,122.5 652.5,184.7 706.1,135.1 " />
+              </svg>
+            </div>
+          </div>
+          <div class="common-appointment-card bordered-rounded-card px-0">
+            <div class="appointment-card-head flex-center-align px-4 pb-3">
+              <div class="card-head-img">
+                <div class="avatar-circle-img" style="background-image: url(&quot;/images/zahra.png&quot;)"></div>
+              </div>
+              <div class="card-head-details">
+                <h5 class="card-head-name">Zahra</h5>
+                <p class="card-common-desc">Headache</p>
+              </div>
+            </div>
+            <div class="appointment-card-body flex-align-between flex-wrap border-line-top px-4 pt-3">
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/heart-rate.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/body-temperature.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>34<sup>o</sup></h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/bp.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/stress-value.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>234 psi</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="common-appointment-card bordered-rounded-card border-danger px-0" style="background: var(--light-red-bg)">
+            <div class="appointment-card-head flex-center-align px-4 pb-3">
+              <div class="card-head-img">
+                <div class="avatar-circle-img" style="background-image: url(&quot;/images/rahman.png&quot;)"></div>
+              </div>
+              <div class="card-head-details">
+                <h5 class="card-head-name">Rahman</h5>
+                <p class="card-common-desc">Vomiting</p>
+              </div>
+
+              <div class="spinner-grow text-danger" role="status">
+                <span class="visually-hidden"></span>
+              </div>
+            </div>
+            <div class="appointment-card-body flex-align-between flex-wrap border-line-top border-danger px-4 pt-3">
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/heart-rate.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/body-temperature.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>34<sup>o</sup></h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/bp.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/stress-value.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>234 psi</h4>
+                </div>
+              </div>
+            </div>
+            <div class="appointment-card-graph">
+              <svg class="stacked-area-load-state--css-draw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 711 325">
+                <path id="chart-bg" class="chart-bg" style="stroke: #f46a6a" d="M3.4,216.5h707.3 M3.4,160.5h707.3 M3.3,103.5h707.3 M3.3,48.5h707.6 M0.4,276.6H710H0.4z" />
+                <polyline id="chart-line" class="chart-line--static" style="stroke: transparent; stroke-width: 4; fill: none" points="8.8,175.8 62.4,237.7 116.1,184.7 169.7,175.8 223.3,57 277,176.8 330.6,176.8 384.3,122.5 437.9,176.8 491.6,176.8 545.2,218.4 598.8,122.5 652.5,184.7 706.1,135.1 " />
+                <polyline id="chart-line" class="chart-line" style="stroke: #f46a6a; stroke-width: 4; fill: none" points="8.8,175.8 62.4,237.7 116.1,184.7 169.7,175.8 223.3,57 277,176.8 330.6,176.8 384.3,122.5 437.9,176.8 491.6,176.8 545.2,218.4 598.8,122.5 652.5,184.7 706.1,135.1 " />
+              </svg>
+            </div>
+          </div>
+          <div class="common-appointment-card bordered-rounded-card px-0">
+            <div class="appointment-card-head flex-center-align px-4 pb-3">
+              <div class="card-head-img">
+                <div class="avatar-circle-img" style="background-image: url(&quot;/images/akmal.png&quot;)"></div>
+              </div>
+              <div class="card-head-details">
+                <h5 class="card-head-name">Akmal</h5>
+                <p class="card-common-desc">Headache</p>
+              </div>
+            </div>
+            <div class="appointment-card-body flex-align-between flex-wrap border-line-top px-4 pt-3">
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/heart-rate.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/body-temperature.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>34<sup>o</sup></h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/bp.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/stress-value.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>234 psi</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="common-appointment-card bordered-rounded-card px-0">
+            <div class="appointment-card-head flex-center-align px-4 pb-3">
+              <div class="card-head-img">
+                <div class="avatar-circle-img" style="background-image: url(&quot;/images/sinan.png&quot;)"></div>
+              </div>
+              <div class="card-head-details">
+                <h5 class="card-head-name">Sinan</h5>
+                <p class="card-common-desc">Vomiting</p>
+              </div>
+            </div>
+            <div class="appointment-card-body flex-align-between flex-wrap border-line-top px-4 pt-3">
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/heart-rate.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/body-temperature.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>34<sup>o</sup></h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/bp.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>75 Bpm</h4>
+                </div>
+              </div>
+              <div class="health-stats-list">
+                <div class="health-stat-icon">
+                  <img src="/images/health-icon/stress-value.svg" class="img-fluid" alt="Heart icon" height="40" width="40" />
+                </div>
+                <div class="health-stat-info card-stats-info">
+                  <h4>234 psi</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

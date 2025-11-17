@@ -1,0 +1,178 @@
+<div class="page-wrapper d-flex flex-column h-100">
+  <div class="filter-row-wrap d-flex flex-wrap gap-2 pb-4">
+    <div class="add-action-button border-0 bg-transparent">
+      <span class="button-light-text opacity-100">Settings</span>
+    </div>
+  </div>
+
+  <!-- Setting Items Wrap -->
+  <div class="setting-items-wrap d-flex flex-column overflow-y-auto h-100">
+    <div class="setting-list-item flex-align-between gap-3 bordered-rounded-card p-3">
+      <div class="setting-item-details flex-center-align gap-2">
+        <div class="setting-item-icon">
+          <img src="/images/inbox-icon.svg" class="img-fluid" alt="Message icon" height="24" width="24" />
+        </div>
+        <div class="setting-item-desc">
+          <h5 class="setting-item-label">Email settings</h5>
+          @if (userService.currentUser()?.username) {
+            <p class="setting-item-info">{{ userService.currentUser()?.username }}<span>(Verified)</span></p>
+          }
+        </div>
+      </div>
+      <div class="setting-item-button">
+        <button type="button" class="btn btn-outline ripple-button primary-button" data-bs-toggle="offcanvas" data-bs-target="#changeEmailCanvas" aria-controls="changeEmailCanvas" (click)="resetEmailForm()">
+          <span class="loader-spinner"> Change Email ID </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="setting-list-item flex-align-between gap-3 bordered-rounded-card p-3">
+      <div class="setting-item-details flex-center-align gap-2">
+        <div class="setting-item-icon">
+          <img src="/images/lock-icon.svg" class="img-fluid" alt="Lock icon" height="24" width="24" />
+        </div>
+        <div class="setting-item-desc">
+          <h5 class="setting-item-label">Change Password</h5>
+          <p class="setting-item-info">********</p>
+        </div>
+      </div>
+      <div class="setting-item-button">
+        <button type="button" class="btn btn-outline ripple-button primary-button" data-bs-toggle="offcanvas" data-bs-target="#changePasswordCanvas" aria-controls="changePasswordCanvas" (click)="resetPasswordForm()">Change Password</button>
+      </div>
+    </div>
+
+    <!-- Change Password Side Panel -->
+    <div class="offcanvas appointment-side-canvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="changePasswordCanvas" aria-labelledby="changePasswordCanvasLabel">
+      <div class="offcanvas-header p-0 pb-4">
+        <h5 class="offcanvas-title flex-fill" id="changePasswordCanvasLabel">Change Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="passwordForm" class="offcanvas-body overflow-x-hidden p-0 pt-lg-4 d-flex flex-column" appSubmitOnEnter>
+        <div class="auth-screen-form setting-screen-form flex-fill">
+          <div class="form-control-group">
+            <label for="auth.login.password" class="form-label">Old Password</label>
+            <app-input-password [formControl]="passwordForm.controls.oldPassword" id="auth.oldPassword" placeholder="Old Password"></app-input-password>
+          </div>
+          <div class="form-control-group">
+            <label for="auth.login.password" class="form-label">New Password</label>
+            <app-input-password [formControl]="passwordForm.controls.password" id="auth.newPassword" placeholder="New Password"></app-input-password>
+            <div class="password-requirements mt-3">
+              <small class="text-muted">Password must contain:</small>
+              <ul class="list-unstyled mt-1 mb-0">
+                @for (requirement of passwordRequirements; track $index) {
+                  <li class="d-flex align-items-center gap-1">
+                    <i class="bi" [class.bi-check-circle-fill]="requirement.isValid" [class.bi-circle]="!requirement.isValid"></i>
+                    <small [class.text-success]="requirement.isValid">{{ requirement.text }}</small>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+          <div class="form-control-group">
+            <label for="auth.login.password" class="form-label">Confirm New Password</label>
+            <app-input-password [formControl]="passwordForm.controls.passwordConfirm" id="auth.confirmPassword" placeholder="Confirm New Password"></app-input-password>
+          </div>
+        </div>
+        <div class="offcanvas-footer modal-action-btns d-flex justify-content-center p-0 pt-4 gap-3">
+          <button type="button" class="btn btn-outline ripple-button primary-button w-100" data-bs-dismiss="offcanvas" #closeChangePasswordCanvas>Cancel</button>
+          <button type="submit" class="btn text-white primary-button w-100" (click)="changePassword()" [disabled]="passwordForm.invalid || !isPasswordValid">
+            <span class="loader-spinner">
+              Submit
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Change E-mail OTP Side Panel -->
+    <div class="offcanvas appointment-side-canvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="changeEmailOTPCanvas" aria-labelledby="changeEmailOTPCanvasLabel">
+      <div class="offcanvas-header p-0 pb-4">
+        <h5 class="offcanvas-title flex-fill" id="changeEmailOTPCanvasLabel">Change Email ID</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body flex-center-align justify-content-center overflow-x-hidden p-0 py-lg-4">
+        <div class="auth-screen-inner w-100">
+          <div class="welcome-intro text-center">
+            <h5 class="mt-0">OTP Code</h5>
+            <p class="mb-0">
+              We send the OTP code via email to <br />
+              <span>{{ this.emailForm.value.email }}</span>
+            </p>
+          </div>
+
+          <form [formGroup]="form" class="auth-screen-form pb-3" appSubmitOnEnter>
+            <div class="formControlOuter mb-0">
+              <div class="form-control-group d-flex align-items-center justify-content-between m-auto gap10">
+                <div class="otp-field-input position-relative" style="margin: 0px 15%; width: 100%">
+                  <app-input-number [formControl]="form.controls.otp" placeholder="----" id="otpFormControl" [maxLength]="4" [minLength]="4"></app-input-number>
+                </div>
+              </div>
+            </div>
+
+            @if (reverseTimer.intervalId) {
+              <p class="text-center pt-4 mb-4 pb-1">
+                @if (!reverseTimer.isRunning()) {
+                  <span> Wait for 00:{{ reverseTimer.timerText() }}</span>
+                }
+                <a class="text-dark" (click)="!reverseTimer.isRunning() ? null : resendOTPCode()" [class.disabled]="!reverseTimer.isRunning()" [style.cursor]="reverseTimer.isRunning() ? 'pointer' : 'default'">
+                  <strong>
+                    <span class="loader-spinner">
+                      Send Again
+                      @if (sendAgainLoader.isLoading()) {
+                        <span class="custom-spinner"></span>
+                      }
+                    </span>
+                  </strong>
+                </a>
+              </p>
+            }
+
+            <div class="auth-button-wrap pb-4 mb-1">
+              <button class="primary-button flex-fill w-100" type="submit" [disabled]="!isOtpComplete()" (click)="submit()">
+                <span class="loader-spinner">
+                  Submit
+                  @if (loader.isLoading()) {
+                    <span class="custom-spinner"></span>
+                  }
+                </span>
+              </button>
+              <button type="button" style="display: none" data-bs-toggle="offcanvas" data-bs-target="#openChangeOTPCanvas" aria-controls="openChangeOTPCanvas" #openChangeOTPCanvas></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change E-mail Side Panel -->
+    <div class="offcanvas appointment-side-canvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="changeEmailCanvas" aria-labelledby="changeEmailCanvasLabel">
+      <div class="offcanvas-header p-0 pb-4">
+        <h5 class="offcanvas-title flex-fill" id="changeEmailCanvasLabel">Change Email ID</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="emailForm" appSubmitOnEnter class="d-flex flex-column h-100">
+        <div class="offcanvas-body overflow-x-hidden p-0 pt-lg-4 flex-fill">
+          <div class="auth-screen-form setting-screen-form">
+            <div class="form-control-group">
+              <label for="auth.login.email" class="form-label">New Email</label>
+              <app-input type="email" id="auth.login.email" [formControl]="emailForm.controls.email" placeholder="Email"></app-input>
+            </div>
+          </div>
+        </div>
+        <div class="offcanvas-footer modal-action-btns d-flex justify-content-center p-0 pt-4 gap-3">
+          <button type="submit" class="btn text-white primary-button w-100" aria-controls="changeEmailOTPCanvas" (click)="requestOtp()" [disabled]="emailForm.invalid">
+            <span class="loader-spinner">
+              Request OTP
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </span>
+          </button>
+          <button type="button" style="display: none" data-bs-toggle="offcanvas" data-bs-target="#changeEmailOTPCanvas" aria-controls="changeEmailOTPCanvas" id="openChangeEmailOTPCanvas"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

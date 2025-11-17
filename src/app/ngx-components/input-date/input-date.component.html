@@ -1,0 +1,10 @@
+<!-- <input [id]="label" type="date" class="form-control" [name]="label" [formControl]="formControl" [attr.placeholder]="label" [ngClass]="{ 'is-invalid': formControl.invalid && formControl.touched }" [readonly]="readonly" /> -->
+<input [id]="label" type="date" class="form-control" [name]="label" [formControl]="formControl" [attr.placeholder]="label" [ngClass]="{ 'is-invalid': formControl.invalid && formControl.touched }" [readonly]="readonly" />
+@if (formControl.invalid && formControl.touched) {
+  @if (formControl.getError("required")) {
+    <div class="text-danger input-field-error">This field is required.</div>
+  }
+  @if (formControl.hasError("minAge")) {
+    Minimum age required: {{ formControl.getError("minAge").requiredAge }} years. Your age: {{ formControl.getError("minAge").actualAge }} years.
+  }
+}

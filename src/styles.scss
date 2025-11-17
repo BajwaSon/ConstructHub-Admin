@@ -1,0 +1,94 @@
+@import "./theme/variables.scss";
+@import "bootstrap/scss/bootstrap";
+@import "./theme/angular-material.theme.scss";
+@import "ngx-toastr/toastr";
+@import "assets/scss/custom/bootstrap";
+
+// Import other necessary styles
+@import "bootstrap-icons/font/bootstrap-icons";
+@import "assets/scss/icons";
+
+@import "./theme/bootstrap-extended.scss";
+
+@import "@jot143/core-angular/src/assets/style.scss";
+
+@import "./theme/app.scss";
+
+@import "./theme/map.scss";
+@import "./app/ngx-components/input/input.component.scss";
+
+// @import "./home/home-index/side-menu/date-slider-card/date-slider-card.component.scss";
+// @import "./home/home-index/department/student-list-carousel/student-list-carousel.component.scss";
+// @import "./home/home-index/department/department.component.scss";
+
+// "styles":[
+//   "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+//   "./node_modules/bootstrap-icons/font/bootstrap-icons.min.css",
+//   "./node_modules/slick-carousel/slick/slick.scss",
+//   "./node_modules/slick-carousel/slick/slick-theme.scss",
+// ],
+//   "scripts":
+//   [ "./node_modules/jquery/dist/jquery.min.js",
+//   "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+//   "./node_modules/slick-carousel/slick/slick.min.js"];
+
+/* General CSS Updated */
+html,
+body {
+  color: var(--text-highlight);
+  scrollbar-width: none;
+  margin: 0;
+  font-family: var(--primary-font);
+  font-size: clamp(10px, 4vw, var(--primary-font-size));
+  background-color: var(--background-color);
+}
+
+// TODO: Move to core rcubinity
+
+/* Prevent text selection and dragging globally */
+// * {
+//   user-select: none; /* Prevents text selection */
+//   -webkit-user-select: none; /* For Safari */
+//   -moz-user-select: none; /* For Firefox */
+//   -ms-user-select: none; /* For IE/Edge */
+
+//   // pointer-events: none; /* Prevents interactions, including drag events */
+// }
+
+/* Allow interactions for specific elements like buttons, inputs, and links */
+button,
+input,
+textarea,
+a,
+select {
+  user-select: auto;
+  pointer-events: auto;
+}
+.loader-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.custom-spinner {
+  width: 24px; /* Match the diameter */
+  height: 24px;
+  border: 3px solid rgba(0, 0, 0, 0.1); /* Light border */
+  border-top-color: #fff; /* Primary color like mat-spinner */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.modal-xl .modal-content {
+  height: 100%;
+  max-width: 100% !important;
+}

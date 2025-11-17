@@ -1,0 +1,43 @@
+.search-list {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background: #fff;
+  z-index: 9999;
+  max-height: 400px;
+  overflow-y: auto;
+
+  &:has(.list) {
+    border: 1px solid #ccc;
+  }
+
+  .list {
+    cursor: pointer;
+  }
+
+  .list {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 5px 10px;
+  }
+
+  .list:hover {
+    color: #444;
+    background: #eee;
+  }
+}
+
+.hide {
+  display: none;
+}
+
+.cross-box {
+  margin-left: -33px !important;
+  z-index: 100;
+  padding-top: 0;
+  padding-bottom: 0;
+  outline: none !important;
+  border: none !important;
+}

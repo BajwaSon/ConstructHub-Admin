@@ -1,0 +1,45 @@
+.home-content-tabs {
+  .nav-pills-tabs-list {
+    position: relative;
+    flex-wrap: nowrap;
+    height: var(--h-w-global);
+    gap: 1rem;
+    border-radius: 30px;
+    overflow-x: auto;
+    .nav-item {
+      z-index: 1;
+      .nav-link {
+        color: var(--text-highlight);
+        font-size: var(--primary-font-size);
+        font-weight: var(--font-medium);
+        padding: 0 1.5rem;
+        min-width: 12rem;
+        height: 100%;
+        justify-content: center;
+        border-radius: 30px;
+        background-color: transparent;
+        transition: background-color 500ms;
+        &.active {
+          color: var(--white);
+        }
+      }
+    }
+    .bg-active-slide {
+      position: absolute;
+      height: 100%;
+      width: 33.33%;
+      border-radius: 30px;
+      background-color: var(--primary-color);
+      transform: translateX(0);
+      transition: all 0.3s ease;
+    }
+  }
+  .tab-content {
+    padding: 0 1rem;
+    .tab-pane {
+      .classes-select-outer {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

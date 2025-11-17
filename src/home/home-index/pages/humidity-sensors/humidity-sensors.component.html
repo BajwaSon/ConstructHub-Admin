@@ -1,0 +1,471 @@
+<div class="page-wrapper d-flex flex-column h-100">
+  <!-- Filter Details List Wrap -->
+  <div class="filter-row-wrap d-flex flex-wrap gap-2 pb-4 justify-content-between">
+    <!-- Export Excel Button -->
+    <div class="add-action-button border-0 bg-transparent">
+      <span class="button-light-text opacity-100">All Humidity Sensor</span>
+    </div>
+    <div class="export-excel-button-outer d-flex gap-2">
+      <form [formGroup]="campusForm" class="d-flex gap-2">
+        <div class="filter-select-field">
+          <app-single-select [options]="campusList()" [selectedValue]="campusForm.controls.campusId.value" (selectedValueChange)="onCampusFilterChange($event)"></app-single-select>
+        </div>
+
+        @if (selectedCampusFilter() && selectedCampusFilter().buildings.length > 0 && campusForm.controls.campusId.value !== "") {
+          <div class="filter-select-field">
+            <app-single-select [options]="buildingListFilter()" [selectedValue]="campusForm.controls.buildingId.value" (selectedValueChange)="onBuildingFilterChange($event)"></app-single-select>
+          </div>
+        }
+
+        @if (selectedBuildingFilter() && selectedBuildingFilter().floors.length > 0 && campusForm.controls.buildingId.value !== "") {
+          <div class="filter-select-field">
+            <app-single-select [options]="floorListFilter()" [selectedValue]="campusForm.controls.floorId.value" (selectedValueChange)="onFloorFilterChange($event)"></app-single-select>
+          </div>
+        }
+      </form>
+      <button class="primary-button export-excel-primary-button flex-center-align" type="button" data-bs-toggle="offcanvas" data-bs-target="#addHumiditySensorCanvas" aria-controls="addHumiditySensorCanvas" (click)="resetAddForm()">
+        <span>
+          <img src="/images/plus-icon.svg" class="img-fluid" alt="Excel Sheet Icon" height="24" width="24" />
+        </span>
+        New
+      </button>
+    </div>
+  </div>
+
+  @if (campusService.campuses().length > 0 && selectedCampusFilter() && selectedCampusFilter().buildings.length > 0 && selectedBuildingFilter() && selectedBuildingFilter().floors.length > 0 && campusForm.value.floorId && campusForm.value.buildingId && campusForm.value.campusId) {
+    <div class="table-responsive theme-custom-table">
+      <table class="table align-middle table-hover w-100 mb-0">
+        <thead class="table-light sticky-top">
+          <tr>
+            <!-- <th scope="col" style="width: 40px" rowspan="1" colspan="1" class="align-middle sticky-top">
+            <label for="checkbox1" class="custom-checkbox">
+              <input type="checkbox" id="checkbox1" name="checkbox1" aria-checked="false" [checked]="allSelected()" (change)="toggleSelection($event)" />
+              <span class="checkbox"></span>
+            </label>
+          </th> -->
+            <th scope="col" rowspan="1" colspan="1" class="align-middle sticky-top">Mac ID</th>
+            <th scope="col" rowspan="1" colspan="1" class="align-middle sticky-top">Location</th>
+            <th scope="col" rowspan="1" colspan="1" class="align-middle sticky-top">Classroom</th>
+            <th scope="col" rowspan="1" colspan="1" class="align-middle sticky-top">Floor</th>
+            <th scope="col" rowspan="1" colspan="1" class="align-middle sticky-top">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (humidityLoader.isLoading()) {
+            <tr>
+              <td class="bordered-rounded-card bg-white" style="border-radius: 8px" colspan="6">
+                <app-loader></app-loader>
+              </td>
+            </tr>
+          } @else {
+            @if (humidityService.humidity().length === 0) {
+              <tr>
+                <td class="bordered-rounded-card bg-white" style="border-radius: 8px" colspan="6">
+                  <div style="width: 100%">
+                    <app-data-not-found></app-data-not-found>
+                  </div>
+                </td>
+              </tr>
+            }
+            @for (humidity of humidityService.humidity(); track $index) {
+              <tr>
+                <!-- <td>
+                <label [for]="'checkbox' + ($index + 1)" class="custom-checkbox">
+                  <input type="checkbox" [id]="'checkbox' + ($index + 1)" [name]="'checkbox' + ($index + 1)" aria-checked="false" [checked]="humidity.selected" (change)="toggleSelection($event, humidity)" />
+                  <span class="checkbox"></span>
+                </label>
+              </td> -->
+                <td>
+                  <p class="td-common-text">{{ humidity.macId }}</p>
+                </td>
+                <div class="location-block">
+                  <div class="coordinate-item">
+                    <span class="coordinate-label">LAT</span>
+                    <span class="coordinate-value">{{ humidity.latitude }}</span>
+                  </div>
+                  <div class="coordinate-item">
+                    <span class="coordinate-label">LNG</span>
+                    <span class="coordinate-value">{{ humidity.longitude }}</span>
+                  </div>
+                </div>
+                <td>
+                  <p class="td-common-text">
+                    @if (!humidity.classRoom?.roomNumber) {
+                      <p class="td-common-text text-muted">
+                        <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
+                        <small>Classroom not connected</small>
+                      </p>
+                    } @else {
+                      {{ humidity.classRoom?.roomNumber }}
+                    }
+                  </p>
+                </td>
+                <td>
+                  @if (humidity.floor?.floorMapPhoto?.value) {
+                    <div class="room-thumbnail-container">
+                      <img [src]="getFloorMapImageUrl(humidity.floor?.floorMapPhoto?.value || '')" [alt]="'Floor map for ' + humidity.macId" class="room-thumbnail" [class.border-green]="humidity.latitude && humidity.longitude && humidity.floor?.floorMapPhoto?.value" [class.border-red]="!humidity.latitude && !humidity.longitude && humidity.floor?.floorMapPhoto?.value" (click)="openInteractiveMapModal(humidity)" style="cursor: pointer" />
+                    </div>
+                  } @else {
+                    <p class="td-common-text text-muted">
+                      <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
+                      <small>Floor not configured</small>
+                    </p>
+                  }
+                </td>
+                <td>
+                  <button type="button" class="card-action-btn ripple-button icon-rounded-button" (click)="openModal(appointmentModal, 'update', humidity)">
+                    <img src="/images/dots.svg" class="img-fluid" alt="Dots icon" height="5" width="20" />
+                  </button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <!-- Show appropriate empty state based on missing data -->
+    <div class="flex-center-align justify-content-center h-100 w-100">
+      <div class="not-found-empty-alert-block" [style.background]="'#fff'" style="height: 100% !important">
+        <!-- Empty State Illustration -->
+        <div class="no-data-illustration interactive-illustration" tabindex="0" role="img" aria-label="No IoT Devices Illustration">
+          <svg width="280" height="240" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Soft background shape -->
+            <ellipse cx="100" cy="120" rx="90" ry="40" fill="#f5f6fa" />
+
+            <!-- Document stack -->
+            <rect x="55" y="50" width="70" height="60" rx="6" fill="#fff" stroke="#bbb" stroke-width="2" />
+            <rect x="65" y="60" width="70" height="60" rx="6" fill="#f7f7f7" stroke="#bbb" stroke-width="2" />
+
+            <!-- Document lines -->
+            <rect x="75" y="75" width="50" height="6" rx="3" fill="#e0e0e0" />
+            <rect x="75" y="85" width="40" height="5" rx="2.5" fill="#e0e0e0" />
+            <rect x="75" y="95" width="35" height="5" rx="2.5" fill="#e0e0e0" />
+            <rect x="75" y="105" width="45" height="5" rx="2.5" fill="#e0e0e0" />
+
+            <!-- Magnifying glass -->
+            <g class="magnifier">
+              <circle cx="120" cy="110" r="38" stroke="#8ba0ad" stroke-width="6" fill="#f5f6fa" />
+              <text x="120" y="110" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="Arial, sans-serif" fill="#8ba0ad" opacity="0.85" font-weight="bold">?</text>
+              <rect x="150" y="140" width="38" height="8" rx="4" transform="rotate(45 150 140)" fill="#8ba0ad" />
+            </g>
+            <!-- Speech bubble with X -->
+            <g class="x-bubble">
+              <ellipse cx="160" cy="55" rx="20" ry="18" fill="#fff" stroke="#bbb" stroke-width="2" />
+              <path d="M153 48L167 62M167 48L153 62" stroke="#ff4d4f" stroke-width="3" stroke-linecap="round" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- Empty State Messages -->
+        @if (campusService.campuses().length === 0) {
+          <h4 class="text-center" style="color: #8789ed">No Campuses Found</h4>
+          <p class="text-center" style="color: #888; font-size: 15px">
+            To view Humidity Sensors data, please add campuses first.<br />
+            Go to <b>Infrastructure</b> in the sidebar, then select <b>Campus</b> to create new campuses.
+          </p>
+        } @else if (!campusForm.value.campusId) {
+          <h4 class="text-center" style="color: #8789ed">No Campus Selected</h4>
+          <p class="text-center" style="color: #888; font-size: 15px">Please select a campus to view Humidity Sensors data</p>
+        } @else if (!selectedCampusFilter() || selectedCampusFilter().buildings.length === 0) {
+          <h4 class="text-center" style="color: #8789ed">No Buildings Found for this Campus</h4>
+          <p class="text-center" style="color: #888; font-size: 15px">
+            To view Humidity Sensors data, please add buildings first for this campus.<br />
+            Go to <b>Infrastructure</b> in the sidebar, then select <b>Campus</b> to create new buildings.
+          </p>
+        } @else if (!campusForm.value.buildingId) {
+          <h4 class="text-center" style="color: #8789ed">No Building Selected</h4>
+          <p class="text-center" style="color: #888; font-size: 15px">Please select a building to view Humidity Sensors data</p>
+        } @else if (!selectedBuildingFilter() || selectedBuildingFilter().floors.length === 0) {
+          <h4 class="text-center" style="color: #8789ed">No Floors Found for this Building</h4>
+          <p class="text-center" style="color: #888; font-size: 15px">
+            To view Humidity Sensors data, please add floors first for this building.<br />
+            Go to <b>Infrastructure</b> in the sidebar, then select <b>Campus</b> to create new floors.
+          </p>
+        } @else if (!campusForm.value.floorId) {
+          <h4 class="text-center" style="color: #8789ed">No Floor Selected</h4>
+          <p class="text-center" style="color: #888; font-size: 15px">Please select a floor to view Humidity Sensors data</p>
+        }
+      </div>
+    </div>
+  }
+  <!-- Humidity Sensor Action Mode Modal -->
+  <ng-template #appointmentModal>
+    <div class="appointment-action-modal">
+      <div class="modal-body p-0 pb-3">
+        <button type="button" class="action-btn-item ripple-button" data-bs-toggle="offcanvas" data-bs-target="#editHumiditySensorCanvas" aria-controls="editHumiditySensorCanvas" (click)="closeModal()">Edit</button>
+        <button type="button" class="action-btn-item ripple-button" data-bs-toggle="modal" data-bs-target="#appointmentDeleteModal" (click)="closeModal(); openModal(appointmentDeleteModal)">Delete</button>
+      </div>
+      <div class="modal-footer justify-content-center border-0 p-0">
+        <button type="button" class="action-btn-item action-cancel-button ripple-button m-0" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Humidity Sensor Delete Alert Modal -->
+  <ng-template #appointmentDeleteModal>
+    <div class="appointment-action-modal appointment-delete-modal">
+      <div class="modal-body p-0">
+        <h6 class="modal-title">Are you sure want to delete this Humidity Sensor?</h6>
+        <div class="modal-action-btns d-flex justify-content-center pt-4">
+          <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">No</button>
+          <button type="button" class="btn text-white primary-button" (click)="deleteHumiditySensor()">
+            <span class="loader-spinner">
+              Yes
+              @if (loader.isLoading()) {
+                <span class="custom-spinner"></span>
+              }
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Add New Humidity Sensor Side Panel -->
+  <div class="offcanvas appointment-side-canvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="addHumiditySensorCanvas" aria-labelledby="addHumiditySensorCanvasLabel">
+    <div class="offcanvas-header p-0 pb-4">
+      <h5 class="offcanvas-title d-flex align-items-end gap-2 flex-fill" id="addHumiditySensorCanvasLabel">
+        <span><img src="/images/teacher-icon-dark.svg" alt="Calendar icon" class="img-fluid" height="24" width="24" /></span> Add Humidity Sensor
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    @if (campusService.campuses().length > 0 && campusService.campuses()[0].buildings.length > 0 && campusService.campuses()[0].buildings[0].floors.length > 0) {
+      <div class="offcanvas-body overflow-x-hidden p-0 pt-lg-4">
+        <form [formGroup]="humidityForm" class="take-appointment-form" appSubmitOnEnter>
+          <div class="form-group-item mb-4">
+            <div class="select-menu-wrap w-100">
+              <div class="select-wrap-label">Mac ID</div>
+              <app-input type="text" [formControl]="humidityForm.controls.macId" placeholder="MAC ID"></app-input>
+            </div>
+          </div>
+
+          <div class="form-group-item mb-4">
+            <div class="select-wrap-label">Latitude</div>
+            <app-input type="text" [formControl]="humidityForm.controls.latitude" placeholder="Latitude"></app-input>
+          </div>
+
+          <div class="form-group-item mb-4">
+            <div class="select-wrap-label">Longitude</div>
+            <app-input type="text" [formControl]="humidityForm.controls.longitude" placeholder="Longitude"></app-input>
+          </div>
+
+          <div class="form-group-row row row-mx-cst">
+            <div class="col-6 form-group-item mb-4">
+              <div class="select-wrap-label">Campus ID</div>
+              <div class="filter-select-field">
+                <app-single-select [options]="campusList()" [selectedValue]="humidityForm.controls.campusId.value" (selectedValueChange)="onCampusChange($event)"></app-single-select>
+              </div>
+            </div>
+            <div class="col-6 form-group-item mb-4">
+              <div class="select-wrap-label">Buildings</div>
+              <div class="filter-select-field">
+                <app-single-select [options]="buildingList()" [selectedValue]="humidityForm.controls.buildingId.value" (selectedValueChange)="onBuildingChange($event)"></app-single-select>
+              </div>
+            </div>
+            <div class="col-6 form-group-item mb-4">
+              <div class="select-wrap-label">Floor Number</div>
+              <div class="filter-select-field">
+                <app-single-select [options]="floorList()" [selectedValue]="humidityForm.controls.floorId.value" (selectedValueChange)="onFloorChange($event)"></app-single-select>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    } @else {
+      <div class="flex-center-align justify-content-center h-100 w-100">
+        <div class="not-found-empty-alert-block" [style.background]="'#fff'" style="height: 100% !important">
+          <div class="no-data-illustration interactive-illustration" tabindex="0" role="img" aria-label="No Class Levels Illustration">
+            <svg width="280" height="240" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Soft background shape -->
+              <ellipse cx="100" cy="120" rx="90" ry="40" fill="#f5f6fa" />
+              <!-- Document stack -->
+              <rect x="55" y="50" width="70" height="60" rx="6" fill="#fff" stroke="#bbb" stroke-width="2" />
+              <rect x="65" y="60" width="70" height="60" rx="6" fill="#f7f7f7" stroke="#bbb" stroke-width="2" />
+              <!-- Document lines -->
+              <rect x="75" y="75" width="50" height="6" rx="3" fill="#e0e0e0" />
+              <rect x="75" y="85" width="40" height="5" rx="2.5" fill="#e0e0e0" />
+              <rect x="75" y="95" width="35" height="5" rx="2.5" fill="#e0e0e0" />
+              <rect x="75" y="105" width="45" height="5" rx="2.5" fill="#e0e0e0" />
+              <!-- Magnifying glass -->
+              <g class="magnifier">
+                <circle cx="120" cy="110" r="38" stroke="#8ba0ad" stroke-width="6" fill="#f5f6fa" />
+                <text x="120" y="110" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="Arial, sans-serif" fill="#8ba0ad" opacity="0.85" font-weight="bold">?</text>
+                <rect x="150" y="140" width="38" height="8" rx="4" transform="rotate(45 150 140)" fill="#8ba0ad" />
+              </g>
+              <!-- Speech bubble with X -->
+              <g class="x-bubble">
+                <ellipse cx="160" cy="55" rx="20" ry="18" fill="#fff" stroke="#bbb" stroke-width="2" />
+                <path d="M153 48L167 62M167 48L153 62" stroke="#ff4d4f" stroke-width="3" stroke-linecap="round" />
+              </g>
+            </svg>
+          </div>
+          @if (campusService.campuses().length === 0) {
+            <h4 class="text-center" style="color: #8789ed">No Campuses Found</h4>
+            <p class="text-center" style="color: #888; font-size: 15px">
+              To add humidity sensors, please add campuses first.<br />
+              Go to <b>Infrastructure</b> in the sidebar, then select <b>Campus</b> to create new campuses.
+            </p>
+          } @else if (campusService.campuses()[0].buildings.length === 0) {
+            <h4 class="text-center" style="color: #8789ed">No Buildings Found</h4>
+            <p class="text-center" style="color: #888; font-size: 15px">
+              To add humidity sensors, please add buildings first.<br />
+              Go to <b>Infrastructure</b> in the sidebar, then select <b>Campus</b> to create new buildings.
+            </p>
+          } @else if (campusService.campuses()[0].buildings[0].floors.length === 0) {
+            <h4 class="text-center" style="color: #8789ed">No Floors Found</h4>
+            <p class="text-center" style="color: #888; font-size: 15px">
+              To add humidity sensors, please add floors first.<br />
+              Go to <b>Infrastructure</b> in the sidebar, then select <b>Campus</b> to create new floors.
+            </p>
+          }
+        </div>
+      </div>
+    }
+    <div class="offcanvas-footer modal-action-btns d-flex justify-content-center p-0 pt-4 gap-3">
+      <button type="button" class="btn btn-outline ripple-button primary-button w-100" data-bs-dismiss="offcanvas" #addHumidityCanvas>Cancel</button>
+      <button type="submit" class="btn text-white primary-button w-100" [disabled]="humidityForm.invalid" (click)="addHumiditySensor()">
+        <span class="loader-spinner">
+          Submit
+          @if (loader.isLoading()) {
+            <span class="custom-spinner"></span>
+          }
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Edit Humidity Sensor Side Panel -->
+  <div class="offcanvas appointment-side-canvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="editHumiditySensorCanvas" aria-labelledby="editHumiditySensorCanvasLabel">
+    <div class="offcanvas-header p-0 pb-4">
+      <h5 class="offcanvas-title d-flex align-items-end gap-2 flex-fill" id="editHumiditySensorCanvasLabel">
+        <span><img src="/images/teacher-icon-dark.svg" alt="Calendar icon" class="img-fluid" height="24" width="24" /></span> Edit Humidity Sensor
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    @if (campusService.campuses().length > 0) {
+      <div class="offcanvas-body overflow-x-hidden p-0 pt-lg-4">
+        <form [formGroup]="updateHumidityForm" class="take-appointment-form" appSubmitOnEnter>
+          <div class="form-group-item mb-4">
+            <div class="select-menu-wrap w-100">
+              <div class="select-wrap-label">Mac ID</div>
+              <app-input type="text" [formControl]="updateHumidityForm.controls.macId" placeholder="MAC ID"></app-input>
+            </div>
+          </div>
+
+          <div class="form-group-item mb-4">
+            <div class="select-wrap-label">Latitude</div>
+            <app-input type="text" [formControl]="updateHumidityForm.controls.latitude" placeholder="Latitude"></app-input>
+          </div>
+
+          <div class="form-group-item mb-4">
+            <div class="select-wrap-label">Longitude</div>
+            <app-input type="text" [formControl]="updateHumidityForm.controls.longitude" placeholder="Longitude"></app-input>
+          </div>
+
+          <div class="form-group-row row row-mx-cst">
+            <div class="col-6 form-group-item mb-4">
+              <div class="select-wrap-label">Campus ID</div>
+              <div class="filter-select-field">
+                <app-single-select [options]="campusList()" [selectedValue]="updateHumidityForm.controls.campusId.value" (selectedValueChange)="onCampusChange($event)"></app-single-select>
+              </div>
+            </div>
+            <div class="col-6 form-group-item mb-4">
+              <div class="select-wrap-label">Buildings</div>
+              <div class="filter-select-field">
+                <app-single-select [options]="buildingList()" [selectedValue]="updateHumidityForm.controls.buildingId.value" (selectedValueChange)="onBuildingChange($event)"></app-single-select>
+              </div>
+            </div>
+            <div class="col-6 form-group-item mb-4">
+              <div class="select-wrap-label">Floor Number</div>
+              <div class="filter-select-field">
+                <app-single-select [options]="floorList()" [selectedValue]="updateHumidityForm.controls.floorId.value" (selectedValueChange)="onFloorChange($event)"></app-single-select>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    } @else {
+      <div class="flex-center-align justify-content-center h-100 w-100">
+        <div class="not-found-empty-alert-block" [style.background]="'#fff'">
+          <h4 class="text-center" style="color: #8789ed">No Campuses Found</h4>
+          <p class="text-center" style="color: #888; font-size: 15px">
+            To add humidity sensors, please add campuses first.<br />
+            Go to <b>Infrastructure</b> in the sidebar, then select <b>Campus</b> to create new campuses.
+          </p>
+        </div>
+      </div>
+    }
+    <div class="offcanvas-footer modal-action-btns d-flex justify-content-center p-0 pt-4 gap-3">
+      <button type="button" class="btn btn-outline ripple-button primary-button w-100" data-bs-dismiss="offcanvas" #updateHumidityCanvas>Cancel</button>
+      <button type="submit" class="btn text-white primary-button w-100" [disabled]="updateHumidityForm.invalid" (click)="updateHumiditySensor()">
+        <span class="loader-spinner">
+          Submit
+          @if (loader.isLoading()) {
+            <span class="custom-spinner"></span>
+          }
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Interactive Map Modal -->
+<ng-template #interactiveMapModal>
+  <div class="appointment-action-modal appointment-delete-modal document-preview-modal" style="max-width: 90vw; width: 90vw; max-height: 90vh">
+    <div class="modal-header p-0 pb-3">
+      <h5 class="modal-title card-head-name">
+        Interactive Map
+        @if (selectedHumidityForMap$()?.latitude && selectedHumidityForMap$()?.longitude) {
+          - {{ selectedHumidityForMap$()?.latitude }}, {{ selectedHumidityForMap$()?.longitude }}
+        }
+      </h5>
+      <button type="button" class="btn-close" (click)="closeModal()"></button>
+    </div>
+    <div class="modal-body p-0" style="height: 70vh; overflow: hidden">
+      @if (selectedFloorForMap$()?.floorMapPhoto?.value) {
+        <div class="polygon-toolbar d-flex gap-2 mt-2 mb-2">
+          <button type="button" class="btn btn-outline-primary" (click)="createMarker()"><i class="bi bi-plus-square"></i> New/Edit Marker</button>
+          <button type="button" class="btn btn-outline-danger" [disabled]="!selectedHumidityForMap$()?.markerMatrix" (click)="deleteMarker()"><i class="bi bi-trash"></i> Delete Marker</button>
+        </div>
+        <div class="interactive-map-container" style="height: 100%; width: 100%">
+          <lib-interactive-map #interactiveMapDom (load)="onInteractiveMapLoad(interactiveMapDom)" (markerDrawFinish)="onMarkerDrawFinish($event)"></lib-interactive-map>
+        </div>
+      } @else {
+        <div class="flex-center-align justify-content-center h-100 w-100">
+          <div class="not-found-empty-alert-block" [style.background]="'#fff'" style="height: 100% !important">
+            <div class="no-data-illustration interactive-illustration" tabindex="0" role="img" aria-label="No Floor Map Illustration">
+              <svg width="280" height="240" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Soft background shape -->
+                <ellipse cx="100" cy="120" rx="90" ry="40" fill="#f5f6fa" />
+                <!-- Document stack -->
+                <rect x="55" y="50" width="70" height="60" rx="6" fill="#fff" stroke="#bbb" stroke-width="2" />
+                <rect x="65" y="60" width="70" height="60" rx="6" fill="#f7f7f7" stroke="#bbb" stroke-width="2" />
+                <!-- Document lines -->
+                <rect x="75" y="75" width="50" height="6" rx="3" fill="#e0e0e0" />
+                <rect x="75" y="85" width="40" height="5" rx="2.5" fill="#e0e0e0" />
+                <rect x="75" y="95" width="35" height="5" rx="2.5" fill="#e0e0e0" />
+                <rect x="75" y="105" width="45" height="5" rx="2.5" fill="#e0e0e0" />
+                <!-- Magnifying glass -->
+                <g class="magnifier">
+                  <circle cx="120" cy="110" r="38" stroke="#8ba0ad" stroke-width="6" fill="#f5f6fa" />
+                  <text x="120" y="110" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="Arial, sans-serif" fill="#8ba0ad" opacity="0.85" font-weight="bold">?</text>
+                  <rect x="150" y="140" width="38" height="8" rx="4" transform="rotate(45 150 140)" fill="#8ba0ad" />
+                </g>
+              </svg>
+            </div>
+            <h4 class="text-center" style="color: #8789ed">No Floor Map Available</h4>
+            <p class="text-center" style="color: #888; font-size: 15px">
+              This classroom doesn't have a floor map configured.<br />
+              Please configure the floor map first to view the interactive map.
+            </p>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="modal-footer justify-content-center border-0 p-0 pt-3">
+      <button type="button" class="btn btn-outline ripple-button primary-button" (click)="closeModal()">Close</button>
+      <button type="button" class="btn btn-primary ripple-button primary-button" (click)="saveMapChanges()">Save</button>
+    </div>
+  </div>
+</ng-template>

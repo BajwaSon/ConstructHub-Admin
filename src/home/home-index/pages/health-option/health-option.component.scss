@@ -1,0 +1,200 @@
+.top-header-bar {
+  .admin-user-block {
+    gap: 0.75rem;
+    .admin-user-name {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 0.875);
+      font-weight: var(--font-semibold);
+      margin-bottom: 0;
+    }
+  }
+}
+
+.tab-content-head {
+  border-bottom: 1px solid var(--grey-light-shade);
+  .card-head-details {
+    .card-head-name {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 1.25);
+    }
+  }
+  .card-action-btn {
+    background: var(--light-grey-bg);
+  }
+}
+
+.app-action-status-listing {
+  .status-list-item {
+    .status-item-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 5rem;
+      width: 5rem;
+      border: 2px solid var(--grey-light-shade);
+      border-radius: 0.625rem;
+      transition: all 0.3s ease;
+    }
+    .status-item-title {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 0.875);
+      font-weight: var(--font-medium);
+      margin: 6px 0 0;
+    }
+  }
+}
+
+.appointment-action-modal {
+  padding: 2rem 0;
+  width: 100%;
+  .action-btn-item {
+    display: block;
+    color: var(--black);
+    font-size: var(--primary-font-size);
+    font-weight: var(--font-medium);
+    letter-spacing: var(--letter-space);
+    padding: 0.875rem 1rem;
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+    &.action-cancel-button {
+      color: var(--unread-badge);
+    }
+  }
+}
+
+.appointment-delete-modal {
+  padding: 3rem 1.5rem;
+  border-radius: var(--cst-radius-lg);
+  .modal-title {
+    color: var(--black);
+    font-size: var(--primary-font-size);
+    font-weight: var(--font-regular);
+    letter-spacing: 0.64px;
+    text-align: center;
+    margin: 0;
+  }
+  .modal-action-btns {
+    gap: 0.625rem;
+  }
+  .select-menu-wrap {
+    width: 18.75rem;
+    margin: 0 auto;
+  }
+}
+
+.appointment-side-canvas {
+  padding: 1.5rem;
+  border-top-left-radius: var(--cst-radius-lg);
+  border-bottom-left-radius: var(--cst-radius-lg);
+  .offcanvas-header {
+    .offcanvas-title {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 1.5);
+      font-weight: var(--font-regular);
+      letter-spacing: 0.96px;
+      line-height: 1;
+    }
+    .btn-close {
+      height: 34px;
+      width: 34px;
+      opacity: 1;
+      padding: 0;
+      margin: 0;
+      background-image: url("/images/close-icon.svg");
+      background-size: 34px;
+    }
+  }
+  .take-appointment-form {
+    input,
+    textarea {
+      &::placeholder {
+        color: var(--black);
+        text-transform: capitalize;
+      }
+    }
+    textarea {
+      min-height: 9rem;
+    }
+  }
+  @media screen and (min-width: 1200px) {
+    padding: 3rem;
+    width: 32rem;
+  }
+}
+
+.modal-action-btns {
+  .btn {
+    width: 5.5rem;
+  }
+}
+
+.media-upload-outer {
+  gap: 0.75rem;
+  .preview-upload-img {
+    width: 4.25rem;
+    flex: none;
+    .avatar-rounded-img {
+      // background-color: var(--text-highlight);
+      .upload-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      &[style*="background-image"] {
+        .upload-icon {
+          display: none;
+        }
+      }
+    }
+  }
+  .form-label {
+    color: var(--base-grey);
+    font-size: calc(var(--primary-font-size) * 0.875);
+    font-weight: var(--font-medium);
+  }
+  .media-upload-btn {
+    position: relative;
+    display: inline-block;
+    color: var(--black);
+    font-size: calc(var(--primary-font-size) * 0.875);
+    font-weight: var(--font-regular);
+    line-height: 1;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border: 1px solid var(--black);
+    border-radius: 0.5rem;
+    background-color: var(--white);
+    overflow: hidden;
+  }
+}
+
+.select-item-button {
+  transition: all 0.3s ease;
+  &:focus {
+    border-color: var(--black);
+  }
+}
+
+.theme-custom-table {
+  td {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--grey-light-shade);
+    .avatar-details-block {
+      .rounded-50-img {
+        height: var(--h-w-global);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--grey-light-shade);
+        border-radius: 0.5rem;
+      }
+    }
+  }
+  tr:last-child {
+    td {
+      border-bottom: none;
+    }
+  }
+}

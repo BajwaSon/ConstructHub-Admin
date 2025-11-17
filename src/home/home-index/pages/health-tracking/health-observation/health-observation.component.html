@@ -1,0 +1,140 @@
+<div class="d-flex flex-column overflow-hidden h-100">
+  <!-- Filter Details List Wrap -->
+  <div class="filter-row-wrap d-flex flex-wrap gap-2 pb-4">
+    <div class="add-action-button border-0 bg-transparent">
+      <span class="button-light-text opacity-100">Students Health Observation</span>
+    </div>
+  </div>
+  <!-- Recently Appointments Cols -->
+  <div class="recently-appointments-row row row-mx-cst overflow-hidden h-100">
+    <div class="col-sm-8 overflow-hidden h-100">
+      <div class="bordered-rounded-card overflow-hidden d-flex flex-column h-100 pb-0">
+        <div class="appointment-card-head tab-content-head flex-align-between pb-4">
+          <div class="card-head-details">
+            <h5 class="card-head-name m-0">Under the Observation</h5>
+          </div>
+        </div>
+        <div class="chat-listed-body overflow-y-auto overflow-hidden flex-fill h-100 py-4">
+          <div class="row row-mx-cst row-gap-3">
+            @if (healthObservationLoader.isLoading()) {
+              <div style="width: 100%">
+                <app-loader></app-loader>
+              </div>
+            } @else {
+              @for (student of studentHealthData; track $index; let i = $index) {
+                <div class="col-lg-4">
+                  <div class="common-appointment-card bordered-rounded-card {{ student.borderColor }} px-0 h-100" [ngStyle]="{ background: student.backgroundColor }">
+                    <div class="appointment-card-head flex-center-align px-4 pb-3">
+                      <div class="card-head-img">
+                        <div class="avatar-circle-img" [style.backgroundImage]="'url(' + student.avatar + ')'"></div>
+                      </div>
+                      <div class="card-head-details">
+                        <h5 class="card-head-name">{{ student.name }}</h5>
+                        <p class="card-common-desc">{{ student.condition }}</p>
+                      </div>
+                      <div class="card-alert-icon ms-auto px-4">
+                        <img [src]="student.statsIcon" alt="Health alert icon" />
+                      </div>
+                      <div class="spinner-grow" [ngClass]="student.spinnerColor" role="status">
+                        <span class="visually-hidden"></span>
+                      </div>
+                    </div>
+
+                    <div class="appointment-card-body flex-align-between flex-wrap border-line-top {{ student.borderColor }} px-4 pt-3">
+                      <div class="health-stats-list" *ngFor="let stat of student.stats">
+                        <div class="health-stat-icon">
+                          <img [src]="stat.icon" class="img-fluid" alt="Health Icon" height="40" width="40" />
+                        </div>
+                        <div class="health-stat-info card-stats-info">
+                          <h4>{{ stat.value }}</h4>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="appointment-card-graph">
+                      <svg class="stacked-area-load-state--css-draw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 711 275">
+                        <path id="chart-bg" class="chart-bg" [attr.style]="'stroke: ' + student.strokeColor" d="M3.4,216.5h707.3 M3.4,160.5h707.3 M3.3,103.5h707.3 M3.3,48.5h707.6 M0.4" />
+                        <polyline id="chart-line" class="chart-line" [attr.style]="'stroke: ' + student.strokeColor + '; stroke-width: 4; fill: none'" points="8.8,175.8 62.4,237.7 116.1,184.7 169.7,175.8 223.3,57 277,176.8 330.6,176.8 384.3,122.5 437.9,176.8 491.6,176.8 545.2,218.4 598.8,122.5 652.5,184.7 706.1,135.1" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4 d-flex flex-column overflow-hidden h-100">
+      <div class="bordered-rounded-card card-mb-1 px-0">
+        <div class="user-chat-items-outer">
+          <div class="user-chat-items d-flex flex-nowrap gap-3 px-4 overflow-x-auto">
+            @for (user of users; track $index) {
+              <div class="chat-user-avatar" (click)="selectUser(user)" [class.active]="user === selectedUser">
+                <div class="chat-avatar-img avatar-circle-img" [style.background-image]="'url(' + user.avatarUrl + ')'"></div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="chat-screen-body bordered-rounded-card d-flex flex-column flex-fill overflow-hidden h-100">
+        <div class="user-chat-head chat-card-user flex-center-align gap-2 pb-4">
+          <div class="chat-user-avatar">
+            <div class="chat-avatar-img avatar-circle-img" [style.background-image]="'url(' + selectedUser?.avatarUrl + ')'"></div>
+          </div>
+          <div class="chat-user-details">
+            <h5 class="mt-0 text-capitalize">{{ selectedUser?.name }}</h5>
+            <p class="m-0">{{ selectedUser?.role }}</p>
+          </div>
+        </div>
+        <div class="user-chat-body flex-fill h-100 overflow-y-auto py-2">
+          <h6 class="user-chat-day-label text-center text-capitalize">Today</h6>
+          @for (message of messages; track $index) {
+            <div class="user-ongoing-chat-wrap">
+              <div [ngClass]="{ 'user-sent-chat': message.sender === 'You', 'user-receive-chat': message.sender !== 'You' }" class="d-flex align-items-center user-chat-card-outer">
+                <div class="chat-user-avatar position-relative">
+                  <div class="chat-avatar-img avatar-circle-img" [style.background-image]="'url(' + selectedUser?.avatarUrl + ')'"></div>
+                </div>
+                <div class="user-chat-message-card">
+                  <p class="m-0">{{ message.content }}</p>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+        <div class="user-chat-footer flex-center-align gap-3 pt-4">
+          <textarea name="message" id="message" placeholder="Type your Message" class="form-control flex-fill w-100" [(ngModel)]="newMessage" name="newMessage"></textarea>
+          <div class="user-chat-action-btns d-flex align-items-center">
+            @if (!newMessage) {
+              <button type="button" class="bg-transparent border-0">
+                <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M15.3927 1.27405C14.9172 0.839899 14.2997 0.599609 13.6594 0.599609H10.1527C9.51259 0.599609 8.8952 0.839775 8.41975 1.27372L7.73149 1.90191C7.26373 2.32884 6.65632 2.56513 6.02657 2.56513C3.16768 2.56513 0.850098 4.91177 0.850098 7.80651V14.3582C0.850098 17.253 3.16768 19.5996 6.02657 19.5996H17.6736C20.5325 19.5996 22.8501 17.253 22.8501 14.3582V7.80651C22.8501 4.91177 20.5325 2.56513 17.6736 2.56513L17.4885 2.55743C16.9975 2.5165 16.5313 2.31364 16.1629 1.97728L15.3927 1.27405ZM10.1527 1.79961H13.6594C13.9998 1.79961 14.3288 1.92765 14.5836 2.16023L15.3538 2.86346C15.9169 3.37763 16.6322 3.69021 17.3888 3.75328L17.6238 3.76409C19.8664 3.76513 21.6501 5.57119 21.6501 7.80651V14.3582C21.6501 16.5935 19.8664 18.3996 17.6736 18.3996H6.02657C3.83379 18.3996 2.0501 16.5935 2.0501 14.3582V7.80651C2.0501 5.63893 3.72733 3.87498 5.82839 3.77006L6.25815 3.75791C7.10399 3.7051 7.90932 3.36429 8.54045 2.78824L9.22872 2.16005C9.48341 1.92758 9.8124 1.79961 10.1527 1.79961ZM11.8501 5.60461C14.6115 5.60461 16.8501 7.84319 16.8501 10.6046C16.8501 13.366 14.6115 15.6046 11.8501 15.6046C9.08867 15.6046 6.8501 13.366 6.8501 10.6046C6.8501 7.84319 9.08867 5.60461 11.8501 5.60461ZM8.0501 10.6046C8.0501 8.50593 9.75142 6.80461 11.8501 6.80461C13.9488 6.80461 15.6501 8.50593 15.6501 10.6046C15.6501 12.7033 13.9488 14.4046 11.8501 14.4046C9.75142 14.4046 8.0501 12.7033 8.0501 10.6046Z"
+                    fill="#FF6F61" />
+                </svg>
+              </button>
+              <button type="button" class="bg-transparent border-0">
+                <svg width="16" height="24" viewBox="0 0 16 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.84988 0.600098C10.3352 0.600098 12.3499 2.61482 12.3499 5.1001V12.1001C12.3499 14.5854 10.3352 16.6001 7.84988 16.6001C5.3646 16.6001 3.34988 14.5854 3.34988 12.1001V5.1001C3.34988 2.61482 5.3646 0.600098 7.84988 0.600098ZM0.599878 10.9285C0.898112 10.9285 1.14552 11.1461 1.19202 11.4311L1.19988 11.5285V11.6604C1.19988 15.4005 4.17937 18.4285 7.84988 18.4285C11.4423 18.4285 14.3728 15.5279 14.4959 11.8982L14.4999 11.6604V11.5389C14.4999 11.2075 14.7685 10.9389 15.0999 10.9389C15.3981 10.9389 15.6455 11.1565 15.692 11.4415L15.6999 11.5389L15.6961 11.9085C15.5732 15.9892 12.4265 19.3006 8.44974 19.6056L8.44988 23.1001C8.44988 23.4315 8.18125 23.7001 7.84988 23.7001C7.55164 23.7001 7.30423 23.4825 7.25773 23.1974L7.24988 23.1001L7.25035 19.6056C3.27597 19.301 0.130576 15.9935 0.00384808 11.9162L-0.00012207 11.5285C-0.00012207 11.1971 0.268507 10.9285 0.599878 10.9285ZM4.54988 5.1001C4.54988 3.27756 6.02734 1.8001 7.84988 1.8001C9.67242 1.8001 11.1499 3.27756 11.1499 5.1001V12.1001C11.1499 13.9226 9.67242 15.4001 7.84988 15.4001C6.02734 15.4001 4.54988 13.9226 4.54988 12.1001V5.1001Z"
+                    fill="#FF6F61" />
+                </svg>
+              </button>
+            } @else {
+              <button type="button" class="bg-transparent border-0" (click)="sendMessage()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 2L11 13" stroke="#FF6F61" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#FF6F61" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

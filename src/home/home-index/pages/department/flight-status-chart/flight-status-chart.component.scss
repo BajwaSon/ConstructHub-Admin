@@ -1,0 +1,216 @@
+.flight-status-chart-container {
+  border-radius: 0.625rem;
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+
+    h4 {
+      margin: 0;
+      color: #111827;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #666;
+        padding: 6px 12px;
+        background: var(--light-white);
+        border-radius: 6px;
+        border: 1px solid var(--grey-light-shade);
+
+        .legend-color {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          display: inline-block;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+          &.on-time {
+            background: linear-gradient(135deg, #10b981, #059669);
+          }
+
+          &.delayed {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+          }
+
+          &.cancelled {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+          }
+
+          &.boarding {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+          }
+        }
+      }
+    }
+  }
+
+  .chart-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .chart-column {
+      flex: 1;
+      padding: 1.5rem;
+      border: 1px solid var(--grey-light-shade);
+      border-radius: var(--cst-radius-lg);
+      background-color: var(--white);
+
+      &.full-width {
+        flex: 1;
+      }
+
+      h5 {
+        margin: 0 0 16px 0;
+        color: #374151;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      ::ng-deep {
+        .apexcharts-canvas {
+          margin: 0 auto;
+        }
+
+        .apexcharts-legend {
+          padding: 8px 0;
+        }
+
+        .apexcharts-legend-text {
+          color: #666 !important;
+          font-size: 12px !important;
+          font-weight: 500 !important;
+        }
+
+        .apexcharts-legend-marker {
+          border-radius: 50% !important;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .apexcharts-tooltip {
+          background: #ffffff !important;
+          border: 1px solid #e5e7eb !important;
+          border-radius: 8px !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+          color: #374151 !important;
+          font-family: "Host Grotesk", serif !important;
+        }
+
+        .apexcharts-tooltip-title {
+          background: #f9fafb !important;
+          border-bottom: 1px solid #e5e7eb !important;
+          color: #111827 !important;
+          font-weight: 600 !important;
+          padding: 8px 12px !important;
+          font-family: "Host Grotesk", serif !important;
+        }
+
+        .apexcharts-tooltip-y-group {
+          color: #374151 !important;
+          padding: 4px 12px !important;
+          font-family: "Host Grotesk", serif !important;
+        }
+
+        .apexcharts-xaxis-label,
+        .apexcharts-yaxis-label {
+          color: #666 !important;
+          font-size: 11px !important;
+          font-weight: 500 !important;
+        }
+
+        .apexcharts-title-text {
+          color: #111827 !important;
+          font-weight: 600 !important;
+        }
+
+        .apexcharts-subtitle-text {
+          color: #666 !important;
+        }
+
+        .apexcharts-donut-slice-pie {
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+        }
+
+        .apexcharts-gridline {
+          stroke: #e5e7eb !important;
+          stroke-width: 1px !important;
+          opacity: 0.5 !important;
+        }
+
+        .apexcharts-xaxis-tick {
+          stroke: #e5e7eb !important;
+        }
+
+        .apexcharts-yaxis-tick {
+          stroke: #e5e7eb !important;
+        }
+
+        .apexcharts-text {
+          fill: #666 !important;
+        }
+
+        .apexcharts-donut-label {
+          fill: #111827 !important;
+        }
+
+        .apexcharts-donut-label-total {
+          font-weight: 600 !important;
+          font-size: 16px !important;
+        }
+
+        .apexcharts-donut-label-label {
+          font-size: 12px !important;
+          color: #666 !important;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .flight-status-chart-container {
+    padding: 16px;
+
+    .chart-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+
+      .chart-legend {
+        justify-content: flex-start;
+      }
+    }
+
+    .chart-row {
+      flex-direction: column;
+      gap: 16px;
+
+      .chart-column {
+        &.full-width {
+          flex: none;
+        }
+      }
+    }
+  }
+}

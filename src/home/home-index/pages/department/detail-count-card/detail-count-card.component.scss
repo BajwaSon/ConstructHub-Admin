@@ -1,0 +1,54 @@
+.detail-count-card {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  border-radius: 0.625rem;
+  background-color: var(--white);
+  .count-card-body {
+    .count-card-title {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 2);
+      font-weight: var(--font-bold);
+      letter-spacing: 1.28px;
+      margin-bottom: 0.5rem;
+    }
+    .count-card-text {
+      color: var(--text-highlight);
+      letter-spacing: var(--letter-space);
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .count-card-icon {
+    min-width: 4.25rem;
+    height: 4.25rem;
+    border: 1px solid var(--grey-light-shade);
+    border-radius: 50%;
+    background: rgb(248 248 248 / 47%);
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1499px) {
+  .detail-count-card {
+    padding: 1rem;
+    align-self: flex-start;
+    .count-card-body {
+      .count-card-title {
+        font-size: calc(var(--primary-font-size) * 1.5);
+        margin-bottom: 0.5rem;
+      }
+      .count-card-text {
+        font-size: calc(var(--primary-font-size) * 0.875);
+      }
+    }
+    .count-card-icon {
+      min-width: 3.5rem;
+      height: 3.5rem;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+}

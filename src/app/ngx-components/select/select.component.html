@@ -1,0 +1,10 @@
+<select class="custom-select form-control" placeholder="Select Option" [formControl]="formControl" [name]="label" [ngClass]="{ 'is-invalid': formControl.invalid && formControl.touched }">
+  @for (option of options; track $index) {
+    <option [value]="option.value">{{ option.label }}</option>
+  }
+</select>
+@if (formControl.invalid && formControl.touched) {
+  @if (formControl.getError("required")) {
+    <div class="text-danger input-field-error">This field is required.</div>
+  }
+}

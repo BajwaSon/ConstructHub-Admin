@@ -1,0 +1,38 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ClassDecorator, Model, User } from "@jot143/core-angular";
+import { environment } from "../../environments/environment";
+
+export class Section extends Model<Section> {
+  override className: string = "Section";
+
+  designation = "Nurse";
+  dob = "";
+  email = "";
+  gender: "male" | "female" | "other" = "male";
+  id: number | "" = "";
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  admissionNumber?: string;
+  origin?: string;
+  parentName?: string;
+  parentPhone?: string;
+  parentEmail?: string;
+  level?: string;
+  name = "";
+  phoneNo = "";
+  updatedAt = "";
+  createdAt = "";
+  deletedAt = null;
+
+  @ClassDecorator(() => new User())
+  user: User | null = null;
+  profile?: any = {};
+  profilePhoto?: { value: string } | null = null;
+  get imageUrl() {
+    if (!this.profile.profilePhoto?.value) {
+      return "";
+    }
+    return this.profile.profilePhoto.value.startsWith("http") ? this.profile.profilePhoto.value : environment.assetsUrl + "/" + this.profile.profilePhoto.value;
+  }
+}

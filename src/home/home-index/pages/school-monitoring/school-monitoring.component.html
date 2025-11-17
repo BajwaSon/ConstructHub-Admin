@@ -1,0 +1,35 @@
+<div class="page-wrapper d-flex flex-column h-100">
+  <!-- Filter Details List Wrap -->
+  <div class="filter-row-wrap flex-align-between flex-wrap gap-2 pb-4">
+    <div class="add-action-button border-0 bg-transparent">
+      <span class="button-light-text opacity-100">Airport Monitoring</span>
+    </div>
+    <div class="home-content-tabs pt-3">
+      <ul class="nav nav-pills nav-pills-tabs-list bg-white" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation" *ngFor="let tab of tabs; let i = index">
+          <button class="nav-link flex-center-align gap-2" id="pills-tab-{{ i }}" [class.active]="activeTabIndex === i" (click)="setActiveTab(i)" #tabButtons type="button" role="tab" [attr.aria-selected]="activeTabIndex === i">
+            <span [innerHTML]="tab.icon" style="position: relative; font-size: 22px; top: 2px"></span>
+            <span>{{ tab.label }}</span>
+          </button>
+        </li>
+        <span class="bg-active-slide" #bgSlide></span>
+      </ul>
+    </div>
+  </div>
+  <!-- Recently Appointments Cols -->
+  <div class="appointments-cards-row-wrapper flex-fill overflow-hidden h-100">
+    <div class="recently-appointments-row overflow-hidden h-100">
+      <div class="bordered-rounded-card overflow-y-auto h-100">
+        <div class="tab-content h-100" id="pills-tabContent">
+          <div class="tab-pane h-100 fade" [class.show]="activeTabIndex === i" [class.active]="activeTabIndex === i" role="tabpanel" *ngFor="let tab of tabs; let i = index" [attr.id]="'pills-tab-' + i" [attr.aria-labelledby]="'pills-tab-' + i + '-tab'">
+            <ng-container [ngSwitch]="i">
+              <!-- <app-iot-devices-map *ngSwitchCase="0"></app-iot-devices-map> -->
+              <app-crowd-heat-map *ngSwitchCase="0"></app-crowd-heat-map>
+              <app-climate-widget *ngSwitchCase="1"></app-climate-widget>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

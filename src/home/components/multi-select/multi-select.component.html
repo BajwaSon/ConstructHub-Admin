@@ -1,0 +1,29 @@
+<mat-form-field class="select-item-button">
+  <mat-chip-grid #chipGrid>
+    @for (item of selectedItems(); track item.value) {
+      <mat-chip-row (removed)="remove(item)">
+        {{ item.label }}
+        <button matChipRemove [attr.aria-label]="'remove ' + item.label">
+          <img src="/images/close-circle.svg" alt="Close circle icon" />
+        </button>
+      </mat-chip-row>
+    }
+  </mat-chip-grid>
+
+  <input [(ngModel)]="searchString" name="searchString" placeholder="Search..." #subjectInput [matChipInputFor]="chipGrid" [matAutocomplete]="auto" (matChipInputTokenEnd)="add($event)" (keydown.enter)="triggerFormSubmit($event)" />
+
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event); subjectInput.value = ''">
+    @for (option of filteredOptions(); track option.value) {
+      <mat-option [value]="option.value" [disabled]="isSelected(option)" [ngClass]="{ 'disabled-option': isSelected(option) }">
+        {{ option.label }}
+        @if (isSelected(option)) {
+          <span class="tick-icon">
+            <svg class="custom-tick" width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M4 9L8 13L14 5" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        }
+      </mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>

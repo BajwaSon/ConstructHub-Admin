@@ -1,0 +1,197 @@
+<div class="recently-appointments-row row row-mx-cst overflow-hidden h-100">
+  <div class="col-sm-3 d-flex flex-column overflow-hidden h-100">
+    <div class="home-content-tabs">
+      <ul class="nav nav-pills nav-pills-tabs-list bg-white" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation" *ngFor="let tab of tabs; let i = index">
+          <button class="nav-link flex-center-align gap-2" id="pills-tab-{{ i }}" [class.active]="activeTabIndex === i"
+            (click)="setActiveTab(i)" #tabButtons type="button" role="tab" [attr.aria-selected]="activeTabIndex === i">
+            <span style="position: relative; font-size: 22px; top: 2px"></span>
+            <span>{{ tab.label }}</span>
+          </button>
+        </li>
+        <span class="bg-active-slide" #bgSlide></span>
+      </ul>
+    </div>
+    <div class="tab-content bordered-rounded-card overflow-hidden h-100 pb-0" id="pills-tabContent">
+      <div class="tab-pane h-100 fade" [class.show]="activeTabIndex === i" [class.active]="activeTabIndex === i"
+        role="tabpanel" *ngFor="let tab of tabs; let i = index" [attr.id]="'pills-tab-' + i"
+        [attr.aria-labelledby]="'pills-tab-' + i + '-tab'">
+        <ng-container [ngSwitch]="i">
+          <div class="d-flex flex-column overflow-hidden h-100" *ngSwitchCase="0">
+            <div class="tab-content-head pb-4">
+              <div class="card-head-details">
+                <h5 class="card-head-name m-0">Arrival Workers List</h5>
+              </div>
+            </div>
+            <div class="attendance-listed-outer flex-fill overflow-y-auto h-100 py-3">
+              <div class="attendance-list-item ripple-button" *ngFor="let arrival of arrivals; trackBy: trackByFn">
+                <div class="attendance-list-head flex-center-align">
+                  <div class="card-head-img rounded-50-img rounded-circle border">
+                    <div class="avatar-circle-img bg-white"
+                      [ngStyle]="{ 'background-image': 'url(' + arrival.avatar + ')' }"></div>
+                  </div>
+                  <div class="card-head-details">
+                    <h5>{{ arrival.name }}</h5>
+                    <p><span class="badge badge-soft-secondary me-2">{{ arrival.flightNo }}</span>
+                      <span class="badge badge-soft-secondary me-2">{{ arrival.destination }}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          @if (this.classLevelService.classLevels().length > 0) {
+          <div class="attendance-listed-outer flex-fill overflow-y-auto h-100 pb-3" *ngSwitchCase="1">
+            <div class="filter-select-row-wrap flex-center-align gap-2 pb-4">
+              <div class="w-100">
+                <app-single-select [options]="flightIdOptions" [selectedValue]="selectedFlightId()"
+                  (selectedValueChange)="selectedFlightId.setValue($event?.value ?? $event)"></app-single-select>
+              </div>
+            </div>
+            @if (selectedFlightId() === "") {
+            <div class="empty-alert-block" [style.background]="'#f3f6ff'">
+              <!-- Animated SVG or Icon -->
+              <svg width="64" height="64" fill="none" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="30" fill="#e3eafe" />
+                <path d="M32 20v16M32 44h.02" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" />
+              </svg>
+
+              <h5 class="text-center mt-3 mb-1">
+                Select a role to view workers
+              </h5>
+            </div>
+            } @else {
+            @if (filteredPassengers().length === 0) {
+            <div class="empty-alert-block" [style.background]="'#f3f6ff'">
+              <svg width="64" height="64" fill="none" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="30" fill="#e3eafe" />
+                <path d="M32 20v16M32 44h.02" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" />
+              </svg>
+              <h5 class="text-center mt-3 mb-1">
+                No workers found for this role
+              </h5>
+            </div>
+            } @else {
+            <div class="attendance-listed-outer flex-fill overflow-y-auto h-100 py-3">
+              @for (passenger of filteredPassengers(); track $index; let i = $index) {
+              <div class="attendance-list-item ripple-button">
+                <div class="attendance-list-head flex-center-align">
+                  <div class="card-head-img rounded-50-img rounded-circle border">
+                    <div class="avatar-circle-img bg-white"
+                      [ngStyle]="{ 'background-image': 'url(' + passenger.profile + ')' }"></div>
+                  </div>
+                  <div class="card-head-details">
+                    <h5>{{ passenger.passengerName }}</h5>
+                    <p>
+                      <span class="badge badge-soft-secondary me-2">{{ passenger.flightNo }}</span>
+                      <span class="badge badge-soft-secondary me-2">{{ passenger.destination }}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+            }
+            }
+          </div>
+          } @else {
+          <div class="flex-center-align justify-content-center h-100 w-100">
+            <div class="not-found-empty-alert-block" [style.background]="'#fff'">
+              <div class="no-data-illustration interactive-illustration" tabindex="0" role="img"
+                aria-label="No Class Levels Illustration">
+                <svg width="280" height="240" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Soft background shape -->
+                  <ellipse cx="100" cy="120" rx="90" ry="40" fill="#f5f6fa" />
+                  <!-- Document stack -->
+                  <rect x="55" y="50" width="70" height="60" rx="6" fill="#fff" stroke="#bbb" stroke-width="2" />
+                  <rect x="65" y="60" width="70" height="60" rx="6" fill="#f7f7f7" stroke="#bbb" stroke-width="2" />
+                  <!-- Document lines -->
+                  <rect x="75" y="75" width="50" height="6" rx="3" fill="#e0e0e0" />
+                  <rect x="75" y="85" width="40" height="5" rx="2.5" fill="#e0e0e0" />
+                  <rect x="75" y="95" width="35" height="5" rx="2.5" fill="#e0e0e0" />
+                  <rect x="75" y="105" width="45" height="5" rx="2.5" fill="#e0e0e0" />
+                  <!-- Magnifying glass -->
+                  <g class="magnifier">
+                    <circle cx="120" cy="110" r="38" stroke="#8ba0ad" stroke-width="6" fill="#f5f6fa" />
+                    <text x="120" y="110" text-anchor="middle" dominant-baseline="middle" font-size="38"
+                      font-family="Arial, sans-serif" fill="#8ba0ad" opacity="0.85" font-weight="bold">?</text>
+                    <rect x="150" y="140" width="38" height="8" rx="4" transform="rotate(45 150 140)" fill="#8ba0ad" />
+                  </g>
+                  <!-- Speech bubble with X -->
+                  <g class="x-bubble">
+                    <ellipse cx="160" cy="55" rx="20" ry="18" fill="#fff" stroke="#bbb" stroke-width="2" />
+                    <path d="M153 48L167 62M167 48L153 62" stroke="#ff4d4f" stroke-width="3" stroke-linecap="round" />
+                  </g>
+                </svg>
+              </div>
+              @if (classLevelService.classLevels().length === 0) {
+              <h4 class="text-center" style="color: #8789ed">No Class Levels Found</h4>
+              <p class="text-center" style="color: #888; font-size: 15px">
+                To track students on the map, please add class levels first.<br />
+                Go to <b>Academic Setup</b> in the sidebar, then select <b>Levels & Subjects</b> to create new class
+                levels.
+              </p>
+              } @else {
+              <h4 class="text-center" style="color: #8789ed">No Data Found</h4>
+              }
+            </div>
+          </div>
+          }
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-9 overflow-hidden h-100">
+    <div class="bordered-rounded-card d-flex flex-column overflow-y-auto h-100">
+      <div class="upper-head-flex flex-center-align ms-auto gap-4 pb-4">
+        <form [formGroup]="campusForm" class="d-flex gap-2">
+          <!-- Terminal -->
+          <div class="filter-select-field">
+            <app-single-select [options]="campusList()" [selectedValue]="campusForm.controls.campusId.value"
+              (selectedValueChange)="onCampusFilterChange($event)"></app-single-select>
+          </div>
+          <!-- Gate is independent now -->
+          <div class="filter-select-field">
+            <app-single-select [options]="floorListFilter()" [selectedValue]="campusForm.controls.floorId.value"
+              (selectedValueChange)="onFloorFilterChange($event)"></app-single-select>
+          </div>
+          <!-- Airline is independent -->
+          <div class="filter-select-field">
+            <app-single-select [options]="buildingListFilter()" [selectedValue]="campusForm.controls.buildingId.value"
+              (selectedValueChange)="onBuildingFilterChange($event)"></app-single-select>
+          </div>
+        </form>
+        <div class="legend-item-outer flex-center-align gap-4">
+          <!-- <div class="legend-item flex-center-align gap-2">
+            <div class="legend-icon flex-center-align text-white rounded-circle staff-density">
+              <span class="count-text" [title]="staffCount + ' Staff'">{{ staffCount | numberFormat }}</span>
+            </div>
+            <h5>Support Staff</h5>
+          </div> -->
+          <div class="legend-item flex-center-align gap-2">
+            <div class="legend-icon flex-center-align text-white rounded-circle teacher-density">
+              <span class="count-text" [title]="childrenCount + ' Children'">{{ childrenCount | numberFormat }}</span>
+            </div>
+            <h5>Staff</h5>
+          </div>
+          <div class="legend-item flex-center-align gap-2">
+            <div class="legend-icon flex-center-align text-white rounded-circle children-density">
+              <span class="count-text" [title]="teacherCount + ' Teachers'">{{ teacherCount | numberFormat }}</span>
+            </div>
+            <h5>Security Officer</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="plain-view-map-container position-relative overflow-hidden h-100" id="mapContainer">
+        <img src="/images/blueprints-site-plan.jpg" class="img-fluid h-100 w-100 floor-pan-image object-fit-cover"
+          id="floorPlan" alt="Site Map Plan" />
+        <div class="dots-container position-absolute top-0 start-0 w-100 h-100">
+          <div *ngFor="let dot of activeDots" class="person-dot" [class.teacher-dot]="dot.isTeacher"
+            [class.student-dot]="!dot.isTeacher" [class.staff-dot]="dot.isStaff" [style.left.%]="dot.x"
+            [style.top.%]="dot.y"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+.user-stats-details-card {
+  .month-select-outer {
+    .stats-select-dropdown {
+      width: 10rem;
+    }
+  }
+  .card-stats-info {
+    p,
+    h6 {
+      color: var(--text-highlight);
+      font-size: calc(var(--primary-font-size) * 0.875);
+      font-weight: var(--font-regular);
+      line-height: 1.14;
+      margin: 0 0 0.5rem;
+    }
+    h4 {
+      color: var(--black);
+      font-size: calc(var(--primary-font-size) * 1.1);
+      font-weight: var(--font-semibold);
+      line-height: 1;
+    }
+  }
+}

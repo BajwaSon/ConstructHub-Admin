@@ -1,0 +1,27 @@
+.main-content-wrapper {
+  margin-left: 290px;
+  height: var(--screen-height);
+  transition: all 0.5s ease;
+
+  .top-header-outer {
+    padding: 1.5rem;
+  }
+
+  .search-bar-outer {
+    padding: 2em 1.5em 0.4em 0.8em;
+  }
+
+  @media screen and (max-width: 1500px) {
+    margin-left: 260px;
+  }
+
+  @media screen and (max-width: 991px) {
+    padding: 1.5rem 1rem;
+    margin-left: 0;
+  }
+}
+
+.page-screen-isolated {
+  background-image: var(--bg-light-gradient);
+  background-color: var(--bg-white-shade);
+}

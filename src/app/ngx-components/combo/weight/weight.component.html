@@ -1,0 +1,14 @@
+<div class="form-group">
+  <label [for]="label">{{ label }}</label>
+  <div class="input-group">
+    <input type="text" (keydown)="allowOnlyNumber($event)" placeholder="Weight" name="weight" [formControl]="weight" class="form-control" />
+    <select name="unit" class="custom-select form-control" [formControl]="weightUnit">
+      <option value="dz">dz</option>
+      <option value="g">g</option>
+      <option value="kg">kg</option>
+      <option value="lb">lb</option>
+      <option value="ml">ml</option>
+      <option value="mg">mg</option>
+    </select>
+  </div>
+</div>
