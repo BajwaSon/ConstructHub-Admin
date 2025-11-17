@@ -9,41 +9,30 @@ import { ClickOutsideDirective, NavigationService, RippleButtonDirective } from 
 import { PermissionDirective } from "../../../app/directives/permission.directive";
 import { filter } from "rxjs";
 import { AppService } from "../../../app/services/app.service";
-import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
+import { trigger, state, style, animate, transition, keyframes } from "@angular/animations";
 
 @Component({
   selector: "app-top-header",
-  imports: [RippleButtonDirective, CommonModule, RouterModule, PermissionDirective, ClickOutsideDirective],
+  imports: [RippleButtonDirective, CommonModule, RouterModule],
   templateUrl: "./top-header.component.html",
   styleUrl: "./top-header.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    trigger('digitAnimation', [
-      transition('* => *', [
-        animate('0.2s ease-in-out', keyframes([
-          style({ transform: 'scale(1)', opacity: 1, offset: 0 }),
-          style({ transform: 'scale(1.1)', opacity: 0.8, offset: 0.5 }),
-          style({ transform: 'scale(1)', opacity: 1, offset: 1 })
-        ]))
-      ])
+    trigger("digitAnimation", [
+      transition("* => *", [
+        animate(
+          "0.2s ease-in-out",
+          keyframes([
+            style({ transform: "scale(1)", opacity: 1, offset: 0 }),
+            style({ transform: "scale(1.1)", opacity: 0.8, offset: 0.5 }),
+            style({ transform: "scale(1)", opacity: 1, offset: 1 }),
+          ])
+        ),
+      ]),
     ]),
-    trigger('dateAnimation', [
-      transition('* => *', [
-        animate('0.3s ease-in-out', keyframes([
-          style({ opacity: 0.7, offset: 0 }),
-          style({ opacity: 1, offset: 1 })
-        ]))
-      ])
-    ]),
-    trigger('timezoneAnimation', [
-      transition('* => *', [
-        animate('0.3s ease-in-out', keyframes([
-          style({ opacity: 0.7, offset: 0 }),
-          style({ opacity: 1, offset: 1 })
-        ]))
-      ])
-    ])
-  ]
+    trigger("dateAnimation", [transition("* => *", [animate("0.3s ease-in-out", keyframes([style({ opacity: 0.7, offset: 0 }), style({ opacity: 1, offset: 1 })]))])]),
+    trigger("timezoneAnimation", [transition("* => *", [animate("0.3s ease-in-out", keyframes([style({ opacity: 0.7, offset: 0 }), style({ opacity: 1, offset: 1 })]))])]),
+  ],
 })
 export class TopHeaderComponent implements OnInit {
   @Input() isSearchVisible?: boolean = false;
@@ -215,9 +204,9 @@ export class TopHeaderComponent implements OnInit {
     this.router.navigateByUrl("/home/messages");
   }
 
-  currentTime: string = '';
-  currentDate: string = '';
-  currentTimezone: string = '';
+  currentTime: string = "";
+  currentDate: string = "";
+  currentTimezone: string = "";
   currentTimeArray: string[] = [];
   private timeInterval: any;
 
@@ -234,21 +223,21 @@ export class TopHeaderComponent implements OnInit {
 
   private updateDateTime(): void {
     const now = new Date();
-    
+
     // Update time
-    this.currentTime = now.toLocaleTimeString('en-US', {
+    this.currentTime = now.toLocaleTimeString("en-US", {
       hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     });
-    
+
     // Convert time to array for individual digit animation
-    this.currentTimeArray = this.currentTime.replace(/:/g, '').split('');
-    
+    this.currentTimeArray = this.currentTime.replace(/:/g, "").split("");
+
     // Update date
     this.currentDate = now.toDateString();
-    
+
     // Update timezone
     this.currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   }

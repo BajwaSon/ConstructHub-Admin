@@ -18,11 +18,11 @@ export class MapTrackingComponent implements OnDestroy {
   activeTabIndex = 0;
   tabs = [
     {
-      label: "2D Map Tracker",
+      label: "Plain Map Tracker",
       icon: `<i class="bi bi-aspect-ratio"></i>`,
     },
     {
-      label: "3D Map View",
+      label: "Real Time View",
       icon: `<i class="bi bi-box"></i>`,
     },
   ];
