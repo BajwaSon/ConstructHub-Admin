@@ -144,8 +144,9 @@
           <!-- Show airport map for Underage passengers -->
           <div *ngIf="category.id === 'under_age'" class="h-100">
             <div class="plain-view-map-container position-relative overflow-hidden h-100" id="underAgeMapContainer">
-              <img src="/images/blueprints-site-plan.jpg" class="img-fluid h-100 w-100 floor-pan-image object-fit-cover"
-                id="underAgeFloorPlan" alt="Airport floor plan" />
+              <img src="/images/blueprints-site-plan.webp"
+                class="img-fluid h-100 w-100 floor-pan-image object-fit-cover" id="underAgeFloorPlan"
+                alt="Airport floor plan" />
               <div id="underAgePulseDotsContainer" class="position-absolute top-0 start-0 w-100 h-100"></div>
             </div>
           </div>
@@ -153,8 +154,9 @@
           <!-- Show airport map for Wheelchair passengers -->
           <div *ngIf="category.id === 'wheelchair'" class="h-100">
             <div class="plain-view-map-container position-relative overflow-hidden h-100" id="wheelchairMapContainer">
-              <img src="/images/blueprints-site-plan.jpg" class="img-fluid h-100 w-100 floor-pan-image object-fit-cover"
-                id="wheelchairFloorPlan" alt="Airport floor plan" />
+              <img src="/images/blueprints-site-plan.webp"
+                class="img-fluid h-100 w-100 floor-pan-image object-fit-cover" id="wheelchairFloorPlan"
+                alt="Airport floor plan" />
               <div id="wheelchairPulseDotsContainer" class="position-absolute top-0 start-0 w-100 h-100"></div>
             </div>
           </div>
@@ -190,7 +192,7 @@
       </div>
       <div class="modal-body p-0">
         <div class="location-modal-map-container">
-          <img src="/images/blueprints-site-plan.jpg" class="location-modal-map-image" alt="Airport floor plan" />
+          <img src="/images/blueprints-site-plan.webp" class="location-modal-map-image" alt="Airport floor plan" />
 
           <div class="location-modal-dots-container">
             <div *ngFor="let dot of modalMapDots" class="location-modal-dot"

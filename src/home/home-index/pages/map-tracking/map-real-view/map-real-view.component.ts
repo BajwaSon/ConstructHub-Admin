@@ -91,7 +91,7 @@ export class MapRealViewComponent implements AfterViewInit, OnDestroy {
       site: "Site A",
       lat: 25.12055,
       lng: 55.38915,
-      avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+      avatar: "https://randomuser.me/api/portraits/men/12.jpg",
     },
     {
       id: "WRK-29384756",
@@ -131,17 +131,17 @@ export class MapRealViewComponent implements AfterViewInit, OnDestroy {
       site: "Site A",
       lat: 25.12059,
       lng: 55.38919,
-      avatar: "https://randomuser.me/api/portraits/women/57.jpg",
+      avatar: "https://randomuser.me/api/portraits/men/57.jpg",
     },
     {
       id: "WRK-847362911",
-      name: "Jullie Qua",
+      name: "Jule Quinn",
       type: "Electrician",
       role: "worker",
       site: "Site A",
       lat: 25.12051,
       lng: 55.38923,
-      avatar: "https://randomuser.me/api/portraits/women/73.jpg",
+      avatar: "https://randomuser.me/api/portraits/men/73.jpg",
     },
   ];
 
