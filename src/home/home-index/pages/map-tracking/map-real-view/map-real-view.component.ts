@@ -19,6 +19,7 @@ interface Worker {
   site: string;
   lat: number;
   lng: number;
+  avatar: string;
 }
 
 @Component({
@@ -42,16 +43,106 @@ export class MapRealViewComponent implements AfterViewInit, OnDestroy {
   sites: Site[] = [{ name: "Site A", lat: 25.1202, lng: 55.3876, workerCount: 5 }];
 
   workers: Worker[] = [
-    // Site A - Workers
-    { id: "WRK-86234696", name: "Ahmed Hassan", type: "Carpenter", role: "worker", site: "Site A", lat: 25.121, lng: 55.39 },
-    { id: "WRK-23984712", name: "Mohammed Ali", type: "Laborer", role: "worker", site: "Site A", lat: 25.121, lng: 55.389 },
-    { id: "WRK-38475621", name: "Omar Ibrahim", type: "Electrician", role: "worker", site: "Site A", lat: 25.1205, lng: 55.3891 },
-    { id: "WRK-56372819", name: "Khalid Ahmed", type: "Plumber", role: "worker", site: "Site A", lat: 25.1205, lng: 55.3892 },
-    // Site A - Supervisors
-    { id: "WRK-98472635", name: "Sarah Johnson", type: "Supervisor", role: "supervisor", site: "Site A", lat: 25.12055, lng: 55.38915 },
-    { id: "WRK-29384756", name: "David Wilson", type: "Supervisor", role: "supervisor", site: "Site A", lat: 25.12045, lng: 55.3895 },
-    // Site A - Foremen
-    { id: "WRK-84736291", name: "James Anderson", type: "Foreman", role: "foreman", site: "Site A", lat: 25.1205, lng: 55.3896 },
+    {
+      id: "WRK-86234696",
+      name: "Ahmed Hassan",
+      type: "Carpenter",
+      role: "worker",
+      site: "Site A",
+      lat: 25.12047,
+      lng: 55.38879,
+      avatar: "https://randomuser.me/api/portraits/men/11.jpg",
+    },
+    {
+      id: "WRK-23984712",
+      name: "Mohammed Ali",
+      type: "Laborer",
+      role: "worker",
+      site: "Site A",
+      lat: 25.121,
+      lng: 55.389,
+      avatar: "https://randomuser.me/api/portraits/men/22.jpg",
+    },
+    {
+      id: "WRK-38475621",
+      name: "Omar Ibrahim",
+      type: "Electrician",
+      role: "worker",
+      site: "Site A",
+      lat: 25.1205,
+      lng: 55.3891,
+      avatar: "https://randomuser.me/api/portraits/men/33.jpg",
+    },
+    {
+      id: "WRK-56372819",
+      name: "Khalid Ahmed",
+      type: "Plumber",
+      role: "worker",
+      site: "Site A",
+      lat: 25.1205,
+      lng: 55.3892,
+      avatar: "https://randomuser.me/api/portraits/men/44.jpg",
+    },
+    {
+      id: "WRK-98472635",
+      name: "Sarah Johnson",
+      type: "Supervisor",
+      role: "supervisor",
+      site: "Site A",
+      lat: 25.12055,
+      lng: 55.38915,
+      avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+    },
+    {
+      id: "WRK-29384756",
+      name: "David Wilson",
+      type: "Supervisor",
+      role: "supervisor",
+      site: "Site A",
+      lat: 25.12045,
+      lng: 55.3895,
+      avatar: "https://randomuser.me/api/portraits/men/55.jpg",
+    },
+    {
+      id: "WRK-84736291",
+      name: "James Anderson",
+      type: "Foreman",
+      role: "foreman",
+      site: "Site A",
+      lat: 25.1205,
+      lng: 55.3896,
+      avatar: "https://randomuser.me/api/portraits/men/66.jpg",
+    },
+    {
+      id: "WRK-984726351",
+      name: "John Doe",
+      type: "Carpenter",
+      role: "worker",
+      site: "Site A",
+      lat: 25.12041,
+      lng: 55.3891,
+      avatar: "https://randomuser.me/api/portraits/men/6.jpg",
+    },
+    {
+      id: "WRK-293847561",
+      name: "Kane Lee",
+      type: "Supervisor",
+      role: "worker",
+      site: "Site A",
+      lat: 25.12059,
+      lng: 55.38919,
+      avatar: "https://randomuser.me/api/portraits/women/57.jpg",
+    },
+    {
+      id: "WRK-847362911",
+      name: "Jullie Qua",
+      type: "Electrician",
+      role: "worker",
+      site: "Site A",
+      lat: 25.12051,
+      lng: 55.38923,
+      avatar: "https://randomuser.me/api/portraits/women/73.jpg",
+    },
   ];
 
   constructor(
@@ -218,18 +309,27 @@ export class MapRealViewComponent implements AfterViewInit, OnDestroy {
       const roleColor = worker.role === "foreman" ? "#9B59B6" : worker.role === "supervisor" ? "#F39C12" : "#4A90E2";
 
       const infoContent = `
-        <div style="padding: 10px; min-width: 200px;">
-          <h4 style="margin: 0 0 6px 0; font-size: 16px; font-weight: bold; color: #333;">${worker.name}</h4>
-          <div style="margin: 4px 0;">
-            <span style="display: inline-block; padding: 2px 8px; background-color: ${roleColor}; color: white; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase;">${roleLabel}</span>
+        <div style="padding: 0 10px 10px; min-width: 200px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <img src="${worker.avatar}"
+                style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid #ddd;" />
+            <div>
+              <h4 style="margin: 0; font-size: 16px; font-weight: bold; color: #333;font-family: "Host Grotesk", serif;">${worker.name}</h4>
+              <span style="display:block; margin-top:2px; font-size:12px; color:#888;font-family: "Host Grotesk", serif;">${worker.type}</span>
+            </div>
           </div>
-          <p style="margin: 6px 0 0 0; font-size: 13px; color: #666;">
+          <div style="margin-top:8px;">
+            <span style="display:inline-block; padding:2px 8px; background-color:${roleColor}; color:white; border-radius:12px; font-size:11px; text-transform:uppercase; font-weight:600;font-family: "Host Grotesk", serif;">
+              ${roleLabel}
+            </span>
+          </div>
+          <p style="margin: 8px 0 0 0; font-size: 13px; color: #666;font-family: "Host Grotesk", serif;">
             <strong>Type:</strong> ${worker.type}
           </p>
-          <p style="margin: 4px 0 0 0; font-size: 12px; color: #666;">
+          <p style="margin: 4px 0 0 0; font-size: 12px; color: #666;font-family: "Host Grotesk", serif;">
             <strong>ID:</strong> ${worker.id}
           </p>
-          <p style="margin: 4px 0 0 0; font-size: 12px; color: #999;">
+          <p style="margin: 4px 0 0 0; font-size: 12px; color: #999;font-family: "Host Grotesk", serif;">
             <strong>Site:</strong> ${worker.site}
           </p>
         </div>
